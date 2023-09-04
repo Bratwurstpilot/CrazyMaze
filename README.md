@@ -1,2 +1,2 @@
 # CrazyMaze
-Software project by Cedrik Weißbricht, Phillip Linke, Frederic Schiller.
+Software project by Cedrik Weißbrich, Philipo Linke, Frederic Schiller.
