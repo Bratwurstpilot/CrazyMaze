@@ -55,7 +55,7 @@ class Entity:
         self.__bodyWidth = width
 
 
-    def setBodyWidth(self, height) -> None:
+    def setBodyHeight(self, height) -> None:
 
         self.__bodyHeight = height
 
