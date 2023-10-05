@@ -20,6 +20,7 @@ class Entity:
 
         self.__positionX : int = 0
         self.__positionY : int = 0
+        self.__positionZ : int = 0
         
         self.__bodyWidth : int = 0
         self.__bodyHeight : int = 0
@@ -44,18 +45,62 @@ class Entity:
         self.__playable = True
 
 
-    def setBody(self, width, height) -> None:
+    def setPositionX(self, xPosition : int) -> int:
+
+        self.__positionX = xPosition
+    
+
+    def setPositionY(self, yPosition : int) -> int:
+
+        self.__positionY = yPosition
+    
+
+    def setPositionZ(self, zPosition : int) -> int:
+
+        self.__positionZ = zPosition
+
+
+    def setPosition(self, position : list) -> int:
+
+        self.__positionX = position[0]
+        self.__positionY = position[1]
+        self.__positionZ = position[2]
+
+    
+    def shiftPositonX(self, shift : int) -> int:
+
+        self.__positionX += shift
+
+    
+    def shiftPositonY(self, shift : int) -> int:
+
+        self.__positionY += shift
+
+    
+    def shiftPositonZ(self, shift : int) -> int:
+
+        self.__positionY += shift
+
+    
+    def shiftPosition(self, position : list) -> int:
+
+        self.__positionX += position[0]
+        self.__positionY += position[1]
+        self.__positionZ += position[2]
+    
+
+    def setBody(self, width : int, height : int) -> None:
 
         self.__bodyWidth = width
         self.__bodyHeight = height 
 
     
-    def setBodyWidth(self, width) -> None:
+    def setBodyWidth(self, width : int) -> None:
 
         self.__bodyWidth = width
 
 
-    def setBodyHeight(self, height) -> None:
+    def setBodyHeight(self, height : int) -> None:
 
         self.__bodyHeight = height
 
@@ -108,6 +153,11 @@ class Entity:
     def getPositionY(self) -> int:
 
         return self.__positionY
+    
+
+    def getPositionZ(self) -> int:
+
+        return self.__positionZ
     
 
     def getBody(self) -> list:

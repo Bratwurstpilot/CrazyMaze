@@ -1,6 +1,5 @@
 from Source.Game.main import main
 
-
 def program():
     main()
 

@@ -26,7 +26,7 @@ class PhysicsComponent:
 
     def update(self, postion : list[int]) :
 
-        return [postion[0] + self.__velocityX, postion[1] + self.__velocityY]
+        return [postion[0] + self.__velocityX, postion[1] - self.__velocityY]
 
 
     # Get Methods
