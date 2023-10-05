@@ -1,12 +1,12 @@
 from Source.Engine.Entity import Entity
+from Source.Engine.Scene import Scene
+import Source.Engine.Screen as SES
+
 import pygame
 
 def main():
     
     entt = Entity()
-
-    pygame.init()
-    screen = pygame.display.set_mode([500, 500])
     running = True
     clock = pygame.time.Clock()
 
@@ -17,7 +17,6 @@ def main():
     from Source.Engine.UtilFile import File
     print(File.getContentSplit("CrazyMaze/Dependencies/Files/TestFile.txt", ";"))
     print(File.getContentRaw("CrazyMaze/Dependencies/Files/TestFile.txt"))
-    
 
     # crappy pygame test
 
