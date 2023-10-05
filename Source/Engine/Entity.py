@@ -80,6 +80,26 @@ class Entity:
     # Get Methods
 
 
+    def getAnimation(self) -> AnimationComponent:
+
+        return self.__animationComp
+    
+
+    def getPhysics(self) -> PhysicsComponent:
+
+        return self.__physicsComp
+
+
+    def getTexture(self) -> TextureComponent:
+
+        return self.__textureComp
+    
+
+    def getSound(self) -> SoundComponent:
+
+        return self.__soundComp
+    
+
     def getPosition(self) -> list:
 
         return [self.__positionX, self.__positionY]
