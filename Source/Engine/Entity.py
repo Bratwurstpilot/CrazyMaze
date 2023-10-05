@@ -20,6 +20,7 @@ class Entity:
 
         self.__positionX : int = 0
         self.__positionY : int = 0
+        self.__positionZ : int = 0
         
         self.__bodyWidth : int = 0
         self.__bodyHeight : int = 0
@@ -55,7 +56,7 @@ class Entity:
         self.__bodyWidth = width
 
 
-    def setBodyWidth(self, height) -> None:
+    def setBodyHeight(self, height) -> None:
 
         self.__bodyHeight = height
 

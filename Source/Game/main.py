@@ -14,6 +14,11 @@ def main():
     limit = 144
     sound = pygame.mixer.Sound("CrazyMaze/Dependencies/Sounds/test.wav") # Selbst erstellter Sound, kein Copyright
 
+    from Source.Engine.UtilFile import File
+    print(File.getContentSplit("CrazyMaze/Dependencies/Files/TestFile.txt", ";"))
+    print(File.getContentRaw("CrazyMaze/Dependencies/Files/TestFile.txt"))
+    
+
     # crappy pygame test
 
     while running:
@@ -27,7 +32,7 @@ def main():
 
         timer += 1
         if timer >= limit:
-            entt.playSound(sound)
+            entt.getSoundComponent().play(sound)
             timer = 0
 
         clock.tick(144)

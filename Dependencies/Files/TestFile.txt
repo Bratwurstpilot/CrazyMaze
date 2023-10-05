@@ -1,0 +1,3 @@
+PlayerBody.tex;
+PlayerWeapon.tex;
+PlayerBar.tex;
