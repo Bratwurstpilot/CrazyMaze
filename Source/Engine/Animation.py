@@ -1,6 +1,5 @@
 
 
-
 class AnimationComponent:
 
     def __init__(self) -> None:

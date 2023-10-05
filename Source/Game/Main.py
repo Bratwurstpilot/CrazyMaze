@@ -1,38 +1,29 @@
+import pygame
+
 from Source.Engine.Entity import Entity
 from Source.Engine.Scene import Scene
 import Source.Engine.Screen as SES
 
-import pygame
 
 def main():
     
-    entt = Entity()
+    pygame.init()
     running = True
     clock = pygame.time.Clock()
+    screen : pygame.display = SES.setScreen(800,600, "")
 
-    timer = 0
-    limit = 144
-    sound = pygame.mixer.Sound("CrazyMaze/Dependencies/Sounds/test.wav") # Selbst erstellter Sound, kein Copyright
+    entt = Entity()
+    entt.setPosition(250,250,0)
+    entt.setBody()
 
-    from Source.Engine.UtilFile import File
-    print(File.getContentSplit("CrazyMaze/Dependencies/Files/TestFile.txt", ";"))
-    print(File.getContentRaw("CrazyMaze/Dependencies/Files/TestFile.txt"))
-
-    # crappy pygame test
+    scene1 = Scene(screen, [entt])
 
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
 
-        screen.fill((255, 255, 255))
-        pygame.draw.circle(screen, (0, 0, 255), (250, 250), 75)
-        pygame.display.flip()
-
-        timer += 1
-        if timer >= limit:
-            entt.getSoundComponent().play(sound)
-            timer = 0
+        scene1.renderScene()
 
         clock.tick(144)
 

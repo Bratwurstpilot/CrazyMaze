@@ -17,9 +17,10 @@ class SoundComponent:
     def play(self, sound) -> None: 
 
         self.__mixer.Sound.play(sound)
-            
+
 
     # Get Methods
+    
     
     def setConfig(self, file : None) -> None:
 

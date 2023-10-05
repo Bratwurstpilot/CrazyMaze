@@ -1,7 +1,6 @@
 import pygame
 
 
-
 def setScreen(width : int, height : int, title : str) -> pygame.display:
 
    
