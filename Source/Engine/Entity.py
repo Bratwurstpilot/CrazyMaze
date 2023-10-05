@@ -36,11 +36,6 @@ class Entity:
         self.__animationComp.update(self.__textureComp)
 
 
-    def playSound(self, sound) -> None:
-
-        self.__soundComp.play(sound)
-
-
     # Set Methods
 
 
@@ -80,22 +75,22 @@ class Entity:
     # Get Methods
 
 
-    def getAnimation(self) -> AnimationComponent:
+    def getAnimationComponent(self) -> AnimationComponent:
 
         return self.__animationComp
     
 
-    def getPhysics(self) -> PhysicsComponent:
+    def getPhysicsComponent(self) -> PhysicsComponent:
 
         return self.__physicsComp
 
 
-    def getTexture(self) -> TextureComponent:
+    def getTextureComponent(self) -> TextureComponent:
 
         return self.__textureComp
     
 
-    def getSound(self) -> SoundComponent:
+    def getSoundComponent(self) -> SoundComponent:
 
         return self.__soundComp
     

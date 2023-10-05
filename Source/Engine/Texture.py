@@ -14,7 +14,7 @@ class TextureComponent:
         try: 
             self.__texture = pygame.image.load(tex2D)
         except ValueError:
-            pass
+            print("Error while loading Texture : " + tex2D + " in component " + self)
 
 
     def getTexture(self) -> pygame.image:
