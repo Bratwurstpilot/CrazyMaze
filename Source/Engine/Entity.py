@@ -60,11 +60,11 @@ class Entity:
         self.__positionZ = zPosition
 
 
-    def setPosition(self, position : list) -> int:
+    def setPosition(self, positionX : int = 0, positionY : int = 0, positionZ : int = 0) -> int:
 
-        self.__positionX = position[0]
-        self.__positionY = position[1]
-        self.__positionZ = position[2]
+        self.__positionX = positionX
+        self.__positionY = positionY
+        self.__positionZ = positionZ
 
     
     def shiftPositonX(self, shift : int) -> int:
@@ -82,14 +82,14 @@ class Entity:
         self.__positionY += shift
 
     
-    def shiftPosition(self, position : list) -> int:
+    def shiftPosition(self, positionX : int = 0, positionY : int = 0, positionZ : int = 0) -> int:
 
-        self.__positionX += position[0]
-        self.__positionY += position[1]
-        self.__positionZ += position[2]
+        self.__positionX += positionX
+        self.__positionY += positionY
+        self.__positionZ += positionZ
     
 
-    def setBody(self, width : int, height : int) -> None:
+    def setBody(self, width : int = 100, height : int = 100) -> None:
 
         self.__bodyWidth = width
         self.__bodyHeight = height 
