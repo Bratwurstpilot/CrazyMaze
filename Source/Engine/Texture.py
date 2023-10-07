@@ -11,7 +11,7 @@ class TextureComponent:
         self.__color : tuple = (0,0,0)
         self.__fileConfig : None = None
 
-        self.__frameInterval : list[int] = [0]
+        self.__frameInterval : list = [0]
         self.__frameIntervalCurrent : int = 0
         self.__frameCurrent : int = 0
 
@@ -20,13 +20,12 @@ class TextureComponent:
 
     def update(self):
             
-        self.__frameCurrent += 1
+        self.__frameCurrent += 1.0
+
         if self.__frameCurrent >= self.__frameInterval[self.__frameIntervalCurrent]:
             self.__frameCurrent = 0
-            self.__textureCurrent += 1
-            if self.__textureCurrent >= len(self.__textures):
-                self.__textureCurrent = 0
-            self.__frameIntervalCurrent = (self.__frameIntervalCurrent + 1) % len(self.__frameInterval)
+            self.__textureCurrent = (self.__textureCurrent + 1) % len(self.__textures)
+            self.__frameIntervalCurrent = int((self.__frameIntervalCurrent + 1) % len(self.__frameInterval))
 
 
     # Set Methods
@@ -50,9 +49,9 @@ class TextureComponent:
             print("Error while loading Texture " + textureSet + " in component " + self)
 
 
-    def setFrameInterval(self, interval : int) -> None:
+    def setFrameInterval(self, interval : float) -> None:
         
-        self.__frameInterval = interval * 144
+        self.__frameInterval = [interval * 144]
 
 
     def setFrameIntervalCustom(self, interval : list[int]) -> None:
