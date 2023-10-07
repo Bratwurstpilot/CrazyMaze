@@ -14,7 +14,9 @@ def main():
 
     entt = Entity()
     entt.setPosition(250,250,0)
-    entt.setBody()
+    #entt.setBody()
+    entt.getTextureComponent().setTextureSet(["CrazyMaze/Source/Game/Files/KnightSprite1.png", "CrazyMaze/Source/Game/Files/KnightSprite2.png"])
+    entt.getTextureComponent().setFrameIntervalCustom([0.5, 0.5, 0.5, 0.5, 0.2, 0.2, 0.2, 0.2, 2])
 
     scene1 = Scene(screen, [entt])
 
@@ -24,6 +26,7 @@ def main():
                 running = False
 
         scene1.renderScene()
+        entt.update()
 
         clock.tick(144)
 
