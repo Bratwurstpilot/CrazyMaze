@@ -8,26 +8,19 @@ import Source.Engine.Screen as SES
 
 def main():
     
-    entt = Entity()
-    entt.setBodyWidth(50)
-    entt.setBodyHeight(50)
-    entt.setPositionZ(2)
+    entts = []
 
-    entt2 = Entity()
-    entt2.setBody(50,50)
-    entt2.setPosition(100,100, 0)
-    entt2.setPositionZ(1)
-
-    entt3 = Entity()
-    entt3.setBody(50,50)
-    entt3.setPosition(150,150, 0)
-    entt3.setPositionZ(0)
-
+    for i in range(0, 10, 2):
+        for j in range(0, 10, 2):
+            entt = Entity()
+            entt.setBody(50,50)
+            entt.setPosition(50 * j, 50 * i, 0)
+            entts.append(entt)
 
     pygame.init()
     screen = SES.setScreen(500, 500, "Crappy")
 
-    rend = Scene(screen, [entt, entt2, entt3])
+    rend = Scene(screen, entts)
     
 
     running = True
