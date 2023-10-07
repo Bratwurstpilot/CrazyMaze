@@ -6,7 +6,7 @@ class Scene():
     def __init__(self, newScreen : pygame.display, newElements : list) -> None:
 
         self.screen : pygame.display = newScreen
-        self.elements : list = newElements
+        self.elements : list = self.depthSort(newElements)
 
 
     def renderScene(self) -> None:
@@ -14,10 +14,20 @@ class Scene():
         self.screen.fill((255, 255, 255))
 
         for element in self.elements:
+
             img : pygame.image = element.getTextureComponent().getTexture()
             if img == None :       
                 pygame.draw.rect(self.screen, (0, 0, 0), (element.getPositionX(), element.getPositionY(), element.getBodyWidth(), element.getBodyHeight()))
             else : 
                 self.screen.blit(img, (element.getPositionX(), element.getPositionY(), element.getBodyWidth(), element.getBodyHeight()))
 
+
         pygame.display.update()
+
+
+    def depthSort(self, elements : list) -> list :
+
+        elements.sort(key = lambda x : x.getPositionZ())
+        
+        return elements
+
