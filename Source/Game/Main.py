@@ -3,8 +3,7 @@ import pygame
 from Source.Engine.Entity import Entity
 from Source.Engine.Scene import Scene
 from Source.Engine.Sound import Music
-
-import Source.Engine.Screen as SES
+from Source.Engine.Screen import Screen
 
 
 def main():
@@ -21,14 +20,10 @@ def main():
             entts.append(entt)
 
     pygame.init()
-    screen = SES.setScreen(500, 500, "Crappy")
-
-    rend = Scene(screen, entts)
+    screen = Screen.setScreen(500, 500, "Crappy")
     
     running = True
     clock = pygame.time.Clock()
-    screen : pygame.display = SES.setScreen(800,600, "")
-
 
     entt = Entity()
     entt.setPosition(250,250,0)
