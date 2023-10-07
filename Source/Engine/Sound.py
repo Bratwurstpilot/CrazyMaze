@@ -1,3 +1,4 @@
+from typing import Any
 import pygame
 
 
@@ -5,9 +6,7 @@ class SoundComponent:
     
     def __init__(self) -> None:
         
-        self.__sounds : list = None
-        self.__soundState : int = -1 # -1 = inactive
-        self.__currentSound : str = ""
+        self.__sound : str = ""
         self.__mixer : pygame.mixer = pygame.mixer
 
 
@@ -17,9 +16,15 @@ class SoundComponent:
     def play(self, sound) -> None: 
 
         self.__mixer.Sound.play(sound)
-            
 
-    # Get Methods
+    
+    def play(self) -> None:
+
+        pass #TODO add functionality
+
+
+    # Set Methods
+    
     
     def setConfig(self, file : None) -> None:
 
@@ -34,3 +39,59 @@ class SoundComponent:
     def addSound(self, sound) -> None:
 
         self.__sounds.append(sound)
+
+
+class Music(): # .queue bedenken
+
+    def __init__(self) -> None:
+        
+        self.__loop : int = -1 
+        self.__volume : float = 0.5
+        self.__playing : bool = False
+
+    
+    def play(self, music : str) -> None:
+
+        if not self.__playing:
+            pygame.mixer.music.load(music)
+            pygame.mixer.music.set_volume(self.__volume)
+            pygame.mixer.music.play(self.__loop,0.0)
+
+            self.__playing = True
+
+
+    def play(self) -> None:
+
+        if not self.__playing:
+            try:
+                pygame.mixer.music.load(self.__sound)
+                pygame.mixer.music.set_volume(self.__volume)
+                pygame.mixer.music.play(self.__loop,0.0)
+
+                self.__playing = True
+            except ValueError:
+                print("Error while trying to play Music with Object " + self)
+
+
+    def stop(self) -> None:
+
+        self.__playing = False
+        pygame.mixer.music.stop() 
+
+    
+    # Set Methods
+
+
+    def setMusic(self, music : str) -> None:
+
+        self.__sound = music
+
+
+    def setLoop(self, loop : int) -> None:
+
+        self.__loop = loop
+
+
+    def setVolume(self, volume : float) -> None:
+
+        self.__volume = volume

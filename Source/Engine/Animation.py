@@ -1,10 +1,10 @@
 
 
-
 class AnimationComponent:
 
     def __init__(self) -> None:
-        pass
+        
+        self.__sprites = []
 
     
     def update(self) -> None:

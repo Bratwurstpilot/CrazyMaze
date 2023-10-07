@@ -34,7 +34,7 @@ class Entity:
     def update(self) -> None:
         
         self.__physicsComp.update()
-        self.__animationComp.update(self.__textureComp)
+        self.__textureComp.update()
 
 
     # Set Methods

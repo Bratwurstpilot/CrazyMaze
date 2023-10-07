@@ -1,13 +1,16 @@
 import pygame
-import random
 
 from Source.Engine.Entity import Entity
 from Source.Engine.Scene import Scene
+from Source.Engine.Sound import Music
+
 import Source.Engine.Screen as SES
 
 
 def main():
     
+    pygame.init()
+
     entts = []
 
     for i in range(0, 10, 2):
@@ -22,27 +25,30 @@ def main():
 
     rend = Scene(screen, entts)
     
-
     running = True
     clock = pygame.time.Clock()
+    screen : pygame.display = SES.setScreen(800,600, "")
 
-    timer = 0
-    limit = 144
-    sound = pygame.mixer.Sound("Dependencies/Sounds/test.wav") # Selbst erstellter Sound, kein Copyright
 
-    # crappy pygame test
+    entt = Entity()
+    entt.setPosition(250,250,0)
+    entt.getTextureComponent().setTextureSet(["Source/Game/Files/KnightSprite1.png", "Source/Game/Files/KnightSprite2.png"])
+    entt.getTextureComponent().setFrameInterval(0.5)
+
+    themeMain = Music()
+    themeMain.setMusic("Source/Game/Files/ThemeMainMenu.wav")
+    themeMain.setVolume(0.1)
+    themeMain.play()
+
+    scene1 = Scene(screen, [entt])
 
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
 
-        rend.renderScene()
-        
-        timer += 1
-        #if timer >= limit:
-        #    entt.getSoundComponent().play(sound)
-        #    timer = 0
+        scene1.renderScene()
+        entt.update()
 
         clock.tick(144)
 

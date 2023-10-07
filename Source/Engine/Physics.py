@@ -24,7 +24,7 @@ class PhysicsComponent:
         ENTITY2RECT = pygame.rect(entity2Position[0], entity2Position[1], entity2Body[0], entity2Body[1])
 
 
-    def update(self, postion : list[int]) :
+    def update(self, postion : list[int] = [0,0]) :
 
         return [postion[0] + self.__velocityX, postion[1] - self.__velocityY]
 
