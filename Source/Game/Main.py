@@ -23,7 +23,7 @@ def main():
     themeMain.setMusic("Source/Game/Files/ThemeMainMenu.wav")
     themeMain.setVolume(0.1)
     themeMain.play()
-    
+
     scene1 = Scene(screen, [entt])
 
     while running:

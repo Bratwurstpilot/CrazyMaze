@@ -11,7 +11,7 @@ class TextureComponent:
         self.__color : tuple = (0,0,0)
         self.__fileConfig : None = None
 
-        self.__frameInterval : list = [0]
+        self.__frameInterval : list = [1 * 144]
         self.__frameIntervalCurrent : int = 0
         self.__frameCurrent : int = 0
 
