@@ -15,6 +15,7 @@ class TextureComponent:
         self.__frameIntervalCurrent : int = 0
         self.__frameCurrent : int = 0
 
+
     # Compute Methods
 
 
@@ -22,10 +23,10 @@ class TextureComponent:
             
         self.__frameCurrent += 1.0
 
-        if self.__frameCurrent >= self.__frameInterval[self.__frameIntervalCurrent]:
+        if self.__frameCurrent >= self.__frameInterval[self.__frameIntervalCurrent] and len(self.__textures) > 0:
             self.__frameCurrent = 0
             self.__textureCurrent = (self.__textureCurrent + 1) % len(self.__textures)
-            self.__frameIntervalCurrent = int((self.__frameIntervalCurrent + 1) % len(self.__frameInterval))
+            self.__frameIntervalCurrent = (self.__frameIntervalCurrent + 1) % len(self.__frameInterval)
 
 
     # Set Methods
@@ -64,4 +65,6 @@ class TextureComponent:
 
     def getTexture(self) -> pygame.image:
 
-        return self.__textures[self.__textureCurrent]
+        if len(self.__textures) > 0:
+            return self.__textures[self.__textureCurrent]
+        return None

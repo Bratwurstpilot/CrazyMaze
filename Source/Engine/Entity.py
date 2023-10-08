@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from Source.Engine.Animation import AnimationComponent
 from Source.Engine.Physics import PhysicsComponent
 from Source.Engine.Sound import SoundComponent
 from Source.Engine.Texture import TextureComponent
@@ -10,7 +9,6 @@ class Entity:
 
     def __init__(self):
 
-        self.__animationComp = AnimationComponent()
         self.__physicsComp = PhysicsComponent()
         self.__soundComp = SoundComponent()
         self.__textureComp = TextureComponent()
@@ -45,44 +43,44 @@ class Entity:
         self.__playable = True
 
 
-    def setPositionX(self, xPosition : int) -> int:
+    def setPositionX(self, xPosition : int) -> None:
 
         self.__positionX = xPosition
     
 
-    def setPositionY(self, yPosition : int) -> int:
+    def setPositionY(self, yPosition : int) -> None:
 
         self.__positionY = yPosition
     
 
-    def setPositionZ(self, zPosition : int) -> int:
+    def setPositionZ(self, zPosition : int) -> None:
 
         self.__positionZ = zPosition
 
 
-    def setPosition(self, positionX : int = 0, positionY : int = 0, positionZ : int = 0) -> int:
+    def setPosition(self, positionX : int = 0, positionY : int = 0, positionZ : int = 0) -> None:
 
         self.__positionX = positionX
         self.__positionY = positionY
         self.__positionZ = positionZ
 
     
-    def shiftPositonX(self, shift : int) -> int:
+    def shiftPositionX(self, shift : int) -> None:
 
         self.__positionX += shift
 
     
-    def shiftPositonY(self, shift : int) -> int:
+    def shiftPositionY(self, shift : int) -> None:
 
         self.__positionY += shift
 
     
-    def shiftPositonZ(self, shift : int) -> int:
+    def shiftPositionZ(self, shift : int) -> None:
 
         self.__positionY += shift
 
     
-    def shiftPosition(self, positionX : int = 0, positionY : int = 0, positionZ : int = 0) -> int:
+    def shiftPosition(self, positionX : int = 0, positionY : int = 0, positionZ : int = 0) -> None:
 
         self.__positionX += positionX
         self.__positionY += positionY
@@ -118,11 +116,6 @@ class Entity:
 
 
     # Get Methods
-
-
-    def getAnimationComponent(self) -> AnimationComponent:
-
-        return self.__animationComp
     
 
     def getPhysicsComponent(self) -> PhysicsComponent:

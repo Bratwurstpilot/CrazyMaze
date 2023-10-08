@@ -1,46 +1,142 @@
 import pygame
+import random
 
 from Source.Engine.Entity import Entity
 from Source.Engine.Scene import Scene
 from Source.Engine.Sound import Music
-
-import Source.Engine.Screen as SES
+from Source.Engine.Animation import Animation
+import Source.Engine.Screen as Screen
 
 
 def main():
     
     pygame.init()
-
-    entts = []
-
-    for i in range(0, 10, 2):
-        for j in range(0, 10, 2):
-            entt = Entity()
-            entt.setBody(50,50)
-            entt.setPosition(50 * j, 50 * i, 0)
-            entts.append(entt)
-
-    pygame.init()
-    screen = SES.setScreen(500, 500, "Crappy")
-
-    rend = Scene(screen, entts)
-    
     running = True
     clock = pygame.time.Clock()
-    screen : pygame.display = SES.setScreen(800,600, "")
+    screen : pygame.display = Screen.setScreen(1920, 1080, "")
 
+    entities : list = []
+    animations : list = []
+
+    #---------Simple Animation Example 1 : Flying Block--------------
 
     entt = Entity()
-    entt.setPosition(250,250,0)
-    entt.getTextureComponent().setTextureSet(["Source/Game/Files/KnightSprite1.png", "Source/Game/Files/KnightSprite2.png"])
-    entt.getTextureComponent().setFrameInterval(0.5)
+    entt.setPosition(0,0,0)
+    entt.setBody()
 
-    themeMain = Music()
-    themeMain.setMusic("Source/Game/Files/ThemeMainMenu.wav")
-    themeMain.setVolume(0.1)
-    themeMain.play()
+    entities.append(entt)
 
-    scene1 = Scene(screen, [entt])
+    animationEnttDown = Animation()
+    animationEnttDown.setComponents([entt])
+    animationEnttDown.setTargetPositions([[1820, 980]])
+
+    animationEnttUp = Animation()
+    animationEnttUp.setComponents([entt])
+    animationEnttUp.setTargetPositions([[0, 0]])
+
+    animationEnttDown.queue(animationEnttUp)
+    animationEnttUp.queue(animationEnttDown)
+
+    animations.append(animationEnttDown)
+    animations.append(animationEnttUp)
+
+    animationEnttUp.setActive()
+
+    #-----------------------------------------------
+
+    #---------Simple Animation Example 2 : Rain--------------
+
+    for i in range(300):
+        ent = Entity()
+        ent.setBody(4, 8)
+        x = random.randint(0,1900)
+        y = random.randint(0,3000) * -1
+        ent.setPosition(x, y)
+        entities.append(ent)
+
+        entAnimation = Animation()
+        entAnimation.setComponents([ent])
+        entAnimation.setTargetPositions([[x,1300]])
+        entAnimation.setExitAction("ent.setPositionY(y)", {"ent" : ent, "y" : y})
+        entAnimation.setTime(random.randint(1,11) * 0.1)
+        entAnimation.queue(entAnimation)
+
+        animations.append(entAnimation)
+        entAnimation.setActive()
+
+    #-----------------------------------------------
+
+    #---------Complex Animation Example : Incoming Logo Box-------------
+
+    # Flow in Effect
+
+    upperRect = Entity()
+    upperRect.setPosition(-300, 300, 0)
+    upperRect.setBody(300, 50)
+
+    centerRect = Entity()
+    centerRect.setPosition(-500, 350, 0)
+    centerRect.setBody(500, 100)
+
+    lowerRect = Entity()
+    lowerRect.setPosition(-300, 450, 0)
+    lowerRect.setBody(300, 50)
+
+    entities.append(upperRect)
+    entities.append(centerRect)
+    entities.append(lowerRect)
+
+    animationUpper = Animation()
+    animationUpper.setComponents([upperRect])
+    animationUpper.setTargetPositions([[750,300]])
+    animationUpper.setTime(0.3)
+
+    animationCenter = Animation()
+    animationCenter.setComponents([centerRect])
+    animationCenter.setTargetPositions([[650,350]])
+    animationCenter.setTime(0.5)
+
+    animationLower = Animation()
+    animationLower.setComponents([lowerRect])
+    animationLower.setTargetPositions([[750,450]])
+    animationLower.setTime(0.3)
+
+    animationCenter.queueAsDelay(animationUpper, 0.4)
+    animationCenter.queueAsDelay(animationLower, 0.4)
+
+    # Flow out Effect
+
+    animationUpperOut = Animation()
+    animationUpperOut.setComponents([upperRect])
+    animationUpperOut.setTargetPositions([[2000,300]])
+    animationUpperOut.setTime(0.3)
+
+    animationCenterOut = Animation()
+    animationCenterOut.setComponents([centerRect])
+    animationCenterOut.setTargetPositions([[2000,350]])
+    animationCenterOut.setTime(0.5)
+
+    animationLowerOut = Animation()
+    animationLowerOut.setComponents([lowerRect])
+    animationLowerOut.setTargetPositions([[2000,450]])
+    animationLowerOut.setTime(0.3)
+
+    animationCenter.queueAsDelay(animationUpperOut, 2.0)
+    animationCenter.queueAsDelay(animationCenterOut, 2.1)
+    animationCenter.queueAsDelay(animationLowerOut, 2.0)
+
+    animations.append(animationUpper)
+    animations.append(animationCenter)
+    animations.append(animationLower)
+    animations.append(animationUpperOut)
+    animations.append(animationCenterOut)
+    animations.append(animationLowerOut)
+
+    animationCenter.setActive()
+
+    #-------------------------------------------
+
+    scene1 = Scene(screen, entities)
 
     while running:
         for event in pygame.event.get():
@@ -48,7 +144,11 @@ def main():
                 running = False
 
         scene1.renderScene()
-        entt.update()
+
+        for entity in entities:
+            entity.update()
+        for animation in animations:
+            animation.update()
 
         clock.tick(144)
 
