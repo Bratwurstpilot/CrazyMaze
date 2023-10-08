@@ -130,7 +130,7 @@ class Animation:
         self.__active = False
         self.__initialized = False
         self.__componentsActive = [True for _ in range(len(self.__components))]
-        self.__queueActive = [True for _ in range(len(self.__components))]
+        self.__queueActive = [True for _ in range(len(self.__queue))]
         self.__timer = 0.0
 
 

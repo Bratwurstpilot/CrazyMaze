@@ -58,7 +58,7 @@ def main():
         entAnimation.setComponents([ent])
         entAnimation.setTargetPositions([[x,1300]])
         entAnimation.setExitAction("ent.setPositionY(y)", {"ent" : ent, "y" : y})
-        entAnimation.setTime(random.randint(1,11) * 0.1)
+        entAnimation.setTime((i % 10 + 1) * 0.1)
         entAnimation.queue(entAnimation)
 
         animations.append(entAnimation)
@@ -125,6 +125,10 @@ def main():
     animationCenter.queueAsDelay(animationCenterOut, 2.1)
     animationCenter.queueAsDelay(animationLowerOut, 2.0)
 
+    program = "ent1.setPosition(-300, 300, 0) \nent2.setPosition(-500, 350, 0) \nent3.setPosition(-300, 450, 0) \nanim.setActive()"
+    animationCenter.setExitAction(program, {"ent1" : upperRect, "ent2" : centerRect, "ent3" : lowerRect, "anim" : animationCenter})
+    animationCenter.queueAsDelay(animationCenter, 5.0)
+
     animations.append(animationUpper)
     animations.append(animationCenter)
     animations.append(animationLower)
@@ -137,6 +141,18 @@ def main():
     #-------------------------------------------
 
     scene1 = Scene(screen, entities)
+
+    mainMenu = Music()
+    mainMenu.setMusic("Source/Game/Files/ThemeMainMenu.wav")
+    mainMenu.setVolume(0.1)
+    mainMenu.play()
+
+    player = Entity()
+    player.setPosition(200, 700, 0)
+    player.getTextureComponent().setTextureSet(["Source/Game/Files/KnightSprite1.png", "Source/Game/Files/KnightSprite2.png"])
+    player.getTextureComponent().setFrameInterval(0.5)
+    
+    entities.append(player)
 
     while running:
         for event in pygame.event.get():
