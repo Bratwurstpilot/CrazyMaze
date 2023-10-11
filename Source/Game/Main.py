@@ -20,19 +20,11 @@ def main():
 
     #---------Simple Animation Example 1 : Flying Block--------------
 
-    entt = Entity()
-    entt.setPosition(0,0,0)
-    entt.setBody()
-
+    entt = Entity(0,0,0)
     entities.append(entt)
 
-    animationEnttDown = Animation()
-    animationEnttDown.setComponents([entt])
-    animationEnttDown.setTargetPositions([[1820, 980]])
-
-    animationEnttUp = Animation()
-    animationEnttUp.setComponents([entt])
-    animationEnttUp.setTargetPositions([[0, 0]])
+    animationEnttDown = Animation([entt], [[1820, 980]])
+    animationEnttUp = Animation([entt], [[0,0]])
 
     animationEnttDown.queue(animationEnttUp)
     animationEnttUp.queue(animationEnttDown)
@@ -54,11 +46,8 @@ def main():
         ent.setPosition(x, y)
         entities.append(ent)
 
-        entAnimation = Animation()
-        entAnimation.setComponents([ent])
-        entAnimation.setTargetPositions([[x,1300]])
+        entAnimation = Animation([ent], [[x, 1300]], (i % 10 + 1) * 0.1)
         entAnimation.setExitAction("ent.setPositionY(y)", {"ent" : ent, "y" : y})
-        entAnimation.setTime((i % 10 + 1) * 0.1)
         entAnimation.queue(entAnimation)
 
         animations.append(entAnimation)
@@ -70,56 +59,26 @@ def main():
 
     # Flow in Effect
 
-    upperRect = Entity()
-    upperRect.setPosition(-300, 300, 0)
-    upperRect.setBody(300, 50)
-
-    centerRect = Entity()
-    centerRect.setPosition(-500, 350, 0)
-    centerRect.setBody(500, 100)
-
-    lowerRect = Entity()
-    lowerRect.setPosition(-300, 450, 0)
-    lowerRect.setBody(300, 50)
+    upperRect = Entity(-300, 300, 0, 300, 50)
+    centerRect = Entity(-500, 350, 0, 500, 100)
+    lowerRect = Entity(-300, 450, 0, 300, 50)
 
     entities.append(upperRect)
     entities.append(centerRect)
     entities.append(lowerRect)
 
-    animationUpper = Animation()
-    animationUpper.setComponents([upperRect])
-    animationUpper.setTargetPositions([[750,300]])
-    animationUpper.setTime(0.3)
-
-    animationCenter = Animation()
-    animationCenter.setComponents([centerRect])
-    animationCenter.setTargetPositions([[650,350]])
-    animationCenter.setTime(0.5)
-
-    animationLower = Animation()
-    animationLower.setComponents([lowerRect])
-    animationLower.setTargetPositions([[750,450]])
-    animationLower.setTime(0.3)
+    animationUpper = Animation([upperRect], [[750, 300]], 0.3)
+    animationCenter = Animation([centerRect], [[650, 350]], 0.5)
+    animationLower = Animation([lowerRect], [[750, 450]], 0.3)
 
     animationCenter.queueAsDelay(animationUpper, 0.4)
     animationCenter.queueAsDelay(animationLower, 0.4)
 
     # Flow out Effect
 
-    animationUpperOut = Animation()
-    animationUpperOut.setComponents([upperRect])
-    animationUpperOut.setTargetPositions([[2000,300]])
-    animationUpperOut.setTime(0.3)
-
-    animationCenterOut = Animation()
-    animationCenterOut.setComponents([centerRect])
-    animationCenterOut.setTargetPositions([[2000,350]])
-    animationCenterOut.setTime(0.5)
-
-    animationLowerOut = Animation()
-    animationLowerOut.setComponents([lowerRect])
-    animationLowerOut.setTargetPositions([[2000,450]])
-    animationLowerOut.setTime(0.3)
+    animationUpperOut = Animation([upperRect], [[2000, 300]], 0.3)
+    animationCenterOut = Animation([centerRect], [[2000, 350]], 0.5)
+    animationLowerOut = Animation([lowerRect], [[2000, 450]], 0.3)
 
     animationCenter.queueAsDelay(animationUpperOut, 2.0)
     animationCenter.queueAsDelay(animationCenterOut, 2.1)
@@ -142,13 +101,10 @@ def main():
 
     scene1 = Scene(screen, entities)
 
-    mainMenu = Music()
-    mainMenu.setMusic("Source/Game/Files/ThemeMainMenu.wav")
-    mainMenu.setVolume(0.1)
+    mainMenu = Music("Source/Game/Files/ThemeMainMenu.wav", 0.1)
     mainMenu.play()
 
-    player = Entity()
-    player.setPosition(200, 700, 0)
+    player = Entity(200, 700, 0)
     player.getTextureComponent().setTextureSet(["Source/Game/Files/KnightSprite1.png", "Source/Game/Files/KnightSprite2.png"])
     player.getTextureComponent().setFrameInterval(0.5)
     

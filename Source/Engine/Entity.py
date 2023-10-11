@@ -7,7 +7,7 @@ from Source.Engine.Texture import TextureComponent
 
 class Entity:
 
-    def __init__(self):
+    def __init__(self, positionX : int = 0, positionY : int = 0, positionZ : int = 0, bodyWidth : int = 100, bodyHeight : int = 100):
 
         self.__physicsComp = PhysicsComponent()
         self.__soundComp = SoundComponent()
@@ -16,12 +16,12 @@ class Entity:
 
         self.__playable : bool = False
 
-        self.__positionX : int = 0
-        self.__positionY : int = 0
-        self.__positionZ : int = 0
+        self.__positionX : int = positionX
+        self.__positionY : int = positionY
+        self.__positionZ : int = positionZ
         
-        self.__bodyWidth : int = 0
-        self.__bodyHeight : int = 0
+        self.__bodyWidth : int = bodyWidth
+        self.__bodyHeight : int = bodyHeight
 
         self.__configSave : None = None
 

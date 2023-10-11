@@ -3,14 +3,15 @@ import pygame
 
 class Animation:
 
-    def __init__(self) -> None:
+    def __init__(self, components : list = [], targetPositions : list[list[int, int]] = [[0,0]], time : float = 1.0) -> None:
         
-        self.__components : list = []
-        self.__targetPositions : list = []
-        self.__componentsActive : list = []
+        self.__components : list = components
+        self.__componentsActive : list = [True for _ in range(len(self.__components))]
+
+        self.__targetPositions : list[list[int, int]] = targetPositions 
 
         self.__active : bool = False
-        self.__time : float = 1.0 * 144
+        self.__time : float = time * 144
 
         self.__stepValues : list = []
         self.__initialized : bool = False
@@ -40,13 +41,12 @@ class Animation:
         self.__timer += 1
         for num, timeLimit in enumerate(self.__delay):
             if self.__timer >= timeLimit and self.__queueActive[num]:
-
                 # Is a currently animated component in a queued Animation? If so, block the queued animation until the object animation finished
                 block : bool = False
                 for i in range(len(self.__components)):
                     if self.__componentsActive[i] and self.__components[i] in self.__queue[num].getComponents():
                         block = True
-
+ 
                 if not block:
                     self.__queue[num].setActive()
                     self.__queueActive[num] = False

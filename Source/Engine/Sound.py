@@ -43,10 +43,12 @@ class SoundComponent:
 
 class Music(): # .queue bedenken
 
-    def __init__(self) -> None:
+    def __init__(self, musicTrack : str = "", volume : float = 0.1) -> None:
         
+        self.__sound : str =  musicTrack
+        self.__volume : float = volume
+
         self.__loop : int = -1 
-        self.__volume : float = 0.5
         self.__playing : bool = False
 
     
