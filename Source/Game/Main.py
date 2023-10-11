@@ -4,8 +4,12 @@ import random
 from Source.Engine.Entity import Entity
 from Source.Engine.Scene import Scene
 from Source.Engine.Sound import Music
+
 from Source.Engine.Animation import Animation
-import Source.Engine.Screen as Screen
+
+
+from Source.Engine.Screen import Screen
+
 
 
 def main():
@@ -19,6 +23,7 @@ def main():
     animations : list = []
 
     #---------Simple Animation Example 1 : Flying Block--------------
+
 
     entt = Entity(0,0,0)
     entities.append(entt)
