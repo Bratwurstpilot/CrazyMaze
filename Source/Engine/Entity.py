@@ -1,0 +1,178 @@
+from __future__ import annotations
+
+from Source.Engine.Physics import PhysicsComponent
+from Source.Engine.Sound import SoundComponent
+from Source.Engine.Texture import TextureComponent
+
+
+class Entity:
+
+    def __init__(self, positionX : int = 0, positionY : int = 0, positionZ : int = 0, bodyWidth : int = 100, bodyHeight : int = 100):
+
+        self.__physicsComp = PhysicsComponent()
+        self.__soundComp = SoundComponent()
+        self.__textureComp = TextureComponent()
+        #self.__controllComp = Controller(id : int = 0)
+
+        self.__playable : bool = False
+
+        self.__positionX : int = positionX
+        self.__positionY : int = positionY
+        self.__positionZ : int = positionZ
+        
+        self.__bodyWidth : int = bodyWidth
+        self.__bodyHeight : int = bodyHeight
+
+        self.__configSave : None = None
+
+
+    # Update Process
+
+
+    def update(self) -> None:
+        
+        self.__physicsComp.update()
+        self.__textureComp.update()
+
+
+    # Set Methods
+
+
+    def setPlayable(self) -> None:
+
+        self.__playable = True
+
+
+    def setPositionX(self, xPosition : int) -> None:
+
+        self.__positionX = xPosition
+    
+
+    def setPositionY(self, yPosition : int) -> None:
+
+        self.__positionY = yPosition
+    
+
+    def setPositionZ(self, zPosition : int) -> None:
+
+        self.__positionZ = zPosition
+
+
+    def setPosition(self, positionX : int = 0, positionY : int = 0, positionZ : int = 0) -> None:
+
+        self.__positionX = positionX
+        self.__positionY = positionY
+        self.__positionZ = positionZ
+
+    
+    def shiftPositionX(self, shift : int) -> None:
+
+        self.__positionX += shift
+
+    
+    def shiftPositionY(self, shift : int) -> None:
+
+        self.__positionY += shift
+
+    
+    def shiftPositionZ(self, shift : int) -> None:
+
+        self.__positionY += shift
+
+    
+    def shiftPosition(self, positionX : int = 0, positionY : int = 0, positionZ : int = 0) -> None:
+
+        self.__positionX += positionX
+        self.__positionY += positionY
+        self.__positionZ += positionZ
+    
+
+    def setBody(self, width : int = 100, height : int = 100) -> None:
+
+        self.__bodyWidth = width
+        self.__bodyHeight = height 
+
+    
+    def setBodyWidth(self, width : int) -> None:
+
+        self.__bodyWidth = width
+
+
+    def setBodyHeight(self, height : int) -> None:
+
+        self.__bodyHeight = height
+
+    
+    def disablePlayable(self) -> None:
+
+        self.__playable = False
+
+
+    def setConfig(self, file : None) -> None:
+        
+        if self.__configSave != None : print("Overwriting Config on Entity " + self)
+        self.__configSave = file
+        #TODO Parse File Content 
+
+
+    # Get Methods
+    
+
+    def getPhysicsComponent(self) -> PhysicsComponent:
+
+        return self.__physicsComp
+
+
+    def getTextureComponent(self) -> TextureComponent:
+
+        return self.__textureComp
+    
+
+    def getSoundComponent(self) -> SoundComponent:
+
+        return self.__soundComp
+    
+
+    def getPosition(self) -> list:
+
+        return [self.__positionX, self.__positionY]
+    
+
+    def getPositionX(self) -> int:
+
+        return self.__positionX
+    
+
+    def getPositionY(self) -> int:
+
+        return self.__positionY
+    
+
+    def getPositionZ(self) -> int:
+
+        return self.__positionZ
+    
+
+    def getBody(self) -> list:
+
+        return [self.__bodyWidth, self.__bodyHeight]
+    
+
+    def getBodyWidth(self) -> int:
+
+        return self.__bodyWidth
+    
+    
+    def getBodyHeight(self) -> int:
+
+        return self.__bodyHeight
+    
+    
+    def getCollide(self, entities : list[Entity]) -> list:
+
+        return [entity for entity in entities if self.checkCollide(entity) == True]
+
+
+    def checkCollide(self, entity : Entity) -> list:
+
+        return self.__physicsComp.checkCollide(self, entity)
