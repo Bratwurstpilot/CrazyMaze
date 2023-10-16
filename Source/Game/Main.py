@@ -4,11 +4,9 @@ import random
 from Source.Engine.Entity import Entity
 from Source.Engine.Scene import Scene
 from Source.Engine.Sound import Music
-
 from Source.Engine.Animation import Animation
-
-
 from Source.Engine.Screen import Screen
+from Source.Engine.UIElement import UIElement
 
 
 
@@ -20,12 +18,25 @@ def main():
     screen : pygame.display = Screen.setScreen(1920, 1080, "")
 
     entities : list = []
+    uiEntities : list = []
     animations : list = []
+
+    button = UIElement()
+    button.setCommand('print("Hello")')
+    uiEntities.append(button)
+
+    button2 = UIElement()
+    button2.setCommand('print("Hello2")')
+    button2.setPositionX(200)
+    button2.setPositionY(200)
+    uiEntities.append(button2)
 
     #---------Simple Animation Example 1 : Flying Block--------------
 
-
-    entt = Entity(0,0,0)
+    entt = Entity()
+    entt.setPosition(0,0,0)
+    entt.setBody()
+    
     entities.append(entt)
 
     animationEnttDown = Animation([entt], [[1820, 980]])
@@ -104,7 +115,7 @@ def main():
 
     #-------------------------------------------
 
-    scene1 = Scene(screen, entities)
+    scene1 = Scene(screen, entities, uiEntities)
 
     mainMenu = Music("Source/Game/Files/ThemeMainMenu.wav", 0.1)
     mainMenu.play()
@@ -120,12 +131,17 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
 
-        scene1.renderScene()
+        scene1.render()
+        
+        for entity in uiEntities:
+            entity.onClick(pygame.mouse.get_pos())
 
         for entity in entities:
             entity.update()
         for animation in animations:
             animation.update()
+
+        
 
         clock.tick(144)
 

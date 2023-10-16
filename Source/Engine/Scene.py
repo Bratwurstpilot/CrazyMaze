@@ -3,13 +3,21 @@ import pygame
 
 class Scene():
 
-    def __init__(self, newScreen : pygame.display, newElements : list) -> None:
+    def __init__(self, newScreen : pygame.display, newElements : list, newUIElements : list) -> None:
 
         self.screen : pygame.display = newScreen
         self.elements : list = self.depthSort(newElements)
+        self.uiElements : list = newUIElements
 
 
-    def renderScene(self) -> None:
+    def render(self) -> None:
+        
+        self.__renderElements()
+        self.__renderUI()
+        pygame.display.update()
+
+
+    def __renderElements(self) -> None:
         
         self.screen.fill((255, 255, 255))
 
@@ -22,7 +30,11 @@ class Scene():
                 self.screen.blit(img, (element.getPositionX(), element.getPositionY(), element.getBodyWidth(), element.getBodyHeight()))
 
 
-        pygame.display.update()
+    def __renderUI(self) -> None:
+
+        for element in self.uiElements:
+            print(element.getPositionX())
+            pygame.draw.rect(self.screen, (0, 0, 0), (element.getPositionX(), element.getPositionY(), element.getBodyWidth(), element.getBodyHeight()))
 
 
     def depthSort(self, elements : list) -> list :
