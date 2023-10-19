@@ -29,6 +29,11 @@ def main():
     button2.setCommand('print("Hello2")')
     button2.setPositionX(200)
     button2.setPositionY(200)
+    button2.setPositionZ(2)
+    button2.setText("Crazy Maze")
+    button2.setTextFont()
+    button2.setRect()
+
     uiEntities.append(button2)
 
     #---------Simple Animation Example 1 : Flying Block--------------

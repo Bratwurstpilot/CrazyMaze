@@ -23,6 +23,7 @@ class UIElement:
 
         self.__font : pygame.font = pygame.font.SysFont('Arial', 40)
         self.__rect : pygame.Rect = pygame.Rect(100, 100, 100, 100)
+        self.__textFont = self.__font.render(self.__text, True, (255,255,255))
 
 
     def __execCommand(self) -> None:
@@ -46,16 +47,26 @@ class UIElement:
 
 
     #set Methods
+    
+
+    def setTextFont(self) -> None:
+
+        self.__textFont = self.__font.render(self.__text, True, (255,255,255))
+
+
+    def setRect(self) -> None:
+
+        self.__rect = self.__textFont.get_rect(center = (self.__PositionX + self.__width / 2, self.__PositionY + self.__height / 2))
+
+
+    def setText(self, text : str) -> None:
+
+        self.__text = text
 
 
     def setFont(self, font : pygame.font, fontSize : int) -> None:
 
         self.__font = pygame.font.SysFont(font, fontSize)
-
-
-    def setRect(self) -> None:
-
-        self.__rect = pygame.Rect(self.__PositionX, self.__PositionY, self.__width, self.__height)
    
 
     def setCommand(self, newCommand : str) -> None:
@@ -109,13 +120,28 @@ class UIElement:
         
 
 
-    def setWidth(self, newHeight : int) -> None:
+    def setHeight(self, newHeight : int) -> None:
 
         self.__height = newHeight
         
 
 
     #get Methods
+    
+
+    def getTextFont(self) :
+
+        return self.__textFont
+
+
+    def getText(self) -> str:
+
+        return self.__text
+    
+
+    def getRect(self) -> pygame.Rect:
+
+        return self.__rect
 
 
     def getTextureComponent(self) -> TextureComponent:
