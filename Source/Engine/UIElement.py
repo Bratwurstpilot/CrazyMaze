@@ -12,18 +12,20 @@ class UIElement:
         self.__onePress : bool = True
         self.__command : str = ""
         self.__alreadyPressed : bool = False
-        
         self.__text : str = ""
+        self.__textSize : int = 20
+        self.__textColor : tuple = (255, 255, 255)
+        self.__bgColor : tuple = (0, 0, 0)
+    
         self.__PositionX : int = 100
         self.__PositionY : int = 100
         self.__PositionZ : int = 1
-
         self.__width : int = 100
         self.__height : int = 100
 
         self.__font : pygame.font = pygame.font.SysFont('Arial', 40)
         self.__rect : pygame.Rect = pygame.Rect(100, 100, 100, 100)
-        self.__textFont = self.__font.render(self.__text, True, (255,255,255))
+        self.__textFont = self.__font.render(self.__text, True, self.__textColor)
 
 
     def __execCommand(self) -> None:
@@ -48,6 +50,11 @@ class UIElement:
 
     #set Methods
     
+    
+    def setTextSize(self, size : int) -> None:
+
+        self.__textsize = size
+
 
     def setTextFont(self) -> None:
 
@@ -67,16 +74,6 @@ class UIElement:
     def setFont(self, font : pygame.font, fontSize : int) -> None:
 
         self.__font = pygame.font.SysFont(font, fontSize)
-   
-
-    def setCommand(self, newCommand : str) -> None:
-
-        self.__command = newCommand
-
-
-    def setUsable(self) -> None:
-
-        self.__useable = True
 
 
     def shitPositionX(self, shift : int) -> None:
@@ -84,17 +81,14 @@ class UIElement:
         self.__PositionX += shift
         
 
-
     def shitPositionY(self, shift : int) -> None:
 
         self.__PositionY += shift
         
 
-
     def shitPositionZ(self, shift : int) -> None:
 
         self.__PositionZ += shift
-        
 
 
     def setPositionX(self, newPos : int) -> None:
@@ -102,12 +96,10 @@ class UIElement:
         self.__PositionX = newPos
         
 
-
     def setPositionY(self, newPos : int) -> None:
 
         self.__PositionY = newPos
         
-
 
     def setPositionZ(self, newPos : int) -> None:
 
@@ -119,12 +111,19 @@ class UIElement:
         self.__width = newWidth
         
 
-
     def setHeight(self, newHeight : int) -> None:
 
         self.__height = newHeight
-        
+    
 
+    def setCommand(self, newCommand : str) -> None:
+
+        self.__command = newCommand
+
+
+    def setUsable(self) -> None:
+
+        self.__useable = True
 
     #get Methods
     
