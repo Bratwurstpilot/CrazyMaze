@@ -4,19 +4,22 @@ import pygame
 
 class EntityController():
 
-    def __init__(self, entities : list[Entity] = []) -> None:
+    def __init__(self, entities : list[Entity] = [], id : int = 0) -> None:
 
         self.__aiControlled : bool = False
         self.__controlledEntities : list[Entity] = entities
         self.__keysPressed : list[str] = []
 
-        self.__controllerID : int = 0 # ID 0 => WASD, ID 1 => ULDR
+        self.__controllerID : int = id # ID 0 => WASD, ID 1 => ULDR
     
 
     def update(self, key, mode : bool) -> None:
         
         input = self.__processInput(key)
 
+        if input == None:
+            return 
+        
         for entity in self.__controlledEntities:
             entity.getPhysicsComponent().resetMomentum()
 
@@ -45,9 +48,14 @@ class EntityController():
     # Set Methods
 
     
-    def setControllScript(self, script : str) -> None:
+    def setControllerScript(self, script : str) -> None:
 
         pass
+
+
+    def setControllerID(self, id : int) -> None:
+
+        self.__controllerID = id
 
 
     # Get Methods

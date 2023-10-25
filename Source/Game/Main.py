@@ -112,7 +112,8 @@ def main():
     player.getTextureComponent().setFrameInterval(0.5)
     entities.append(player)
 
-    controller = EntityController([player])
+    controller = EntityController([player], 1)
+    
 
     while running:
         for event in pygame.event.get():
