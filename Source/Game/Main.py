@@ -107,22 +107,32 @@ def main():
     mainMenu = Music("Source/Game/Files/ThemeMainMenu.wav", 0.1)
     #mainMenu.play()
 
-    player = Entity(200, 700, 0)
-    player.getTextureComponent().setTextureSet(["Source/Game/Files/KnightSprite1.png", "Source/Game/Files/KnightSprite2.png"])
-    player.getTextureComponent().setFrameInterval(0.5)
-    entities.append(player)
+    player1 = Entity(200, 700, 0)
+    player1.getTextureComponent().setTextureSet(["Source/Game/Files/KnightSprite1.png", "Source/Game/Files/KnightSprite2.png"])
+    player1.getTextureComponent().setFrameInterval(0.5)
+    entities.append(player1)
 
-    controller = EntityController([player], 1)
+    controller1 = EntityController([player1], 0)
+
+    player2 = Entity(200, 700, 0)
+    player2.getTextureComponent().setTextureSet(["Source/Game/Files/KnightSprite1.png", "Source/Game/Files/KnightSprite2.png"])
+    player2.getTextureComponent().setFrameInterval(0.5)
+    entities.append(player2)
+
+    controller2 = EntityController([player2], 1)
     
+    controllers = [controller1, controller2]
 
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
             if event.type == pygame.KEYDOWN:
-                controller.update(event.key, True)
+                for controller in controllers:
+                    controller.update(event.key, True)
             if event.type == pygame.KEYUP:
-                controller.update(event.key, False)
+                for controller in controllers:
+                    controller.update(event.key, False)
         scene1.renderScene()
 
         for entity in entities:
