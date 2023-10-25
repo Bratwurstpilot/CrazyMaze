@@ -32,6 +32,10 @@ class Entity:
     def update(self) -> None:
         
         self.__physicsComp.update()
+        
+        self.__positionX += self.__physicsComp.getMomentum()[0]
+        self.__positionY += self.__physicsComp.getMomentum()[1]
+
         self.__textureComp.update()
 
 

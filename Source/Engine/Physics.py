@@ -6,8 +6,9 @@ class PhysicsComponent:
     def __init__(self):
 
         self.__inPhysics : bool = False
-        self.__velocityX : float = 0.0
-        self.__velocityY : float = 0.0
+        self.__velocityX : float = 5.0
+        self.__velocityY : float = 5.0
+        self.__momentum : list[float, float] = [0.0, 0.0]
 
 
     # Physics Model Functions
@@ -26,7 +27,41 @@ class PhysicsComponent:
 
     def update(self, postion : list[int] = [0,0]) :
 
-        return [postion[0] + self.__velocityX, postion[1] - self.__velocityY]
+        pass
+
+
+    # Set Methods 
+
+
+    def setMomentumX(self, direction : int = 1) -> None:
+
+        self.__momentum[0] = self.__velocityX * direction
+
+    
+    def setMomentumY(self, direction : int = 1) -> None:
+
+        self.__momentum[1] = self.__velocityY * direction
+
+
+    def setMomentum(self, directionX : int = 1, directionY : int = 1) -> None:
+
+        self.__momentum[0] = self.__velocityX * directionX
+        self.__momentum[1] = self.__velocityY * directionY
+
+
+    def resetMomentum(self) -> None:
+
+        self.__momentum = [0.0, 0.0]
+
+
+    def resetMomentumX(self) -> None:
+
+
+        self.__momentum[0] = 0.0
+
+    def resetMomentumY(self) -> None:
+
+        self.__momentum[1] = 0.0
 
 
     # Get Methods
@@ -35,3 +70,23 @@ class PhysicsComponent:
     def getPhysicState(self) -> bool:
 
         return self.getPhysicState
+    
+
+    def getVelocityX(self) -> float:
+
+        return self.__velocityX
+    
+
+    def getVelocityY(self) -> float:
+
+        return self.__velocityY
+    
+
+    def getVelocity(self) -> float:
+
+        return [self.__velocityX, self.__velocityY]
+    
+
+    def getMomentum(self) -> list[float, float]:
+
+        return self.__momentum
