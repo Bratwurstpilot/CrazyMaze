@@ -2,6 +2,11 @@ import pygame
 
 
 class PhysicsComponent:
+
+    '''
+    The PhysicsComponent class can be used to derive
+    some basic physical properties and behaviour.
+    '''
     
     def __init__(self):
 
@@ -23,11 +28,6 @@ class PhysicsComponent:
         entity2Position = entity2.getPosition()
         entity2Body = entity2.getBody()
         ENTITY2RECT = pygame.rect(entity2Position[0], entity2Position[1], entity2Body[0], entity2Body[1])
-
-
-    def update(self, postion : list[int] = [0,0]) :
-
-        pass
 
 
     # Set Methods 
@@ -89,4 +89,5 @@ class PhysicsComponent:
 
     def getMomentum(self) -> list[float, float]:
 
+        #TODO Calculate Collisions and block momentum
         return self.__momentum

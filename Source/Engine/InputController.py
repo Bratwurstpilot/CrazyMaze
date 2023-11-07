@@ -1,48 +1,55 @@
+from abc import ABC, abstractmethod
+
 from Source.Engine.Entity import Entity
 import pygame
 
 
-class EntityController():
+class EntityController(ABC):
+
+    '''
+    An Entity controller can be called in the games lifespan
+    and handles all inputs made by the user by default.
+
+    It works with controller ID's = 
+    0 -> [WASD]               Controlls
+    1 -> [UP RIGHT DOWN LEFT] Controlls
+    '''
 
     def __init__(self, entities : list[Entity] = [], id : int = 0) -> None:
 
-        self.__aiControlled : bool = False
-        self.__controlledEntities : list[Entity] = entities
-        self.__keysPressed : list[str] = []
-
-        self.__controllerID : int = id # ID 0 => WASD, ID 1 => ULDR
+        self.controlledEntities : list[Entity] = entities
+        self.keysPressed : list[str] = []
+        self.controllerID : int = id
     
 
-    def update(self, key, mode : bool) -> None:
+    @abstractmethod
+    def update(self, key) -> None:
+
+        '''
+        update is an abstract method which is given the pressed key
+        in form : "UP", "DOWN", "LEFT" or "RIGHT"
+        '''
+        pass
+    
+
+    def update_(self, key, mode : bool) -> None:
         
-        input = self.__processInput(key)
+        '''
+        The Controller expects to get the key by the main program
+        and does the job to evaluate the pressed key.
+        '''
 
-        if input == None:
-            return 
+        input = self.processInput(key)
         
-        for entity in self.__controlledEntities:
-            entity.getPhysicsComponent().resetMomentum()
+        if not mode and input in self.keysPressed:
+            self.keysPressed.remove(input)
 
-        if not mode:
-            self.__keysPressed.remove(input)
-        else:
-            if input not in self.__keysPressed:
-                self.__keysPressed.append(input)
-                print(self.__keysPressed)
+        elif input not in self.keysPressed:
+            self.keysPressed.append(input)
 
-        if "LEFT" in self.__keysPressed:
-            for entity in self.__controlledEntities:
-                entity.getPhysicsComponent().setMomentumX(direction = -1)
-        elif "RIGHT" in self.__keysPressed:
-            for entity in self.__controlledEntities:
-                entity.getPhysicsComponent().setMomentumX()
+        self.update()
+        
 
-        if "UP" in self.__keysPressed:
-            for entity in self.__controlledEntities:
-                entity.getPhysicsComponent().setMomentumY(direction = -1)
-        elif "DOWN" in self.__keysPressed:
-            for entity in self.__controlledEntities:
-                entity.getPhysicsComponent().setMomentumY()
 
 
     # Set Methods
@@ -55,24 +62,15 @@ class EntityController():
 
     def setControllerID(self, id : int) -> None:
 
-        self.__controllerID = id
+        self.controllerID = id
 
 
     # Get Methods
 
 
-    def getKeys(self) -> None:
+    def processInput(self, key) -> None:
 
-        events = pygame.event.get()
-
-        for event in events:
-            if event.type == pygame.KEYDOWN:
-                return self.__processInput()
-
-
-    def __processInput(self, key) -> None:
-
-        if self.__controllerID == 0:
+        if self.controllerID == 0:
             if key == pygame.K_w:
                 return "UP"
             elif key == pygame.K_s:
@@ -82,7 +80,7 @@ class EntityController():
             elif key == pygame.K_d:
                 return "RIGHT"
 
-        elif self.__controllerID == 1:
+        elif self.controllerID == 1:
             if key == pygame.K_UP:
                 return "UP"
             elif key == pygame.K_DOWN:
