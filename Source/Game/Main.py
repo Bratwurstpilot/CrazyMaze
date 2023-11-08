@@ -6,7 +6,7 @@ from Source.Engine.Scene import Scene
 from Source.Engine.Sound import Music
 from Source.Engine.Animation import Animation
 from Source.Engine.Screen import Screen
-from Source.Engine.UIElement import UIElement
+
 
 
 
@@ -20,21 +20,6 @@ def main():
     entities : list = []
     uiEntities : list = []
     animations : list = []
-
-    button = UIElement()
-    button.setCommand('print("Hello")')
-    uiEntities.append(button)
-
-    button2 = UIElement()
-    button2.setCommand('print("Hello2")')
-    button2.setPositionX(200)
-    button2.setPositionY(200)
-    button2.setPositionZ(2)
-    button2.setText("Crazy Maze")
-    button2.setTextFont()
-    button2.setRect()
-
-    uiEntities.append(button2)
 
     #---------Simple Animation Example 1 : Flying Block--------------
 
@@ -138,8 +123,7 @@ def main():
 
         scene1.render()
         
-        for entity in uiEntities:
-            entity.onClick(pygame.mouse.get_pos())
+        
 
         for entity in entities:
             entity.update()
