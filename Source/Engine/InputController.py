@@ -38,7 +38,6 @@ class EntityController(ABC):
         The Controller expects to get the key by the main program
         and does the job to evaluate the pressed key.
         '''
-
         input = self.processInput(key)
         
         if not mode and input in self.keysPressed:
@@ -48,9 +47,7 @@ class EntityController(ABC):
             self.keysPressed.append(input)
 
         self.update()
-        
-
-
+    
 
     # Set Methods
 

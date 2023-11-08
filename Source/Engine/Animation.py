@@ -151,6 +151,7 @@ class Animation:
 
 
     # Get Methods
+    
 
     def getComponents(self) -> list:
 

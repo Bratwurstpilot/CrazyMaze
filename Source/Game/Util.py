@@ -23,6 +23,7 @@ class MyController(EntityController):
 
         super().__init__(entities, id)
 
+
     def update(self) -> None:
 
         if "LEFT" in self.keysPressed:
@@ -36,6 +37,7 @@ class MyController2(EntityController):
     def __init__(self, entities : list[Entity] = [], id : int = 0):
 
         super().__init__(entities, id)
+
 
     def update(self) -> None:
 
