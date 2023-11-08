@@ -3,6 +3,16 @@ import pygame
 
 class Animation:
 
+    '''
+    Animation is a delicate test class to implement basic 
+    animations like transition, rotation, relative rotation 
+    and scaling which can be mixed together as an event
+    based system.
+
+    NOTE: It is highly recommended to disable this component
+          when not using the animation system
+    '''
+
     def __init__(self, components : list = [], targetPositions : list[list[int, int]] = [[0,0]], time : float = 1.0) -> None:
         
         self.__components : list = components
