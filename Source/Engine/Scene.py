@@ -41,4 +41,4 @@ class Scene():
 
         elements.sort(key = lambda x : x.getPositionZ())
         
-        return elements
+        return elements 
