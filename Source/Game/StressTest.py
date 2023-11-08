@@ -3,6 +3,8 @@ import random
 
 from Source.Engine.Sound import Music
 from Source.Engine.Animation import Animation
+from Source.Engine.Label import Label
+from Source.Engine.Button import Button
 from Source.Game.Util import MyEntity, MyController, MyController2
 
 
@@ -10,9 +12,28 @@ class stressTest:
 
     entities : list = []
     animations : list = []
+    uiEntities : list = []
+    
+    #---------Test Labels--------------------------------------------
+    
+    testLabel = Label(100, 200, 1, 100, 100)
+    testLabel.setText("Crazy Maze")
+    testLabel.setBgColor((0, 0, 0))
+    testLabel.setTextFont()
+    testLabel.setRect()
+    uiEntities.append(testLabel)
+
+    def testFunc(x):
+        x.shiftPositionX(200)
+
+    testButton = Button(100, 300, 1, 200, 100, buttonFunction = testFunc, param = testLabel)
+    testButton.setText("Button")
+    testButton.setBgColor((0, 0, 0))
+    testButton.setTextFont()
+    testButton.setRect()
+    uiEntities.append(testButton)
 
     #---------Simple Animation Example 1 : Flying Block--------------
-
 
     entt = MyEntity(0,0,0)
     entities.append(entt)

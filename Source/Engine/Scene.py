@@ -33,7 +33,7 @@ class Scene():
     def __renderUI(self) -> None:
 
         for element in self.uiElements:
-            pygame.draw.rect(self.screen, (0, 0, 0), (element.getPositionX(), element.getPositionY(), element.getBodyWidth(), element.getBodyHeight()))
+            pygame.draw.rect(self.screen, element.getBgColor(), (element.getPositionX(), element.getPositionY(), element.getBodyWidth(), element.getBodyHeight()))
             self.screen.blit(element.getTextFont(), element.getRect())
 
 
