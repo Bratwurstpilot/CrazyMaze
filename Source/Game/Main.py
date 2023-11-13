@@ -1,10 +1,12 @@
 import pygame
 
 from Source.Engine.Scene import Scene
+from Source.Engine.Animation import Animation
 from Source.Engine.Screen import Screen
 from Source.Engine.Sound import Music
 from Source.Game.StressTest import stressTest
 from Source.Game.OtherTest import otherTest
+
 
 
 def main():
@@ -13,7 +15,9 @@ def main():
 
     running = True
     clock = pygame.time.Clock()
-    screen : pygame.display = Screen.setScreen(1920, 1080, "")
+    infoObject = pygame.display.Info()
+    print(infoObject)
+    screen : pygame.display = Screen.setScreen(infoObject.current_w, infoObject.current_h, "")
 
     test = stressTest
     test2 = otherTest
@@ -21,8 +25,9 @@ def main():
     entities = test.entities
     controllers = test.controllers
     animations = test.animations
+    uiEntities = test.uiEntities
 
-    scene1 = Scene(screen, entities)    
+    scene1 = Scene(screen, entities, uiEntities)    
 
     stateVar = 0
 
@@ -39,26 +44,33 @@ def main():
 
             #--------Experimental------------------------
             if event.type == pygame.MOUSEBUTTONDOWN:
+                  
                 if stateVar == 0:
                     entities = [otherTest.player]
                     controllers = [otherTest.controller]
                     animations = []
-                    scene1 = Scene(screen, entities)    
+                    scene1 = Scene(screen, entities, uiEntities)    
                     stateVar = 1
                 else:
                     entities = test.entities
                     controllers = test.controllers
                     animations = test.animations
-                    scene1 = Scene(screen, entities)  
+                    scene1 = Scene(screen, entities, uiEntities)  
                     stateVar = 0
             #---------------------------------------------
 
-        scene1.renderScene()
+        scene1.render()
+        
+        
 
         for entity in entities:
             entity.update()
+        for entity in uiEntities:
+            entity.update()             
         for animation in animations:
             animation.update()
+
+        
 
         clock.tick(144)
 

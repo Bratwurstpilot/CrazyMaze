@@ -2,6 +2,7 @@ import pygame
 import random
 
 from Source.Game.Util import MyEntity, MyController
+from Source.Engine.Label import Label
 
 
 class otherTest:
