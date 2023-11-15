@@ -4,9 +4,8 @@ from Source.Engine.Scene import Scene
 from Source.Engine.Animation import Animation
 from Source.Engine.Screen import Screen
 from Source.Engine.Sound import Music
-from Source.Game.Menu import Menu
 from Source.Game.StressTest import stressTest
-
+from Source.Game.OtherTest import otherTest
 
 
 
@@ -17,18 +16,18 @@ def main():
     running = True
     clock = pygame.time.Clock()
     infoObject = pygame.display.Info()
-    #print(infoObject)
+    print(infoObject)
     screen : pygame.display = Screen.setScreen(infoObject.current_w, infoObject.current_h, "")
 
-    mainMenu = Menu
+    test = stressTest
+    test2 = otherTest
 
-    background = mainMenu.background
-    entities = mainMenu.entities
-    #controllers = mainMenu.controllers
-    animations = mainMenu.animations
-    uiEntities = mainMenu.uiEntities
+    entities = test.entities
+    controllers = test.controllers
+    animations = test.animations
+    uiEntities = test.uiEntities
 
-    scene1 = Scene(screen, entities, uiEntities, background)    
+    scene1 = Scene(screen, entities, uiEntities)    
 
     stateVar = 0
 
@@ -36,15 +35,15 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-            #if event.type == pygame.KEYDOWN:
-                #for controller in controllers:
-                    #controller.update_(event.key, True)
-           # if event.type == pygame.KEYUP:
-                #for controller in controllers:
-                    #controller.update_(event.key, False)
+            if event.type == pygame.KEYDOWN:
+                for controller in controllers:
+                    controller.update_(event.key, True)
+            if event.type == pygame.KEYUP:
+                for controller in controllers:
+                    controller.update_(event.key, False)
 
             #--------Experimental------------------------
-            """if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.type == pygame.MOUSEBUTTONDOWN:
                   
                 if stateVar == 0:
                     entities = [otherTest.player]
@@ -58,7 +57,6 @@ def main():
                     animations = test.animations
                     scene1 = Scene(screen, entities, uiEntities)  
                     stateVar = 0
-            """
             #---------------------------------------------
 
         scene1.render()

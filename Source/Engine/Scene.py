@@ -3,11 +3,12 @@ import pygame
 
 class Scene():
 
-    def __init__(self, newScreen : pygame.display, newElements : list, newUIElements : list) -> None:
+    def __init__(self, newScreen : pygame.display, newElements : list, newUIElements : list, image : pygame.image = None) -> None:
 
         self.screen : pygame.display = newScreen
         self.elements : list = self.depthSort(newElements)
         self.uiElements : list = newUIElements
+        self.background : pygame.image = image
 
 
     def render(self) -> None:
@@ -19,7 +20,8 @@ class Scene():
 
     def __renderElements(self) -> None:
         
-        self.screen.fill((255, 255, 255))
+        if self.background != None:
+            self.screen.blit(self.background, (0, 0))
 
         for element in self.elements:
 

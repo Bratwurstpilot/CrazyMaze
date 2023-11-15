@@ -25,6 +25,8 @@ class stressTest:
 
     def testFunc(x):
         x.shiftPositionX(200)
+        x.setTextFont()
+        x.setRect()
 
     testButton = Button(100, 300, 1, 200, 100, buttonFunction = testFunc, param = testLabel)
     testButton.setText("Button")

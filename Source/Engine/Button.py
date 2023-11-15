@@ -10,15 +10,15 @@ class Button(Entity):
     def defaultFunc():
         print("default")
 
-    def __init__(self, positionX : int = 0, positionY : int = 0, positionZ : int = 0, bodyWidth : int = 100, bodyHeight : int = 100, buttonFunction = defaultFunc, param = None):
+    def __init__(self, positionX : int = 0, positionY : int = 0, positionZ : int = 0, bodyWidth : int = 100, bodyHeight : int = 100, text : str = "Crazy Maze", textColor : tuple = (255, 255, 255), size : int = 20, buttonFunction = defaultFunc, param = None):
 
         super().__init__(positionX, positionY, positionZ, bodyWidth, bodyHeight)
         
-        self.__text : str = ""
-        self.__textSize : int = 20
-        self.__textColor : tuple = (255, 255, 255)
+        self.__text : str = text
+        self.__textSize : int = size
+        self.__textColor : tuple = textColor
         self.__bgColor : tuple = (0, 0, 0)
-        self.__font : pygame.font = pygame.font.SysFont('Arial', 40)
+        self.__font : pygame.font = pygame.font.SysFont('Arial', self.__textSize, True)
         self.__rect : pygame.Rect = pygame.Rect(100, 100, 100, 100)
         self.__textFont = self.__font.render(self.__text, True, self.__textColor)
 
