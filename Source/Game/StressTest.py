@@ -32,7 +32,7 @@ class stressTest:
     testButton.setText("Button")
     testButton.setBgColor((0, 0, 0))
     testButton.setTextFont()
-    testButton.setRect()
+    testButton.setTextRect()
     uiEntities.append(testButton)
 
     #---------Simple Animation Example 1 : Flying Block--------------

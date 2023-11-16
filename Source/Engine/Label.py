@@ -15,7 +15,8 @@ class Label(Entity):
         self.__textColor : tuple = textColor
         self.__bgColor : tuple = (0, 0, 0)
         self.__font : pygame.font = pygame.font.SysFont('Arial', self.__textSize, True)
-        self.__rect : pygame.Rect = pygame.Rect(100, 100, 100, 100)
+        self.__rect : pygame.Rect = pygame.Rect(positionX, positionY, bodyWidth, bodyHeight)
+        self.__textRect : pygame.Rect = pygame.Rect(100, 100, 100, 100)
         self.__textFont = self.__font.render(self.__text, True, self.__textColor)
 
 
@@ -38,7 +39,12 @@ class Label(Entity):
 
     def setRect(self) -> None:
 
-        self.__rect = self.__textFont.get_rect(center = (self.positionX + (self.bodyWidth / 2), self.positionY + self.bodyHeight / 2))
+        self.__rect = pygame.Rect(self.positionX, self.positionY, self.bodyWidth, self.bodyHeight)
+    
+    
+    def setTextRect(self) -> None:
+
+        self.__textRect = self.__textFont.get_rect(center = (self.positionX + (self.bodyWidth / 2), self.positionY + self.bodyHeight / 2))
 
 
     def setText(self, text : str) -> None:
@@ -54,6 +60,7 @@ class Label(Entity):
     def setBgColor(self, color : tuple) -> None:
 
         self.__bgColor = color
+        
 
     #get Methods
 
@@ -71,6 +78,11 @@ class Label(Entity):
     def getRect(self) -> pygame.Rect:
 
         return self.__rect
+    
+
+    def getTextRect(self) -> pygame.Rect:
+
+        return self.__textRect
 
 
     def getBgColor(self) -> tuple:

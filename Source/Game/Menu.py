@@ -1,5 +1,7 @@
+from __future__ import annotations
 import pygame
 import random
+
 
 from Source.Engine.Sound import Music
 from Source.Engine.Animation import Animation
@@ -9,28 +11,32 @@ from Source.Game.Util import MyEntity, MyController, MyController2
 
 class Menu:
 
-    entities : list = []
-    animations : list = []
-    uiEntities : list = []
+    def __init__(self, functions):
+        functions : list = functions
 
-    background = pygame.image.load("Source/Game/Files/MainBackground.png")
+        self.entities : list = []
+        self.animations : list = []
+        self.uiEntities : list = []
 
-    gameTitle = Label(1920//2, 440, 0, 1, 1, "Crazy Maze", (0, 110, 18), 70)
-    gameTitle.setRect()
-    uiEntities.append(gameTitle)
+        self.background = pygame.image.load("Source/Game/Files/MainBackground.png")
 
+        gameTitle = Label(1920//2, 440, 0, 1, 1, "Crazy Maze", (0, 110, 18), 70)
+        gameTitle.setTextRect()
+        self.uiEntities.append(gameTitle)
 
-    startGame = Button(1920//2, 540, 0, 1, 1, "Spiel erstellen", (0, 110, 18), 40)
-    startGame.setRect()
-    uiEntities.append(startGame)
-    
-    options = Button(1920//2, 640, 0, 1, 1, "Optionen", (0, 110, 18), 40)
-    options.setRect()
-    uiEntities.append(options)
-    
-    quitGame = Button(1920//2, 740, 0, 1, 1, "Beenden", (0, 110, 18), 40)
-    quitGame.setRect()
-    uiEntities.append(quitGame)
-    pygame.init()
-    mainMenu = Music("Source/Game/Files/ThemeMainMenu.wav", 0.1)
-    mainMenu.play()
+        startGame = Button(1920//2 - 150, 490, 0, 300, 50, "Spiel erstellen", (0, 110, 18), 40)
+        startGame.setTextRect()
+        
+        self.uiEntities.append(startGame)
+        
+        options = Button(1920//2 - 150, 550, 0, 300, 50, "Optionen", (0, 110, 18), 40)
+        options.setTextRect()
+        self.uiEntities.append(options)
+        
+        quitGame = Button(1920//2 - 150, 610, 0, 300, 50, "Beenden", (0, 110, 18), 40, functions, [False])
+        quitGame.setTextRect()
+        self.uiEntities.append(quitGame)
+
+        pygame.init()
+        mainMenu = Music("Source/Game/Files/ThemeMainMenu.wav", 0.1)
+        mainMenu.play()
