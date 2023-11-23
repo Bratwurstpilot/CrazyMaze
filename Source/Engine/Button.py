@@ -115,3 +115,7 @@ class Button(Entity):
     def getBgColor(self) -> tuple:
 
         return self.__bgColor
+
+    def getCommand(self) -> str:
+        
+        return self.__command

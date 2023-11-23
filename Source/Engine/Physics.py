@@ -23,12 +23,13 @@ class PhysicsComponent:
 
         entity1Position = entity1.getPosition()
         entity1Body = entity1.getBody()
-        ENTITY1RECT = pygame.rect(entity1Position[0], entity1Position[1], entity1Body[0], entity1Body[1])
+        ENTITY1RECT = pygame.Rect(entity1Position[0], entity1Position[1], entity1Body[0], entity1Body[1])
 
         entity2Position = entity2.getPosition()
         entity2Body = entity2.getBody()
-        ENTITY2RECT = pygame.rect(entity2Position[0], entity2Position[1], entity2Body[0], entity2Body[1])
-
+        ENTITY2RECT = pygame.Rect(entity2Position[0], entity2Position[1], entity2Body[0], entity2Body[1])
+        
+        return ENTITY1RECT.colliderect(ENTITY2RECT)
 
     # Set Methods 
 
