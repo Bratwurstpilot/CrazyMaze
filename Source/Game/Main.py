@@ -8,7 +8,6 @@ from Source.Game.StressTest import stressTest
 from Source.Game.OtherTest import otherTest
 
 
-
 def main():
     
     pygame.init()
@@ -16,7 +15,7 @@ def main():
     running = True
     clock = pygame.time.Clock()
     infoObject = pygame.display.Info()
-    print(infoObject)
+
     screen : pygame.display = Screen.setScreen(infoObject.current_w, infoObject.current_h, "")
 
     test = stressTest
@@ -46,7 +45,7 @@ def main():
             if event.type == pygame.MOUSEBUTTONDOWN:
                   
                 if stateVar == 0:
-                    entities = [otherTest.player]
+                    entities = [otherTest.player, test.agent]
                     controllers = [otherTest.controller]
                     animations = []
                     scene1 = Scene(screen, entities, uiEntities)    

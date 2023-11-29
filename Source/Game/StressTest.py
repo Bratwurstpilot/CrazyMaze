@@ -6,7 +6,7 @@ from Source.Engine.Animation import Animation
 from Source.Engine.Label import Label
 from Source.Engine.Button import Button
 from Source.Game.Util import MyEntity, MyController, MyController2
-
+from Source.Algorithms.Agent import Agent
 
 class stressTest:
 
@@ -128,9 +128,11 @@ class stressTest:
 
     controller2 = MyController2([player2], 1)
     
+    agent = Agent()
+    entities.append(agent)
 
     controllers = [controller1, controller2]
     
     pygame.init()
     mainMenu = Music("Source/Game/Files/ThemeMainMenu.wav", 0.1)
-    mainMenu.play()
+    #mainMenu.play()

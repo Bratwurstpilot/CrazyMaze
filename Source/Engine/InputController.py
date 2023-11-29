@@ -45,7 +45,7 @@ class EntityController(ABC):
 
         elif input not in self.keysPressed:
             self.keysPressed.append(input)
-
+        
         self.update()
     
 
