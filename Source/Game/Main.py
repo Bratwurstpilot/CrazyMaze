@@ -1,89 +1,50 @@
 import pygame
 
-from Source.Engine.Scene import Scene
-from Source.Engine.Animation import Animation
-from Source.Engine.Screen import Screen
-from Source.Engine.Sound import Music
-from Source.Game.Menu import Menu
-from Source.Game.StressTest import stressTest
+import Source.Game.GameScenes as GameScene
 
+def main():
+        
+    pygame.init()
 
-class Main:
-
-    def __init__(self, running : bool):
-        self.running = running
-        self.run()
-
-    def setRunning(self, state : bool):
-        self.running = state
-        print(state)
-        print(self.running)
+    running = True
+    clock = pygame.time.Clock()
+    animations : list = []
     
+    mainScene = GameScene.menuScene
+    entities = GameScene.mainMenu.entities
+    uiEntities = GameScene.mainMenu.uiEntities
 
-    def run(self):
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
         
-        pygame.init()
-
-        running = True
-        clock = pygame.time.Clock()
-        infoObject = pygame.display.Info()
-        #print(infoObject)
-        screen : pygame.display = Screen.setScreen(infoObject.current_w, infoObject.current_h, "")
-
-        mainMenu = Menu([self.setRunning])
+        for entity in uiEntities:
+            if entity.update():
+                if entity.text == "Beenden":
+                    running = False 
+                elif entity.text == "Spiel erstellen":
+                    entities = GameScene.createGame.entities
+                    uiEntities = GameScene.createGame.uiEntities
+                    mainScene = GameScene.createScene
+                elif entity.text == "Zurück":
+                    entities = GameScene.mainMenu.entities
+                    uiEntities = GameScene.mainMenu.uiEntities
+                    mainScene = GameScene.menuScene
         
-        background = mainMenu.background
-        entities = mainMenu.entities
-        #controllers = mainMenu.controllers
-        animations = mainMenu.animations
-        uiEntities = mainMenu.uiEntities
+        mainScene.render()
+        
+        
 
-        scene1 = Scene(screen, entities, uiEntities, background)    
+        for entity in entities:
+            entity.update()
+        for entity in uiEntities:
+            entity.update()             
+        for animation in animations:
+            animation.update()
 
-        stateVar = 0
+        
 
-        while self.running:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    running = False
-                #if event.type == pygame.KEYDOWN:
-                    #for controller in controllers:
-                        #controller.update_(event.key, True)
-            # if event.type == pygame.KEYUP:
-                    #for controller in controllers:
-                        #controller.update_(event.key, False)
+        clock.tick(144)
 
-                #--------Experimental------------------------
-                """if event.type == pygame.MOUSEBUTTONDOWN:
-                    
-                    if stateVar == 0:
-                        entities = [otherTest.player]
-                        controllers = [otherTest.controller]
-                        animations = []
-                        scene1 = Scene(screen, entities, uiEntities)    
-                        stateVar = 1
-                    else:
-                        entities = test.entities
-                        controllers = test.controllers
-                        animations = test.animations
-                        scene1 = Scene(screen, entities, uiEntities)  
-                        stateVar = 0
-                """
-                #---------------------------------------------
-
-            scene1.render()
-            
-            
-
-            for entity in entities:
-                entity.update()
-            for entity in uiEntities:
-                entity.update()             
-            for animation in animations:
-                animation.update()
-
-            
-
-            clock.tick(144)
-
-        pygame.quit()
+    pygame.quit()

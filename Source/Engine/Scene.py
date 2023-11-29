@@ -36,7 +36,7 @@ class Scene():
 
         for element in self.uiElements:
             pygame.draw.rect(self.screen, element.getBgColor(), (element.getPositionX(), element.getPositionY(), element.getBodyWidth(), element.getBodyHeight()))
-            self.screen.blit(element.getTextFont(), element.getRect())
+            self.screen.blit(element.getTextFont(), element.getTextRect())
 
 
     def depthSort(self, elements : list) -> list :

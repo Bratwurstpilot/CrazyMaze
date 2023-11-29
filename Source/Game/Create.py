@@ -9,7 +9,7 @@ from Source.Engine.Label import Label
 from Source.Engine.Button import Button
 from Source.Game.Util import MyEntity, MyController, MyController2
 
-class Menu:
+class Create:
     
     entities : list = []
     animations : list = []
@@ -21,7 +21,7 @@ class Menu:
     gameTitle.setTextRect()
     uiEntities.append(gameTitle)
 
-    startGame = Button(1920//2 - 150, 490, 0, 300, 50, "Spiel erstellen", (0, 110, 18), 40)
+    startGame = Button(1920//2 - 150, 490, 0, 300, 50, "Spiel starten", (0, 110, 18), 40)
     startGame.setTextRect()
     
     uiEntities.append(startGame)
@@ -30,10 +30,10 @@ class Menu:
     #options.setTextRect()
     #uiEntities.append(options)
     
-    quitGame = Button(1920//2 - 150, 610, 0, 300, 50, "Beenden", (0, 110, 18), 40)
-    quitGame.setTextRect()
-    uiEntities.append(quitGame)
+    backMenu = Button(1920//2 - 150, 610, 0, 300, 50, "Zurück", (0, 110, 18), 40)
+    backMenu.setTextRect()
+    uiEntities.append(backMenu)
 
-    pygame.init()
-    mainMenu = Music("Source/Game/Files/ThemeMainMenu.wav", 0.1)
-    mainMenu.play()
+    #pygame.init()
+    #mainMenu = Music("Source/Game/Files/ThemeMainMenu.wav", 0.1)
+    #mainMenu.play()

@@ -1,9 +1,7 @@
-from Source.Game.Main import Main
+from Source.Game.Main import main
 
 def program():
-    main = Main(True)
+    main()
     
-    
-
 if __name__ == "__main__" :
     program()
