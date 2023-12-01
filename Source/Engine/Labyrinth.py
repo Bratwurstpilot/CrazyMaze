@@ -146,19 +146,19 @@ class Labyrinth:
                 if 1 <= y1 < self.width-1:
                     if self.grid[x1][y1] is None:
                         self.grid[x1][y1] = [True]
-                        self.rec_generate_one_path(x1,y1)
+                        self.recGenerateOnePath(x1,y1)
                     else:
-                        self.rec_generate_one_path(x,y)
+                        self.recGenerateOnePath(x,y)
                 else:
                     if y > 1:
-                        self.rec_generate_one_path(x1,y1-1)
+                        self.recGenerateOnePath(x1,y1-1)
                     else:
-                        self.rec_generate_one_path(x1,y1+1)
+                        self.recGenerateOnePath(x1,y1+1)
             else:
                 if x > 1:
-                    self.rec_generate_one_path(x1-1,y1)
+                    self.recGenerateOnePath(x1-1,y1)
                 else:
-                    self.rec_generate_one_path(x1+1,y1)
+                    self.recGenerateOnePath(x1+1,y1)
 
     
     def allneighbors(self, x: int, y: int) -> list:
@@ -172,3 +172,11 @@ class Labyrinth:
                 ret.append(self.grid[x+i][y+j])
         
         return ret
+
+
+labyrinth = Labyrinth(10, 10)
+
+generated_labyrinth = labyrinth.generateLabyrinth()
+
+for row in generated_labyrinth:
+    print(row)
