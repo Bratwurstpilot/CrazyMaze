@@ -5,7 +5,7 @@ from Source.Engine.Label import Label
 def test_label():
     label = Label()
 
-    assert label.getText() == ""
+    assert label.getText() == "Crazy Maze"
     assert label.getBgColor() == (0, 0, 0)
 
     label.setTextSize(25)

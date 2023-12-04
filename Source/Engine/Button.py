@@ -124,12 +124,8 @@ class Button(Entity):
 
     def getBgColor(self) -> tuple:
 
-<<<<<<< HEAD
-        return self.__bgColor
-
-    def getCommand(self) -> str:
-        
-        return self.__command
-=======
         return self.colorBg
->>>>>>> origin/Spieloptik
+
+    #def getCommand(self) -> str:
+        
+     #   return self.__command
