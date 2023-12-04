@@ -47,7 +47,7 @@ class TextureComponent:
             for tex in textureSet:
                 self.__textures.append(pygame.image.load(tex))
         except ValueError:
-            print("Error while loading Texture " + textureSet + " in component " + self)
+            ("Error while loading Texture " + textureSet + " in component " + self)
 
 
     def setFrameInterval(self, interval : float) -> None:

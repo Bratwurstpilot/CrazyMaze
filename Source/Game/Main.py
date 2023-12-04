@@ -1,5 +1,6 @@
 import pygame
 
+import Source.Game.GameScenes as GameScene
 from Source.Engine.Scene import Scene
 from Source.Engine.Animation import Animation
 from Source.Engine.Screen import Screen
@@ -7,58 +8,37 @@ from Source.Engine.Sound import Music
 from Source.Game.StressTest import stressTest
 from Source.Game.OtherTest import otherTest
 
-
 def main():
-    
+        
     pygame.init()
 
     running = True
     clock = pygame.time.Clock()
-    infoObject = pygame.display.Info()
-
-    screen : pygame.display = Screen.setScreen(infoObject.current_w, infoObject.current_h, "")
-
-    test = stressTest
-    test2 = otherTest
-
-    entities = test.entities
-    controllers = test.controllers
-    animations = test.animations
-    uiEntities = test.uiEntities
-
-    scene1 = Scene(screen, entities, uiEntities)    
-
-    stateVar = 0
+    animations : list = []
+    
+    mainScene = GameScene.menuScene
+    entities = GameScene.mainMenu.entities
+    uiEntities = GameScene.mainMenu.uiEntities
 
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-            if event.type == pygame.KEYDOWN:
-                for controller in controllers:
-                    controller.update_(event.key, True)
-            if event.type == pygame.KEYUP:
-                for controller in controllers:
-                    controller.update_(event.key, False)
-
-            #--------Experimental------------------------
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                  
-                if stateVar == 0:
-                    entities = [otherTest.player, test.agent]
-                    controllers = [otherTest.controller]
-                    animations = []
-                    scene1 = Scene(screen, entities, uiEntities)    
-                    stateVar = 1
-                else:
-                    entities = test.entities
-                    controllers = test.controllers
-                    animations = test.animations
-                    scene1 = Scene(screen, entities, uiEntities)  
-                    stateVar = 0
-            #---------------------------------------------
-
-        scene1.render()
+        
+        for entity in uiEntities:
+            if entity.update():
+                if entity.text == "Beenden":
+                    running = False 
+                elif entity.text == "Spiel erstellen":
+                    entities = GameScene.createGame.entities
+                    uiEntities = GameScene.createGame.uiEntities
+                    mainScene = GameScene.createScene
+                elif entity.text == "Zurück":
+                    entities = GameScene.mainMenu.entities
+                    uiEntities = GameScene.mainMenu.uiEntities
+                    mainScene = GameScene.menuScene
+        
+        mainScene.render()
         
         
 

@@ -25,12 +25,14 @@ class stressTest:
 
     def testFunc(x):
         x.shiftPositionX(200)
+        x.setTextFont()
+        x.setRect()
 
     testButton = Button(100, 300, 1, 200, 100, buttonFunction = testFunc, param = testLabel)
     testButton.setText("Button")
     testButton.setBgColor((0, 0, 0))
     testButton.setTextFont()
-    testButton.setRect()
+    testButton.setTextRect()
     uiEntities.append(testButton)
 
     #---------Simple Animation Example 1 : Flying Block--------------
