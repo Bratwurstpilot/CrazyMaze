@@ -50,8 +50,6 @@ class Label(Entity):
     def setText(self, text : str) -> None:
 
         self.text = text
-        print(text)
-        print(self.text)
         self.setTextFont()
         self.setTextRect()
 

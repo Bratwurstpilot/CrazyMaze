@@ -10,7 +10,13 @@ class Instance:
 
         self.maze : list = []
 
+
     def setPlayerOne(self, newAlgorithm : str):
         
         self.playerOneAlgorithm = newAlgorithm
-        print(self.playerOneAlgorithm)
+        
+
+    def setPlayerTwo(self, newAlgorithm : str):
+        
+        self.playerTwoAlgorithm = newAlgorithm
+

@@ -16,20 +16,15 @@ class Create:
     animations : list = []
     uiEntities : list = []
 
-
-    gameInstance = Instance()
-
-    background = pygame.image.load("Source/Game/Files/MainBackground.png")
-
     gameTitle = Label(1920//2, 40, 0, 1, 1, "Crazy Maze", (0, 110, 18), 70)
     gameTitle.setTextRect()
     uiEntities.append(gameTitle)
 
-    POneAlgorithm = Label(1920//4, 300, 0, 1, 1, gameInstance.playerOneAlgorithm, (0, 110, 18), 70)
+    POneAlgorithm = Label(1920//4, 300, 0, 1, 1, "Wähle aus", (0, 110, 18), 70)
     POneAlgorithm.setTextRect()
     uiEntities.append(POneAlgorithm)
 
-    PTwoAlgorithm = Label((1920//4)*3, 300, 0, 1, 1, gameInstance.playerTwoAlgorithm, (0, 110, 18), 70)
+    PTwoAlgorithm = Label((1920//4)*3, 300, 0, 1, 1, "Wähle aus", (0, 110, 18), 70)
     PTwoAlgorithm.setTextRect()
     uiEntities.append(PTwoAlgorithm)
 
@@ -41,12 +36,18 @@ class Create:
     backMenu.setTextRect()
     uiEntities.append(backMenu)
 
-    aStar = Button(1920//2 - 150, 210, 0, 300, 50, "A* Algorithmus", (0, 110, 18), 40, [gameInstance.setPlayerOne, POneAlgorithm.setText], ["A Star", "A Star"])
-    aStar.setTextRect()
-    uiEntities.append(aStar)
+    aStarOne = Button(1920//2 - 150, 210, 0, 150, 50, "A Star", (0, 110, 18), 40)
+    aStarOne.setTextRect()
+    uiEntities.append(aStarOne)
 
-    djikstra = Button(1920//2 - 150, 260, 0, 300, 50, "A* Algorithmus", (0, 110, 18), 40, [gameInstance.setPlayerOne, PTwoAlgorithm.setText], ["Djikstra", "Djisktra"])
-    djikstra.setTextRect()
-    uiEntities.append(djikstra)
+    dijkstraOne = Button(1920//2 - 150, 260, 0, 150, 50, "Dijkstra", (0, 110, 18), 40)
+    dijkstraOne.setTextRect()
+    uiEntities.append(dijkstraOne)
     
+    aStarTwo = Button(1920//2, 210, 0, 150, 50, "A Star", (0, 110, 18), 40)
+    aStarTwo.setTextRect()
+    uiEntities.append(aStarTwo)
 
+    dijkstraTwo = Button(1920//2, 260, 0, 150, 50, "Dijkstra", (0, 110, 18), 40)
+    dijkstraTwo.setTextRect()
+    uiEntities.append(dijkstraTwo)

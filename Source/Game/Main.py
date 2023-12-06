@@ -25,15 +25,13 @@ def main():
         
         stateDelegate.update()
         stateDelegate.scene.render()
-        
-        
-
-                    
+   
         for animation in animations:
             animation.update()
 
         
 
         clock.tick(144)
-
+    print("Player One:",GameScene.gameInstance.playerOneAlgorithm)
+    print("Player Two:",GameScene.gameInstance.playerTwoAlgorithm)
     pygame.quit()

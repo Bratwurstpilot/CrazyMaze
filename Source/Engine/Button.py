@@ -88,6 +88,7 @@ class Button(Entity):
 
         self.textRect = self.textFont.get_rect(center = (self.positionX + (self.bodyWidth / 2), self.positionY + self.bodyHeight / 2))
 
+
     def setText(self, text : str) -> None:
 
         self.text = text
