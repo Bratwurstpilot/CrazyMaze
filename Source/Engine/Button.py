@@ -46,9 +46,10 @@ class Button(Entity):
                 self.colorBg = self.colorClicked
                 if not self.alreadyPressed:
                     try:
-                        self.func(self.param[0])
+                        for i in range(len(self.func)):
+                            self.func[i](self.param[i])
                     except:
-                        print("Error while calling function at button", self)
+                        print("Error while calling function at button", self.text)
                     self.alreadyPressed = True
                     return True
             else:
@@ -90,6 +91,8 @@ class Button(Entity):
     def setText(self, text : str) -> None:
 
         self.text = text
+        self.setTextFont()
+        self.setTextRect()
 
 
     def setFont(self, font : pygame.font, fontSize : int) -> None:

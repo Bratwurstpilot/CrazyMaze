@@ -6,28 +6,26 @@ from Source.Game.Delegate import GameDelegate
 from Source.Engine.Scene import Scene
 from Source.Engine.Screen import Screen
 
-
 pygame.init()
 
-
-
 infoObject = pygame.display.Info()
-background = pygame.image.load("Source/Game/Files/MainBackground.png")
+mainBackground = pygame.image.load("Source/Game/Files/MainBackground.png")
+createBackground = pygame.image.load("Source/Game/Files/CreateBackground.png")
 screen : pygame.display = Screen.setScreen(infoObject.current_w, infoObject.current_h, "")
 
 mainMenu = Menu()
-menuScene = Scene(screen, mainMenu.entities, mainMenu.uiEntities, background)
+menuScene = Scene(screen, mainMenu.entities, mainMenu.uiEntities, mainBackground)
 
 createGame = Create()
-createScene = Scene(screen, createGame.entities, createGame.uiEntities, background)
+createScene = Scene(screen, createGame.entities, createGame.uiEntities, createBackground)
 
 stateDelegate = GameDelegate(menuScene, True)
 
-mainMenu.startGame.setFunc(stateDelegate.setScene)
+mainMenu.startGame.setFunc([stateDelegate.setScene])
 mainMenu.startGame.setParam([createScene])
 
-mainMenu.quitGame.setFunc(stateDelegate.setRunning)
+mainMenu.quitGame.setFunc([stateDelegate.setRunning])
 mainMenu.quitGame.setParam([False])
 
-createGame.backMenu.setFunc(stateDelegate.setScene)
+createGame.backMenu.setFunc([stateDelegate.setScene])
 createGame.backMenu.setParam([menuScene])

@@ -50,6 +50,10 @@ class Label(Entity):
     def setText(self, text : str) -> None:
 
         self.text = text
+        print(text)
+        print(self.text)
+        self.setTextFont()
+        self.setTextRect()
 
 
     def setFont(self, font : pygame.font, fontSize : int) -> None:
