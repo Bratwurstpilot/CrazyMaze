@@ -14,6 +14,8 @@ class Menu:
     entities : list = []
     animations : list = []
     uiEntities : list = []
+    delegate = 0
+    param = 0
 
     background = pygame.image.load("Source/Game/Files/MainBackground.png")
 
@@ -23,12 +25,7 @@ class Menu:
 
     startGame = Button(1920//2 - 150, 490, 0, 300, 50, "Spiel erstellen", (0, 110, 18), 40)
     startGame.setTextRect()
-    
     uiEntities.append(startGame)
-    
-    #options = Button(1920//2 - 150, 550, 0, 300, 50, "Optionen", (0, 110, 18), 40)
-    #options.setTextRect()
-    #uiEntities.append(options)
     
     quitGame = Button(1920//2 - 150, 610, 0, 300, 50, "Beenden", (0, 110, 18), 40)
     quitGame.setTextRect()

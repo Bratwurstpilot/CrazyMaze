@@ -33,8 +33,7 @@ class Button(Entity):
 
     def update(self):
         
-        if self.onClick(pygame.mouse.get_pos()):
-            return True
+        self.onClick(pygame.mouse.get_pos())
     
 
     def onClick(self, mousePos : tuple) -> None:
@@ -46,10 +45,10 @@ class Button(Entity):
             if pygame.mouse.get_pressed(num_buttons = 3)[0]:
                 self.colorBg = self.colorClicked
                 if not self.alreadyPressed:
-                    #try:
-                    #self.func[0](self.param[0])
-                    #except:
-                    #print("Error while calling function at button", self)
+                    try:
+                        self.func(self.param[0])
+                    except:
+                        print("Error while calling function at button", self)
                     self.alreadyPressed = True
                     return True
             else:
@@ -62,6 +61,11 @@ class Button(Entity):
     def setFunc(self, func) -> None:
 
         self.func = func
+
+
+    def setParam(self, param : list) -> None:
+
+        self.param = param
 
 
     def setTextSize(self, size : int) -> None:

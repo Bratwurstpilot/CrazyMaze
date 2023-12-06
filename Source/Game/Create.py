@@ -23,17 +23,9 @@ class Create:
 
     startGame = Button(1920//2 - 150, 490, 0, 300, 50, "Spiel starten", (0, 110, 18), 40)
     startGame.setTextRect()
-    
     uiEntities.append(startGame)
     
-    #options = Button(1920//2 - 150, 550, 0, 300, 50, "Optionen", (0, 110, 18), 40)
-    #options.setTextRect()
-    #uiEntities.append(options)
-    
-    backMenu = Button(1920//2 - 150, 610, 0, 300, 50, "Zurück", (0, 110, 18), 40)
+    backMenu = Button(1920//2 - 150, 560, 0, 300, 50, "Zurück", (0, 110, 18), 40)
     backMenu.setTextRect()
     uiEntities.append(backMenu)
 
-    #pygame.init()
-    #mainMenu = Music("Source/Game/Files/ThemeMainMenu.wav", 0.1)
-    #mainMenu.play()
