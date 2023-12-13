@@ -129,7 +129,7 @@ class AStar(Algorithm):
             currentNode = self.getMin()
             
             if currentNode.coords == self.end.coords:
-                print("path found")
+                print("\npath found\n")
                 return self.closed
 
             self.closed.append(currentNode)
