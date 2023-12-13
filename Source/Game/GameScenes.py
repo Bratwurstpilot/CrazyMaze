@@ -1,7 +1,7 @@
 import pygame
 
 from Source.Game.Menu import Menu
-from Source.Game.Create import Create
+from Source.Game.Create2 import Create
 from Source.Game.Delegate import GameDelegate
 from Source.Game.GameInstance import Instance
 from Source.Engine.Scene import Scene
@@ -32,6 +32,12 @@ mainMenu.quitGame.setParam([False])
 createGame.backMenu.setFunc([stateDelegate.setScene])
 createGame.backMenu.setParam([menuScene])
 
+createGame.switchLeftOne.setFunc([createGame.pOneAlgorithm.setText])
+createGame.switchLeftOne.setParam([gameInstance.setPlayerOne(-1)])
+
+createGame.switchRightOne.setFunc([createGame.pOneAlgorithm.setText])
+createGame.switchRightOne.setParam([gameInstance.setPlayerOne(1)])
+"""
 createGame.aStarOne.setFunc([gameInstance.setPlayerOne, createGame.POneAlgorithm.setText])
 createGame.aStarOne.setParam(["A Star", "A Star"])
 
@@ -43,3 +49,5 @@ createGame.dijkstraOne.setParam(["Djikstra", "Djikstra"])
 
 createGame.dijkstraTwo.setFunc([gameInstance.setPlayerTwo, createGame.PTwoAlgorithm.setText])
 createGame.dijkstraTwo.setParam(["Djikstra", "Djikstra"])
+
+"""

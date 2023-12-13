@@ -32,6 +32,6 @@ def main():
         
 
         clock.tick(144)
-    print("Player One:",GameScene.gameInstance.playerOneAlgorithm)
-    print("Player Two:",GameScene.gameInstance.playerTwoAlgorithm)
+    print("Player One:",GameScene.gameInstance.playerAlgorithm[0])
+    print("Player Two:",GameScene.gameInstance.playerAlgorithm[1])
     pygame.quit()

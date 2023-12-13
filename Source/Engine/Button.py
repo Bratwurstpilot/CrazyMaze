@@ -47,6 +47,7 @@ class Button(Entity):
                 if not self.alreadyPressed:
                     try:
                         for i in range(len(self.func)):
+                            print(self.param[i])
                             self.func[i](self.param[i])
                     except:
                         print("Error while calling function at button", self.text)
@@ -91,6 +92,7 @@ class Button(Entity):
 
     def setText(self, text : str) -> None:
 
+        print(text)
         self.text = text
         self.setTextFont()
         self.setTextRect()
