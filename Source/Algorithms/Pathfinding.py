@@ -206,29 +206,42 @@ class AStar(Algorithm):
 
     def getPath(self):
 
+        queue : list = []
+
         def getMin(node : Node):
             if len(node.succ) == 0:
-                print("No Path found")
                 return
             min = node.succ[0]
             for element in node.succ:
                 if element.value < min.value:
                     min = element
+            node.succ.remove(min)
             return min
         
         path = []
-        current = getMin(astar.start)
+        current = astar.start
+        queue.append(current)
 
         while True:
 
-            path.append(current.coords)
-            labyrinth[current.coords[1]][current.coords[0]] = 7
             current = getMin(current)
+
             if current == None:
-                break
+                try:
+                    path.remove(queue[-1])
+                except ValueError: 
+                    pass
+                queue.remove(queue[-1])
+                current = queue[-1]
+
+            else:
+                path.append(current)
+                queue.append(current)
+
             if current.coords == self.end.coords:
+                path.remove(path[-1])
                 break
-        
+
         return path
     
 
@@ -237,6 +250,7 @@ labyrinth = [[0 for _ in range(10)] for __ in range(10)]
 labyrinth[0][0] = 2
 labyrinth[-1][-1] = 3
 
+'''
 labyrinth = [
     [2, 0, 1, 1, 0, 0, 0, 0, 0, 1],
     [1, 0, 0, 0, 1, 1, 0, 1, 0, 0],
@@ -245,10 +259,11 @@ labyrinth = [
     [1, 0, 0, 0, 0, 0, 0, 0, 1, 1],
     [0, 0, 1, 1, 0, 0, 1, 0, 0, 0],
     [0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 1, 0, 0, 0, 1, 0, 1, 1],
-    [0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+    [0, 0, 1, 0, 0, 0, 1, 1, 1, 1],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 1, 1, 0, 1, 1, 0, 3]
 ]
+'''
 
 '''
 Solution:
@@ -259,14 +274,20 @@ Solution:
     [0, 1, 7, 7, 0, 1, 0, 0, 1, 0]
     [1, 0, 0, 7, 7, 0, 0, 0, 1, 1]
     [0, 0, 1, 1, 7, 7, 1, 0, 0, 0]
-    [0, 1, 0, 0, 0, 7, 7, 7, 0, 0]
-    [0, 0, 1, 0, 0, 0, 1, 7, 1, 1]
-    [0, 0, 0, 0, 0, 1, 0, 7, 7, 0]
+    [0, 1, 0, 0, 0, 7, X, X, X, X] 
+    [0, 0, 1, 0, 0, 7, 1, 1, 1, 1]
+    [0, 0, 0, 0, 0, 7, 7, 7, 7, 0]
     [0, 0, 0, 1, 1, 0, 1, 1, 7, 3]
 '''
 
+for y in range(len(labyrinth)):
+    for x in range(len(labyrinth[0])):
+        choice = random.randint(1,10)
+        if choice >= 9 and labyrinth[y][x] == 0:
+            labyrinth[y][x] = 1
+
 for element in labyrinth:
-    print(element)
+    print(*element)
 
 astar = AStar()
 astar.setViewSpace(labyrinth)
@@ -275,7 +296,7 @@ astar.execRoutine()
 path = astar.getPath()
 
 for node in path:
-    labyrinth[node[1]][node[0]] = 7
+    labyrinth[node.coords[1]][node.coords[0]] = 7
 
 for element in labyrinth:
-    print(element)
+    print(*element)
