@@ -32,24 +32,42 @@ mainMenu.quitGame.setParam([[False]])
 createGame.backMenu.setFunc([stateDelegate.setScene])
 createGame.backMenu.setParam([[menuScene]])
 
-def update(instance, cgame, state, player) -> None:
+def updateAlgorithm(instance, cgame, state, player) -> None:
 
-    instance.setPlayerOne(state,player)
+    instance.setPlayerAlgorithm(state,player)
     cgame.setText(instance.playerAlgorithm[player])
 
-#----------------------------Switch Algorithm Player One----------------------------
-createGame.switchLeftOne.setFunc([update])
-createGame.switchLeftOne.setParam([[gameInstance, createGame.pOneAlgorithm, -1, 0]])
 
-createGame.switchRightOne.setFunc([update])
-createGame.switchRightOne.setParam([[gameInstance, createGame.pOneAlgorithm, 1, 0]])
+def updateDiffictuly(instance, cgame, state, player) -> None:
 
-#----------------------------Switch Algorithm Player Two----------------------------
-createGame.switchLeftTwo.setFunc([update])
-createGame.switchLeftTwo.setParam([[gameInstance, createGame.pTwoAlgorithm, -1, 1]])
+    instance.setBotDifficulty(state,player)
+    cgame.setText(instance.difficulty[player])
 
-createGame.switchRightTwo.setFunc([update])
-createGame.switchRightTwo.setParam([[gameInstance, createGame.pTwoAlgorithm, 1, 1]])
+#----------------------------Switch Player One----------------------------
+createGame.switchLOneAlgorithm.setFunc([updateAlgorithm])
+createGame.switchLOneAlgorithm.setParam([[gameInstance, createGame.pOneAlgorithm, -1, 0]])
+
+createGame.switchROneAlgorithm.setFunc([updateAlgorithm])
+createGame.switchROneAlgorithm.setParam([[gameInstance, createGame.pOneAlgorithm, 1, 0]])
+
+createGame.switchLOneDifficulty.setFunc([updateDiffictuly])
+createGame.switchLOneDifficulty.setParam([[gameInstance, createGame.pOneDifficulty, -1, 0]])
+
+createGame.switchROneDifficulty.setFunc([updateDiffictuly])
+createGame.switchROneDifficulty.setParam([[gameInstance, createGame.pOneDifficulty, 1, 0]])
+
+#----------------------------Switch Player Two----------------------------
+createGame.switchLTwoAlgorithm.setFunc([updateAlgorithm])
+createGame.switchLTwoAlgorithm.setParam([[gameInstance, createGame.pTwoAlgorithm, -1, 1]])
+
+createGame.switchRTwoAlgorithm.setFunc([updateAlgorithm])
+createGame.switchRTwoAlgorithm.setParam([[gameInstance, createGame.pTwoAlgorithm, 1, 1]])
+
+createGame.switchLTwoDifficulty.setFunc([updateDiffictuly])
+createGame.switchLTwoDifficulty.setParam([[gameInstance, createGame.pTwoDifficulty, -1, 0]])
+
+createGame.switchRTwoDifficulty.setFunc([updateDiffictuly])
+createGame.switchRTwoDifficulty.setParam([[gameInstance, createGame.pTwoDifficulty, 1, 0]])
 
 
 

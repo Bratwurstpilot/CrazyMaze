@@ -24,6 +24,10 @@ class Create:
     algorithmChoice.setTextRect()
     uiEntities.append(algorithmChoice)
 
+    difficulty = Label(1920//2, 305, 0, 1, 1, "Schwierigkeitsgrad", (0, 110, 18), 50)
+    difficulty.setTextRect()
+    uiEntities.append(difficulty)
+
     startGame = Button(1920//2 - 150, 740, 0, 300, 50, "Spiel starten", (0, 110, 18), 40)
     startGame.setTextRect()
     uiEntities.append(startGame)
@@ -41,13 +45,29 @@ class Create:
     pOneAlgorithm.setTextRect()
     uiEntities.append(pOneAlgorithm)
 
-    switchLeftOne = Button((1920//16)*3 - 40, 190, 0, 50, 40, "<<", (0,110,18), 40)
-    switchLeftOne.setTextRect()
-    uiEntities.append(switchLeftOne)
+    switchLOneAlgorithm = Button((1920//16)*3 - 40, 190, 0, 50, 40, "<<", (0,110,18), 40)
+    switchLOneAlgorithm.setBgColor((67 ,181 ,207))
+    switchLOneAlgorithm.setTextRect()
+    uiEntities.append(switchLOneAlgorithm)
+     
+    switchROneAlgorithm = Button((1920//16)*5, 190, 0, 50, 40, ">>", (0,110,18), 40)
+    switchROneAlgorithm.setBgColor((67 ,181 ,207))
+    switchROneAlgorithm.setTextRect()
+    uiEntities.append(switchROneAlgorithm)
+
+    pOneDifficulty = Label(1920//4, 305, 0, 1, 1, "Einfach", (0, 110, 18), 40)
+    pOneDifficulty.setTextRect()
+    uiEntities.append(pOneDifficulty)
+
+    switchLOneDifficulty = Button((1920//16)*3 - 40, 290, 0, 50, 40, "<<", (0,110,18), 40)
+    switchLOneDifficulty.setBgColor((114 ,194 ,203))
+    switchLOneDifficulty.setTextRect()
+    uiEntities.append(switchLOneDifficulty)
     
-    switchRightOne = Button((1920//16)*5, 190, 0, 50, 40, ">>", (0,110,18), 40)
-    switchRightOne.setTextRect()
-    uiEntities.append(switchRightOne)
+    switchROneDifficulty = Button((1920//16)*5, 290, 0, 50, 40, ">>", (0,110,18), 40)
+    switchROneDifficulty.setBgColor((114 ,194 ,203))
+    switchROneDifficulty.setTextRect()
+    uiEntities.append(switchROneDifficulty)
 
     #---------------------------------Player Two------------------------------------
     playerTwo = Label((1920//4)*3, 100, 0, 1, 1, "Spieler 2", (0, 110, 18), 70)
@@ -58,12 +78,23 @@ class Create:
     pTwoAlgorithm.setTextRect()
     uiEntities.append(pTwoAlgorithm)
 
-    switchLeftTwo = Button((1920//16)*11 - 40, 190, 0, 50, 40, "<<", (0,110,18), 40)
-    switchLeftTwo.setTextRect()
-    uiEntities.append(switchLeftTwo)
+    switchLTwoAlgorithm = Button((1920//16)*11 - 40, 190, 0, 50, 40, "<<", (0,110,18), 40)
+    switchLTwoAlgorithm.setTextRect()
+    uiEntities.append(switchLTwoAlgorithm)
     
-    switchRightTwo = Button((1920//16)*13, 190, 0, 50, 40, ">>", (0,110,18), 40)
-    switchRightTwo.setTextRect()
-    uiEntities.append(switchRightTwo)
+    switchRTwoAlgorithm = Button((1920//16)*13, 190, 0, 50, 40, ">>", (0,110,18), 40)
+    switchRTwoAlgorithm.setTextRect()
+    uiEntities.append(switchRTwoAlgorithm)
 
+    pTwoDifficulty = Label((1920//4)*3, 305, 0, 1, 1, "Einfach", (0, 110, 18), 40)
+    pTwoDifficulty.setTextRect()
+    uiEntities.append(pTwoDifficulty)
+
+    switchLTwoDifficulty = Button((1920//16)*11 - 40, 290, 0, 50, 40, "<<", (0,110,18), 40)
+    switchLTwoDifficulty.setTextRect()
+    uiEntities.append(switchLTwoDifficulty)
+    
+    switchRTwoDifficulty = Button((1920//16)*13, 290, 0, 50, 40, ">>", (0,110,18), 40)
+    switchRTwoDifficulty.setTextRect()
+    uiEntities.append(switchRTwoDifficulty)
     
