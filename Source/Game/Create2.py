@@ -54,9 +54,9 @@ class Create:
     playerTwo.setTextRect()
     uiEntities.append(playerTwo)
 
-    PTwoAlgorithm = Label((1920//4)*3, 205, 0, 1, 1, "Manuell", (0, 110, 18), 40)
-    PTwoAlgorithm.setTextRect()
-    uiEntities.append(PTwoAlgorithm)
+    pTwoAlgorithm = Label((1920//4)*3, 205, 0, 1, 1, "Manuell", (0, 110, 18), 40)
+    pTwoAlgorithm.setTextRect()
+    uiEntities.append(pTwoAlgorithm)
 
     switchLeftTwo = Button((1920//16)*11 - 40, 190, 0, 50, 40, "<<", (0,110,18), 40)
     switchLeftTwo.setTextRect()

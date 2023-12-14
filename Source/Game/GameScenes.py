@@ -24,30 +24,32 @@ stateDelegate = GameDelegate(menuScene, True)
 gameInstance = Instance()
 
 mainMenu.startGame.setFunc([stateDelegate.setScene])
-mainMenu.startGame.setParam([createScene])
+mainMenu.startGame.setParam([[createScene]])
 
 mainMenu.quitGame.setFunc([stateDelegate.setRunning])
-mainMenu.quitGame.setParam([False])
+mainMenu.quitGame.setParam([[False]])
 
 createGame.backMenu.setFunc([stateDelegate.setScene])
-createGame.backMenu.setParam([menuScene])
+createGame.backMenu.setParam([[menuScene]])
 
-createGame.switchLeftOne.setFunc([createGame.pOneAlgorithm.setText])
-createGame.switchLeftOne.setParam([gameInstance.setPlayerOne(-1)])
+def update(instance, cgame, state, player) -> None:
 
-createGame.switchRightOne.setFunc([createGame.pOneAlgorithm.setText])
-createGame.switchRightOne.setParam([gameInstance.setPlayerOne(1)])
-"""
-createGame.aStarOne.setFunc([gameInstance.setPlayerOne, createGame.POneAlgorithm.setText])
-createGame.aStarOne.setParam(["A Star", "A Star"])
+    instance.setPlayerOne(state,player)
+    cgame.setText(instance.playerAlgorithm[player])
 
-createGame.aStarTwo.setFunc([gameInstance.setPlayerTwo, createGame.PTwoAlgorithm.setText])
-createGame.aStarTwo.setParam(["A Star", "A Star"])
+#----------------------------Switch Algorithm Player One----------------------------
+createGame.switchLeftOne.setFunc([update])
+createGame.switchLeftOne.setParam([[gameInstance, createGame.pOneAlgorithm, -1, 0]])
 
-createGame.dijkstraOne.setFunc([gameInstance.setPlayerOne, createGame.POneAlgorithm.setText])
-createGame.dijkstraOne.setParam(["Djikstra", "Djikstra"])
+createGame.switchRightOne.setFunc([update])
+createGame.switchRightOne.setParam([[gameInstance, createGame.pOneAlgorithm, 1, 0]])
 
-createGame.dijkstraTwo.setFunc([gameInstance.setPlayerTwo, createGame.PTwoAlgorithm.setText])
-createGame.dijkstraTwo.setParam(["Djikstra", "Djikstra"])
+#----------------------------Switch Algorithm Player Two----------------------------
+createGame.switchLeftTwo.setFunc([update])
+createGame.switchLeftTwo.setParam([[gameInstance, createGame.pTwoAlgorithm, -1, 1]])
 
-"""
+createGame.switchRightTwo.setFunc([update])
+createGame.switchRightTwo.setParam([[gameInstance, createGame.pTwoAlgorithm, 1, 1]])
+
+
+

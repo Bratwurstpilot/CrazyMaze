@@ -47,8 +47,8 @@ class Button(Entity):
                 if not self.alreadyPressed:
                     try:
                         for i in range(len(self.func)):
-                            print(self.param[i])
-                            self.func[i](self.param[i])
+                            
+                            self.func[i](*self.param[i])
                     except:
                         print("Error while calling function at button", self.text)
                     self.alreadyPressed = True
