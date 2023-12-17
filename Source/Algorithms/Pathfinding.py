@@ -11,8 +11,9 @@ class Algorithm(ABC):
 
         symbols needs to contain the key:
 
-        "Start" : sym
-        "End" : sym
+        "Start"    : sym
+        "End"      : sym
+        "Obstacle" : sym
         '''
 
         self.viewSpace : list = []
@@ -77,32 +78,27 @@ class Algorithm(ABC):
             if neighbourhood[i] == None : neighbourhood.remove(neighbourhood[i])
 
         return neighbourhood
-    
-''' TESTS
-import random
-labyrinth = [[random.randint(0,1) for _ in range(10)] for __ in range(10)]
-for element in labyrinth:
-    print(element)
-print("\n")
-
-algo = Algorithm()
-algo.setViewSpace([labyrinth[0][1:4], labyrinth[1][1:4], labyrinth[2][1:4]])
-for element in algo.viewSpace:
-    print(element)
-'''
 
 class Node:
 
         def __init__(self, x, y):
             
             self.coords = (x,y)
-            self.succ = []
+            self.pred = []
             self.value : int = 1000
             self.iter = 0
 
-        def setSucc(self, succ):
+            self.neighbours = []
             
-            self.succ.append(succ)
+        
+        def setPred(self, pred) -> None:
+
+            self.pred.append(pred)
+
+        
+        def getNeighbours(self) -> list:
+
+            return self.neighbours
 
 
 class AStar(Algorithm):
@@ -114,6 +110,8 @@ class AStar(Algorithm):
         self.open : list = []
         self.closed : list = []
 
+        self.nodes : list = []
+
         self.start : tuple = None
         self.end : tuple = None
 
@@ -124,50 +122,35 @@ class AStar(Algorithm):
 
         iter = 0
         while len(self.open) > 0:
-            #print(self.open)
             iter += 1
             currentNode = self.getMin()
             
-            if currentNode.coords == self.end.coords:
-                print("\npath found\n")
-                return self.closed
-
-            self.closed.append(currentNode)
-            self.expandNode(currentNode, iter)            
+            self.expandNode(currentNode, iter)  
+            self.closed.append(currentNode)          
 
 
     def expandNode(self, node : Node, iter : int) -> list:
         
-        nodes : list = self.getNeighbourhoodNode(node.coords)
-        if len(nodes) == 0: return
+        nodes : list = node.neighbours
 
-        for i in range(len(nodes)):
-            succNode = Node(*nodes[i])
-            succNode.iter = node.iter + 1
-            node.setSucc(succNode)
+        for succNode in nodes:
+            if succNode in node.pred:
+                continue
 
-            g = succNode.iter
+            g = node.iter+1
             h = self.heuristic(succNode.coords, self.end.coords)
             f = g + h
-            succNode.value = f
-            
-            flag = False
+            value = f
 
-            #Was node already a successor in its neighbourhood?
-            for element in self.closed:
+            if succNode in self.open or succNode in self.closed: 
+                if value > succNode.value:
+                    continue
 
-                if node in element.succ:
-                    coords = element.coords
-                    for succ in node.succ:
-                        if succ.coords == coords:
-                            node.succ.remove(succ)
-                            break
-                
-                if succNode.coords == element.coords:
-                    flag = True
+            succNode.value = value
+            succNode.iter = node.iter+1
+            succNode.setPred(node)
 
-            if not flag:
-                self.open.append(succNode)
+            self.open.append(succNode)
 
 
     def getMin(self) -> tuple:
@@ -175,7 +158,7 @@ class AStar(Algorithm):
         minIndx = 0
 
         for i in range(1, len(self.open)):
-            if self.open[i].value < self.open[minIndx].value:
+            if self.open[i].value <= self.open[minIndx].value:
                 minIndx = i
 
         element = self.open[minIndx]
@@ -186,64 +169,65 @@ class AStar(Algorithm):
 
     def setup(self) -> None:
 
+        def getNodeNeighbours(x, y) -> list:
+
+            neighbours : list = []
+            for node in self.nodes:
+                if node.coords[0] == x - 1 and node.coords[1] == y:
+                    neighbours.append(node)
+                elif node.coords[0] == x + 1 and node.coords[1] == y:
+                    neighbours.append(node)
+                elif node.coords[0] == x and node.coords[1] == y - 1:
+                    neighbours.append(node)
+                elif node.coords[0] == x and node.coords[1] == y + 1:
+                    neighbours.append(node)
+            
+            return neighbours
+
         for i in range(len(self.viewSpace)):
             for j in range(len(self.viewSpace[0])):
+                node = Node(j,i)
                 if self.viewSpace[i][j] == self.symbol["Start"]:
-                    self.start = Node(j,i)
+                    self.start = node
                 elif self.viewSpace[i][j] == self.symbol["End"]:
-                    self.end = Node(j,i)
+                    self.end = node
+                elif self.viewSpace[i][j] == self.symbol["Obstacle"]:
+                    node = Node(-10,-10)
+                self.nodes.append(node)
+
+        for node in self.nodes:
+            neighbours = getNodeNeighbours(*node.coords)
+            node.neighbours = neighbours
                 
         self.open.append(self.start)
 
 
     def heuristic(self, position : tuple, endPoint : tuple):
         
-        distance : float = (position[0] - endPoint[0]) ** 2 + (position[1] - endPoint[1]) ** 2
-
-        # try skipping the square root operation as it is high cost
-        return distance
+        #Euclidean distance
+        return sqrt((endPoint[0] - position[0]) ** 2 + (endPoint[1] - position[1]) ** 2)
     
 
     def getPath(self):
 
-        queue : list = []
-
-        def getMin(node : Node):
-            if len(node.succ) == 0:
-                return
-            min = node.succ[0]
-            for element in node.succ:
-                if element.value < min.value:
-                    min = element
-            node.succ.remove(min)
-            return min
+        path = [self.end]
         
-        path = []
-        current = astar.start
-        queue.append(current)
-
+        current : Node = self.end
         while True:
-
-            current = getMin(current)
-
-            if current == None:
-                try:
-                    path.remove(queue[-1])
-                except ValueError: 
-                    pass
-                queue.remove(queue[-1])
-                current = queue[-1]
-
-            else:
-                path.append(current)
-                queue.append(current)
-
-            if current.coords == self.end.coords:
-                path.remove(path[-1])
+            if current == self.start:
                 break
 
+            predList : list = current.pred
+            maxNode = predList[0]
+
+            for node in predList:
+                if node.value <= maxNode.value:
+                    maxNode = node
+
+            path.append(maxNode)
+            current = maxNode
+
         return path
-    
 
 import random
 labyrinth = [[0 for _ in range(10)] for __ in range(10)]
@@ -280,14 +264,20 @@ Solution:
     [0, 0, 0, 1, 1, 0, 1, 1, 7, 3]
 '''
 
-for y in range(len(labyrinth)):
-    for x in range(len(labyrinth[0])):
-        choice = random.randint(1,10)
-        if choice >= 9 and labyrinth[y][x] == 0:
-            labyrinth[y][x] = 1
+labyrinth = [
+[2, 0, 1, 0, 0, 0, 1, 1, 1, 0],
+[1, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 1, 0, 0, 0, 0, 1, 0],
+[0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+[0, 0, 0, 1, 1, 0, 0, 0, 1, 1],
+[1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
+[0, 0, 1, 1, 0, 0, 0, 0, 1, 0],
+[0, 0, 0, 0, 0, 1, 0, 0, 1, 3]
+]
 
-for element in labyrinth:
-    print(*element)
+#Testing
 
 astar = AStar()
 astar.setViewSpace(labyrinth)
@@ -295,7 +285,7 @@ astar.execRoutine()
 
 path = astar.getPath()
 
-for node in path:
+for node in path[1:-1]:
     labyrinth[node.coords[1]][node.coords[0]] = 7
 
 for element in labyrinth:
