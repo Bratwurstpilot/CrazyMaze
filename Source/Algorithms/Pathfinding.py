@@ -83,10 +83,10 @@ class Node:
 
         def __init__(self, x, y):
             
-            self.coords = (x,y)
-            self.pred = []
+            self.coords : tuple = (x,y)
+            self.pred : list = []
             self.value : int = 1000
-            self.iter = 0
+            self.iter : int = 0
 
             self.neighbours = []
             
@@ -120,16 +120,14 @@ class AStar(Algorithm):
         
         self.setup()
 
-        iter = 0
         while len(self.open) > 0:
-            iter += 1
+
             currentNode = self.getMin()
-            
-            self.expandNode(currentNode, iter)  
+            self.expandNode(currentNode)  
             self.closed.append(currentNode)          
 
 
-    def expandNode(self, node : Node, iter : int) -> list:
+    def expandNode(self, node : Node) -> list:
         
         nodes : list = node.neighbours
 
@@ -137,10 +135,11 @@ class AStar(Algorithm):
             if succNode in node.pred:
                 continue
 
-            g = node.iter+1
-            h = self.heuristic(succNode.coords, self.end.coords)
-            f = g + h
-            value = f
+            g : float = node.iter+1
+            h : float = self.heuristic(succNode.coords, self.end.coords)
+            f : float = g + h
+
+            value : float = f
 
             if succNode in self.open or succNode in self.closed: 
                 if value > succNode.value:
@@ -169,7 +168,7 @@ class AStar(Algorithm):
 
     def setup(self) -> None:
 
-        def getNodeNeighbours(x, y) -> list:
+        def getNodeNeighbours(x : int, y : int) -> list:
 
             neighbours : list = []
             for node in self.nodes:
@@ -202,23 +201,23 @@ class AStar(Algorithm):
         self.open.append(self.start)
 
 
-    def heuristic(self, position : tuple, endPoint : tuple):
+    def heuristic(self, position : tuple, endPoint : tuple) -> float:
         
         #Euclidean distance
         return sqrt((endPoint[0] - position[0]) ** 2 + (endPoint[1] - position[1]) ** 2)
     
 
-    def getPath(self):
+    def getPath(self) -> list:
 
-        path = [self.end]
-        
+        path : list = [self.end]
         current : Node = self.end
+        
         while True:
             if current == self.start:
                 break
 
             predList : list = current.pred
-            maxNode = predList[0]
+            maxNode : Node = predList[0]
 
             for node in predList:
                 if node.value <= maxNode.value:
@@ -228,6 +227,7 @@ class AStar(Algorithm):
             current = maxNode
 
         return path
+
 
 import random
 labyrinth = [[0 for _ in range(10)] for __ in range(10)]
