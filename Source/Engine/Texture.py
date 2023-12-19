@@ -8,7 +8,7 @@ class TextureComponent:
         self.__textures : list = []
         self.__textureCurrent : int = 0
 
-        self.__color : tuple = (0,0,0)
+        self.color : tuple = (0,0,0)
         self.__fileConfig : None = None
 
         self.__frameInterval : list = [1 * 144]

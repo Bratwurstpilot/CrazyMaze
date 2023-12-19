@@ -209,7 +209,7 @@ class AStar(Algorithm):
 
     def getPath(self) -> list:
 
-        path : list = [self.end]
+        path : list = [self.end.coords]
         current : Node = self.end
         
         while True:
@@ -223,70 +223,7 @@ class AStar(Algorithm):
                 if node.value <= maxNode.value:
                     maxNode = node
 
-            path.append(maxNode)
+            path.append(maxNode.coords)
             current = maxNode
 
         return path
-
-
-import random
-labyrinth = [[0 for _ in range(10)] for __ in range(10)]
-labyrinth[0][0] = 2
-labyrinth[-1][-1] = 3
-
-'''
-labyrinth = [
-    [2, 0, 1, 1, 0, 0, 0, 0, 0, 1],
-    [1, 0, 0, 0, 1, 1, 0, 1, 0, 0],
-    [1, 0, 0, 1, 1, 1, 1, 0, 0, 1],
-    [0, 1, 0, 0, 0, 1, 0, 0, 1, 0],
-    [1, 0, 0, 0, 0, 0, 0, 0, 1, 1],
-    [0, 0, 1, 1, 0, 0, 1, 0, 0, 0],
-    [0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 1, 0, 0, 0, 1, 1, 1, 1],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 1, 1, 0, 1, 1, 0, 3]
-]
-'''
-
-'''
-Solution:
-
-    [2, 7, 1, 1, 0, 0, 0, 0, 0, 1]
-    [1, 7, 0, 0, 1, 1, 0, 1, 0, 0]
-    [1, 7, 7, 1, 1, 1, 1, 0, 0, 1]
-    [0, 1, 7, 7, 0, 1, 0, 0, 1, 0]
-    [1, 0, 0, 7, 7, 0, 0, 0, 1, 1]
-    [0, 0, 1, 1, 7, 7, 1, 0, 0, 0]
-    [0, 1, 0, 0, 0, 7, X, X, X, X] 
-    [0, 0, 1, 0, 0, 7, 1, 1, 1, 1]
-    [0, 0, 0, 0, 0, 7, 7, 7, 7, 0]
-    [0, 0, 0, 1, 1, 0, 1, 1, 7, 3]
-'''
-
-labyrinth = [
-[2, 0, 1, 0, 0, 0, 1, 1, 1, 0],
-[1, 0, 1, 0, 0, 0, 0, 0, 0, 0],
-[0, 0, 0, 1, 0, 0, 0, 0, 1, 0],
-[0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
-[0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
-[0, 0, 0, 1, 1, 0, 0, 0, 1, 1],
-[1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-[0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
-[0, 0, 1, 1, 0, 0, 0, 0, 1, 0],
-[0, 0, 0, 0, 0, 1, 0, 0, 1, 3]
-]
-
-#Testing
-
-astar = AStar()
-astar.setViewSpace(labyrinth)
-astar.execRoutine()
-
-path = astar.getPath()
-
-for node in path[1:-1]:
-    labyrinth[node.coords[1]][node.coords[0]] = 7
-
-for element in labyrinth:
-    print(*element)
