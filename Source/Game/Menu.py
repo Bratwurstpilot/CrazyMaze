@@ -1,13 +1,15 @@
-from __future__ import annotations
-import pygame
-import random
 
+import pygame
 
 from Source.Engine.Sound import Music
 from Source.Engine.Animation import Animation
 from Source.Engine.Label import Label
 from Source.Engine.Button import Button
-from Source.Game.Util import MyEntity, MyController, MyController2
+from Source.Engine.Scene import Scene
+from Source.Engine.Screen import Screen
+
+
+
 
 class Menu:
     
@@ -15,7 +17,6 @@ class Menu:
     animations : list = []
     uiEntities : list = []
     delegate = 0
-    param = 0
 
     menuBackground = pygame.image.load("Source/Game/Files/menuBackground.png")
 
@@ -36,3 +37,14 @@ class Menu:
     mainMenu.play()
 
 menu = Menu()
+##menuScene = Scene(screen, menu.entities, menu.uiEntities, menu.menuBackground)
+
+def setup(object, screen : pygame.display, delegate) -> None:
+    object.delegate = delegate
+    return Scene(screen, object.entities, object.uiEntities, object.menuBackground)
+
+menu.startGame.setFunc([menu.delegate.setScene])
+menu.startGame.setParam([[1]])
+
+menu.quitGame.setFunc([menu.delegate.setRunning])
+menu.quitGame.setParam([[False]])

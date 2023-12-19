@@ -1,21 +1,29 @@
 import pygame
 
-import Source.Game.GameScenes as GameScene
-from Source.Engine.Scene import Scene
 from Source.Engine.Animation import Animation
 from Source.Engine.Sound import Music
+from Source.Engine.Screen import Screen
 from Source.Game.Delegate import GameDelegate
+from Source.Game.Menu import menu
+from Source.Game.Create import create
+
 
 
 def main():
         
     pygame.init()
 
-    running = True
     clock = pygame.time.Clock()
     animations : list = []
+    infoObject = pygame.display.Info()
+    screen : pygame.display = Screen.setScreen(infoObject.current_w, infoObject.current_h, "")
+    stateDelegate = GameDelegate(True)
+    test = [menu, create]
+    scenes = []
+    for i in range(len(test)):
+        scenes.append(test[i].setup(test[i], screen, stateDelegate))
 
-    stateDelegate = GameScene.stateDelegate
+    stateDelegate.setup(scenes)
 
     while stateDelegate.running:
         for event in pygame.event.get():
@@ -32,6 +40,4 @@ def main():
         
 
         clock.tick(144)
-    print("Player One:",GameScene.gameInstance.playerAlgorithm[0])
-    print("Player Two:",GameScene.gameInstance.playerAlgorithm[1])
     pygame.quit()

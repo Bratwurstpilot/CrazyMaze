@@ -3,18 +3,25 @@ import pygame
 import random
 
 
-from Source.Engine.Sound import Music
 from Source.Engine.Animation import Animation
 from Source.Engine.Label import Label
 from Source.Engine.Button import Button
-from Source.Game.Util import MyEntity, MyController, MyController2
+from Source.Engine.Scene import Scene
+from Source.Engine.Screen import Screen
 from Source.Game.GameInstance import Instance
+from Source.Game.Main import stateDelegate
+
 
 class Create:
     
     entities : list = []
     animations : list = []
     uiEntities : list = []
+    delegate = 0
+
+    def setup(object, screen : pygame.display, delegate) -> None:
+        object.delegate = delegate
+        return Scene(screen, object.entities, object.uiEntities, object.menuBackground)
 
     createBackground = pygame.image.load("Source/Game/Files/createBackground.png")
 
@@ -99,5 +106,50 @@ class Create:
     switchRTwoDifficulty = Button((1920//16)*13, 290, 0, 50, 40, ">>", (0,110,18), 40)
     switchRTwoDifficulty.setTextRect()
     uiEntities.append(switchRTwoDifficulty)
-    
+
+infoObject = pygame.display.Info()
+screen : pygame.display = Screen.setScreen(infoObject.current_w, infoObject.current_h, "")
 create = Create()
+createScene = Scene(screen, create.entities, create.uiEntities, create.createBackground)
+
+create.backMenu.setFunc([stateDelegate.setScene])
+create.backMenu.setParam([[-1]])
+
+def updateAlgorithm(instance, cgame, state, player) -> None:
+
+    instance.setPlayerAlgorithm(state,player)
+    cgame.setText(instance.playerAlgorithm[player])
+
+
+def updateDiffictuly(instance, cgame, state, player) -> None:
+
+    instance.setBotDifficulty(state,player)
+    cgame.setText(instance.difficulty[player])
+
+gameInstance = Instance()
+
+#----------------------------Switch Player One----------------------------
+create.switchLOneAlgorithm.setFunc([updateAlgorithm])
+create.switchLOneAlgorithm.setParam([[gameInstance, create.pOneAlgorithm, -1, 0]])
+
+create.switchROneAlgorithm.setFunc([updateAlgorithm])
+create.switchROneAlgorithm.setParam([[gameInstance, create.pOneAlgorithm, 1, 0]])
+
+create.switchLOneDifficulty.setFunc([updateDiffictuly])
+create.switchLOneDifficulty.setParam([[gameInstance, create.pOneDifficulty, -1, 0]])
+
+create.switchROneDifficulty.setFunc([updateDiffictuly])
+create.switchROneDifficulty.setParam([[gameInstance, create.pOneDifficulty, 1, 0]])
+
+#----------------------------Switch Player Two----------------------------
+create.switchLTwoAlgorithm.setFunc([updateAlgorithm])
+create.switchLTwoAlgorithm.setParam([[gameInstance, create.pTwoAlgorithm, -1, 1]])
+
+create.switchRTwoAlgorithm.setFunc([updateAlgorithm])
+create.switchRTwoAlgorithm.setParam([[gameInstance, create.pTwoAlgorithm, 1, 1]])
+
+create.switchLTwoDifficulty.setFunc([updateDiffictuly])
+create.switchLTwoDifficulty.setParam([[gameInstance, create.pTwoDifficulty, -1, 0]])
+
+create.switchRTwoDifficulty.setFunc([updateDiffictuly])
+create.switchRTwoDifficulty.setParam([[gameInstance, create.pTwoDifficulty, 1, 0]])
