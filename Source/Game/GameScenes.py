@@ -68,6 +68,3 @@ createGame.switchLTwoDifficulty.setParam([[gameInstance, createGame.pTwoDifficul
 
 createGame.switchRTwoDifficulty.setFunc([updateDiffictuly])
 createGame.switchRTwoDifficulty.setParam([[gameInstance, createGame.pTwoDifficulty, 1, 0]])
-
-
-
