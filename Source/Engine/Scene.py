@@ -3,11 +3,11 @@ import pygame
 
 class Scene():
 
-    def __init__(self, newScreen : pygame.display, newElements : list, newUIElements : list, image : pygame.image = None) -> None:
+    def __init__(self, screen : pygame.display, elements : list, uiElements : list, image : pygame.image = None) -> None:
 
-        self.screen : pygame.display = newScreen
-        self.elements : list = self.depthSort(newElements)
-        self.uiElements : list = newUIElements
+        self.screen : pygame.display = screen
+        self.elements : list = self.depthSort(elements)
+        self.uiElements : list = uiElements
         self.background : pygame.image = image
 
 

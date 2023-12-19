@@ -24,6 +24,7 @@ class Instance:
             self.player[player] = len(self.algorithms) - 1
         self.playerAlgorithm[player] = self.algorithms[self.player[player]]
 
+
     def setBotDifficulty(self, state : int, player : int) -> None:
         
         if self.playerAlgorithm[player] == "Manuell":

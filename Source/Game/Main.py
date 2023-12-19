@@ -20,7 +20,7 @@ def main():
     while stateDelegate.running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = False
+                pass
         
         
         stateDelegate.update()

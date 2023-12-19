@@ -17,7 +17,7 @@ class Menu:
     delegate = 0
     param = 0
 
-    background = pygame.image.load("Source/Game/Files/MainBackground.png")
+    menuBackground = pygame.image.load("Source/Game/Files/menuBackground.png")
 
     gameTitle = Label(1920//2, 440, 0, 1, 1, "Crazy Maze", (0, 110, 18), 70)
     gameTitle.setTextRect()
@@ -34,3 +34,5 @@ class Menu:
     pygame.init()
     mainMenu = Music("Source/Game/Files/ThemeMainMenu.wav", 0.1)
     mainMenu.play()
+
+menu = Menu()
