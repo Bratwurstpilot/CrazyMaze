@@ -11,18 +11,17 @@ class GameDelegate:
         self.scene : Scene = None
         self.running : bool = run
         self.scenes : list = []
-        self.setScene(self.scenes[0])
+        
 
-    
     def setup(self, scenes : list):
 
         self.scene = scenes[0]
         self.scenes = scenes 
 
 
-    def setScene(self, scene : Scene) -> None: 
+    def setScene(self, index : int) -> None: 
         
-        self.scene = scene
+        self.scene = self.scenes[index]
 
 
     def setRunning(self, run : bool) -> None:

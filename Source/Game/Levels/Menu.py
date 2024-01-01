@@ -6,7 +6,7 @@ from Source.Engine.Animation import Animation
 from Source.Engine.Label import Label
 from Source.Engine.Button import Button
 from Source.Engine.Scene import Scene
-from Source.Engine.Screen import Screen
+
 
 
 
@@ -36,15 +36,22 @@ class Menu:
     mainMenu = Music("Source/Game/Files/ThemeMainMenu.wav", 0.1)
     mainMenu.play()
 
-menu = Menu()
+object = Menu()
 ##menuScene = Scene(screen, menu.entities, menu.uiEntities, menu.menuBackground)
 
-def setup(object, screen : pygame.display, delegate) -> None:
-    object.delegate = delegate
-    return Scene(screen, object.entities, object.uiEntities, object.menuBackground)
+gameScene = None
+gameDelegate = None
 
-menu.startGame.setFunc([menu.delegate.setScene])
-menu.startGame.setParam([[1]])
+def setup(screen, delegate):
 
-menu.quitGame.setFunc([menu.delegate.setRunning])
-menu.quitGame.setParam([[False]])
+    global gameDelegate
+    global gameScene
+    
+    gameScene = Scene(screen, object.entities, object.uiEntities, object.menuBackground)
+    gameDelegate = delegate
+
+    object.startGame.setFunc([gameDelegate.setScene])
+    object.startGame.setParam([[1]])
+
+    object.quitGame.setFunc([gameDelegate.setRunning])
+    object.quitGame.setParam([[False]])
