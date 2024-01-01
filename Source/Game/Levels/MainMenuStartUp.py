@@ -2,7 +2,7 @@ from __future__ import annotations
 import pygame
 import random
 
-
+from Source.Engine.Scene import Scene
 from Source.Engine.Sound import Music
 from Source.Engine.Animation import Animation
 from Source.Engine.Label import Label
@@ -35,4 +35,14 @@ class Menu:
     mainMenu = Music("Source/Game/Files/ThemeMainMenu.wav", 0.1)
     mainMenu.play()
 
-menu = Menu()
+
+#------Setup Part----------
+
+object = Menu()
+gameScene = None
+
+def setup(screen):
+    
+    global gameScene
+    gameScene = Scene(screen, object.entities, object.uiEntities, object.background)
+

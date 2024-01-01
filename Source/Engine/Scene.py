@@ -27,7 +27,7 @@ class Scene():
 
             img : pygame.image = element.getTextureComponent().getTexture()
             if img == None :       
-                pygame.draw.rect(self.screen, (0, 0, 0), (element.getPositionX(), element.getPositionY(), element.getBodyWidth(), element.getBodyHeight()))
+                pygame.draw.rect(self.screen, element.getTextureComponent().color, (element.getPositionX(), element.getPositionY(), element.getBodyWidth(), element.getBodyHeight()))
             else : 
                 self.screen.blit(img, (element.getPositionX(), element.getPositionY(), element.getBodyWidth(), element.getBodyHeight()))
 
