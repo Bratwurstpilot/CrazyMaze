@@ -1,6 +1,6 @@
 
 
-class Instance:
+class GameInfo:
 
     def __init__(self):
 

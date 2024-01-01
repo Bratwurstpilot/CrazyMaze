@@ -7,7 +7,7 @@ from Source.Engine.Animation import Animation
 from Source.Engine.Label import Label
 from Source.Engine.Button import Button
 from Source.Engine.Scene import Scene
-from Source.Game.GameInfo import Instance
+
 
 
 
@@ -108,13 +108,15 @@ gameScene = None
 gameDelegate = None
 
 
-def setup(screen, delegate):
+def setup(screen, delegate, info):
 
     global gameDelegate
     global gameScene
+    global gameInfo
     
     gameScene = Scene(screen, object.entities, object.uiEntities, object.createBackground)
     gameDelegate = delegate
+    gameInfo = info
 
     object.backMenu.setFunc([gameDelegate.setScene])
     object.backMenu.setParam([[0]])
@@ -130,33 +132,33 @@ def setup(screen, delegate):
         instance.setBotDifficulty(state,player)
         cgame.setText(instance.difficulty[player])
 
-    gameInstance = Instance()
+    
 
     #----------------------------Switch Player One----------------------------
     object.switchLOneAlgorithm.setFunc([updateAlgorithm])
-    object.switchLOneAlgorithm.setParam([[gameInstance, object.pOneAlgorithm, -1, 0]])
+    object.switchLOneAlgorithm.setParam([[gameInfo, object.pOneAlgorithm, -1, 0]])
 
     object.switchROneAlgorithm.setFunc([updateAlgorithm])
-    object.switchROneAlgorithm.setParam([[gameInstance, object.pOneAlgorithm, 1, 0]])
+    object.switchROneAlgorithm.setParam([[gameInfo, object.pOneAlgorithm, 1, 0]])
 
     object.switchLOneDifficulty.setFunc([updateDiffictuly])
-    object.switchLOneDifficulty.setParam([[gameInstance, object.pOneDifficulty, -1, 0]])
+    object.switchLOneDifficulty.setParam([[gameInfo, object.pOneDifficulty, -1, 0]])
 
     object.switchROneDifficulty.setFunc([updateDiffictuly])
-    object.switchROneDifficulty.setParam([[gameInstance, object.pOneDifficulty, 1, 0]])
+    object.switchROneDifficulty.setParam([[gameInfo, object.pOneDifficulty, 1, 0]])
 
     #----------------------------Switch Player Two----------------------------
     object.switchLTwoAlgorithm.setFunc([updateAlgorithm])
-    object.switchLTwoAlgorithm.setParam([[gameInstance, object.pTwoAlgorithm, -1, 1]])
+    object.switchLTwoAlgorithm.setParam([[gameInfo, object.pTwoAlgorithm, -1, 1]])
 
     object.switchRTwoAlgorithm.setFunc([updateAlgorithm])
-    object.switchRTwoAlgorithm.setParam([[gameInstance, object.pTwoAlgorithm, 1, 1]])
+    object.switchRTwoAlgorithm.setParam([[gameInfo, object.pTwoAlgorithm, 1, 1]])
 
     object.switchLTwoDifficulty.setFunc([updateDiffictuly])
-    object.switchLTwoDifficulty.setParam([[gameInstance, object.pTwoDifficulty, -1, 0]])
+    object.switchLTwoDifficulty.setParam([[gameInfo, object.pTwoDifficulty, -1, 0]])
 
     object.switchRTwoDifficulty.setFunc([updateDiffictuly])
-    object.switchRTwoDifficulty.setParam([[gameInstance, object.pTwoDifficulty, 1, 0]])
+    object.switchRTwoDifficulty.setParam([[gameInfo, object.pTwoDifficulty, 1, 0]])
 
     #---------------------------------------------------------------------------
     object.startGame.setFunc([gameDelegate.setScene])

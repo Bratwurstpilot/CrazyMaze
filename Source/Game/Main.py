@@ -4,17 +4,14 @@ import pygame
 from Source.Engine.Scene import Scene
 from Source.Engine.Animation import Animation
 from Source.Engine.Sound import Music
-
-from Source.Game.Delegate import GameDelegate
-from Source.Game.Util import MyEntity
-from Source.Game.Levels.LabTest import LabTest
-
-from Source.Game.Levels import LabTest
-
 from Source.Engine.Screen import Screen
+
+from Source.Game.Util import MyEntity
 from Source.Game.Delegate import GameDelegate
+from Source.Game.GameInfo import GameInfo
 from Source.Game.Levels import Menu
 from Source.Game.Levels import Create
+from Source.Game.Levels import LabTest
 
 
 
@@ -39,14 +36,12 @@ def main():
     botPos = bot.getPosition().copy()
 
     botPackage = {"bot" : bot, "pos" : botPos, "scene" : botPlayScene}
+    
 
-    entities = instance.entities
-
-    uiEntities = []
-
-    def customFunc(scene, package : dict, instance):
+    def customFunc(scene, package : dict, instance, gameInfo):
         
         bot = package["bot"]
+        bot.tickMax = (2 - gameInfo.botDifficulty[0] + 1) * 144 * 0.2
         botPos = package["pos"]
         botPlayScene = package["scene"]
             
@@ -63,9 +58,10 @@ def main():
 
 
     stateDelegate = GameDelegate(True)
+    gameInfo = GameInfo()
     
     Menu.setup(screen, stateDelegate)
-    Create.setup(screen, stateDelegate)
+    Create.setup(screen, stateDelegate, gameInfo)
 
     stateDelegate.setup([Menu.gameScene, Create.gameScene, botPlayScene])
     
@@ -75,7 +71,7 @@ def main():
         
 
         #Function call + param update || NOT OPTIMAL TODO
-        botPackage = {"bot" : bot, "pos" : customFunc(stateDelegate.scene, botPackage, instance), "scene" : botPlayScene}
+        botPackage = {"bot" : bot, "pos" : customFunc(stateDelegate.scene, botPackage, instance, gameInfo), "scene" : botPlayScene}
         #-------------------------------------------------
 
 
