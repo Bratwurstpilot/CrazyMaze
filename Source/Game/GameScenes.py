@@ -4,7 +4,7 @@ from Source.Game.Menu import menu
 from Source.Game.Create import create
 from Source.Game.Delegate import GameDelegate
 from Source.Game.GameInstance import Instance
-import Source.Game.UtilFunction as UtilFunction
+
 
 from Source.Engine.Scene import Scene
 from Source.Engine.Screen import Screen
