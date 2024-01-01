@@ -1,5 +1,6 @@
 import pygame
 
+
 from Source.Engine.Scene import Scene
 from Source.Engine.Animation import Animation
 from Source.Engine.Sound import Music
@@ -8,8 +9,13 @@ from Source.Game.Delegate import GameDelegate
 from Source.Game.Util import MyEntity
 from Source.Game.Levels.LabTest import LabTest
 
-from Source.Game.Levels import MainMenuStartUp
 from Source.Game.Levels import LabTest
+
+from Source.Engine.Screen import Screen
+from Source.Game.Delegate import GameDelegate
+from Source.Game.Levels import Menu
+from Source.Game.Levels import Create
+
 
 
 
@@ -17,17 +23,17 @@ def main():
         
     pygame.init()
 
-    running = True
     clock = pygame.time.Clock()
     animations : list = []
-
     screen : pygame.display = Screen.setScreen(1920, 1080, "")
+
+
+
 
 
     #------------Setup-------------------------------
 
-    MainMenuStartUp.setup(screen)
-    #MainMenuUserOption.setup()
+    
 
     instance = LabTest.LabTest()
     instance.setupLab()
@@ -57,7 +63,7 @@ def main():
         return botPos
     #------------------------------------------------
 
-    mainScene = MainMenuStartUp.gameScene
+    
 
     while running:
 
@@ -67,6 +73,15 @@ def main():
         #Function call + param update || NOT OPTIMAL TODO
         botPackage = {"bot" : bot, "pos" : customFunc(mainScene, botPackage, instance), "scene" : botPlayScene}
         #-------------------------------------------------
+
+
+    stateDelegate = GameDelegate(True)
+    
+    Menu.setup(screen, stateDelegate)
+    Create.setup(screen, stateDelegate)
+
+    
+    stateDelegate.setup([Menu.gameScene, Create.gameScene])
 
 
         for event in pygame.event.get():
@@ -92,6 +107,4 @@ def main():
         #    animation.update()
 
         clock.tick(144)
-    print("Player One:",GameScene.gameInstance.playerAlgorithm[0])
-    print("Player Two:",GameScene.gameInstance.playerAlgorithm[1])
     pygame.quit()
