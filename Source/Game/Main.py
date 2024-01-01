@@ -27,10 +27,6 @@ def main():
     animations : list = []
     screen : pygame.display = Screen.setScreen(1920, 1080, "")
 
-
-
-
-
     #------------Setup-------------------------------
 
     
@@ -65,44 +61,35 @@ def main():
 
     
 
-    while running:
-
-        screen.fill((255,255,255))
-        
-
-        #Function call + param update || NOT OPTIMAL TODO
-        botPackage = {"bot" : bot, "pos" : customFunc(mainScene, botPackage, instance), "scene" : botPlayScene}
-        #-------------------------------------------------
-
 
     stateDelegate = GameDelegate(True)
     
     Menu.setup(screen, stateDelegate)
     Create.setup(screen, stateDelegate)
 
+    stateDelegate.setup([Menu.gameScene, Create.gameScene, botPlayScene])
     
-    stateDelegate.setup([Menu.gameScene, Create.gameScene])
+    while stateDelegate.running:
+
+        screen.fill((255,255,255))
+        
+
+        #Function call + param update || NOT OPTIMAL TODO
+        botPackage = {"bot" : bot, "pos" : customFunc(stateDelegate.scene, botPackage, instance), "scene" : botPlayScene}
+        #-------------------------------------------------
 
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-        
-        for entity in mainScene.uiElements:
-            if entity.update():
-                if entity.text == "Beenden":
-                    running = False 
-                elif entity.text == "Spiel erstellen":
-                    mainScene = botPlayScene
-                elif entity.text == "Zurück":
-                    mainScene = MainMenuStartUp.gameScene
-        
-        mainScene.render()
 
-        for entity in mainScene.elements:
-            entity.update()
-        for entity in mainScene.uiElements:
-            entity.update()             
+        stateDelegate.update()
+        stateDelegate.scene.render()
+   
+        for animation in animations:
+            animation.update()
+    
+               
         #for animation in mainScene.animations: TODO
         #    animation.update()
 

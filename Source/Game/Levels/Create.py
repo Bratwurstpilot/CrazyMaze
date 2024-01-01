@@ -157,3 +157,7 @@ def setup(screen, delegate):
 
     object.switchRTwoDifficulty.setFunc([updateDiffictuly])
     object.switchRTwoDifficulty.setParam([[gameInstance, object.pTwoDifficulty, 1, 0]])
+
+    #---------------------------------------------------------------------------
+    object.startGame.setFunc([gameDelegate.setScene])
+    object.startGame.setParam([[2]])

@@ -1,18 +1,10 @@
-
-<<<<<<<< HEAD:Source/Game/Levels/MainMenuStartUp.py
-from Source.Engine.Scene import Scene
-========
 import pygame
 
->>>>>>>> test-Delegate:Source/Game/Levels/Menu.py
 from Source.Engine.Sound import Music
 from Source.Engine.Animation import Animation
 from Source.Engine.Label import Label
 from Source.Engine.Button import Button
 from Source.Engine.Scene import Scene
-
-
-
 
 
 class Menu:
@@ -40,7 +32,7 @@ class Menu:
     mainMenu = Music("Source/Game/Files/ThemeMainMenu.wav", 0.1)
     mainMenu.play()
 
-<<<<<<<< HEAD:Source/Game/Levels/MainMenuStartUp.py
+
 
 #------Setup Part----------
 
@@ -52,7 +44,6 @@ def setup(screen):
     global gameScene
     gameScene = Scene(screen, object.entities, object.uiEntities, object.background)
 
-========
 object = Menu()
 ##menuScene = Scene(screen, menu.entities, menu.uiEntities, menu.menuBackground)
 
@@ -72,4 +63,4 @@ def setup(screen, delegate):
 
     object.quitGame.setFunc([gameDelegate.setRunning])
     object.quitGame.setParam([[False]])
->>>>>>>> test-Delegate:Source/Game/Levels/Menu.py
+
