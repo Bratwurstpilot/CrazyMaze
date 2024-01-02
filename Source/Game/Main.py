@@ -68,25 +68,22 @@ def main():
         #Function call + param update || NOT OPTIMAL TODO
         botPackage = {"bot" : bot, "pos" : customFunc(stateDelegate.scene, botPackage, instance, gameInfo), "scene" : botPlayScene}
         #-------------------------------------------------
-        if bot.positionX == instance.end.positionX and bot.positionY == instance.end.positionY :
-
-            stateDelegate.scene = stateDelegate.scenes[0]
-
-            instance.entities.clear()
-            instance.setupLab()
-            stateDelegate.scenes.remove(botPlayScene)
-
-            bot = instance.bot
-            botPos = bot.getPosition().copy()
-            botPlayScene = Scene(screen, instance.entities, [], None)
-
-            stateDelegate.scenes.append(botPlayScene)
-
-            botPackage = {"bot" : bot, "pos" : botPos, "scene" : botPlayScene}
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+
+                    stateDelegate.scene = stateDelegate.scenes[0]
+                    instance.entities.clear()
+                    instance.setupLab()
+                    stateDelegate.scenes.remove(botPlayScene)
+                    bot = instance.bot
+                    botPos = bot.getPosition().copy()
+                    botPlayScene = Scene(screen, instance.entities, [], None)
+                    stateDelegate.scenes.append(botPlayScene)
+                    botPackage = {"bot" : bot, "pos" : botPos, "scene" : botPlayScene}
 
         stateDelegate.update()
         stateDelegate.scene.render()

@@ -32,38 +32,41 @@ class LabTest:
 
         import random
 
-        labyrinth = [[0 for _ in range(10)] for __ in range(10)]
+        width = 20
+        height = 15
+
+        labyrinth = [[0 for _ in range(width)] for __ in range(height)]
         labyrinth[0][0] = 2
         labyrinth[-1][-1] = 3
 
 
-        for y in range(10):
-            for x in range(10):
+        for y in range(height):
+            for x in range(width):
                 choice = random.randint(0,100)
-                if choice >= 85 and labyrinth[x][y] == 0:
-                    labyrinth[x][y] = 1
+                if choice >= 75 and labyrinth[y][x] == 0:
+                    labyrinth[y][x] = 1
 
-        aBot = Agent(300, 200)
+        aBot = Agent(400, 200)
         aBot.setup(labyrinth)
         self.entities.append(aBot)
         aBot.getTextureComponent().color = (255,0, 0)
         self.bot = aBot
 
-        for i in range(11):
-            point = MyEntity(250, 150 + i * 50, 0, 50, 50)
+        for i in range(height+1):
+            point = MyEntity(350, 150 + i * 50, 0, 50, 50)
             self.entities.append(point)
-        for i in range(11):
-            point = MyEntity(250 + 550, 150 + i * 50, 0, 50, 50)
+        for i in range(height+1):
+            point = MyEntity(350 + (width + 1) * 50, 150 + i * 50, 0, 50, 50)
             self.entities.append(point)
-        for i in range(11):
-            point = MyEntity(250 + i * 50, 150, 0, 50, 50)
+        for i in range(width+1):
+            point = MyEntity(350 + i * 50, 150, 0, 50, 50)
             self.entities.append(point)
-        for i in range(12):
-            point = MyEntity(250 + i * 50, 150 + 550, 0, 50, 50)
+        for i in range(width+2):
+            point = MyEntity(350 + i * 50, 150 + (height + 1) * 50, 0, 50, 50)
             self.entities.append(point)
 
         endPoint = aBot.algorithm.end.coords
-        end = MyEntity(300 + 50 * endPoint[0], 200 + 50 * endPoint[1], bodyWidth=50, bodyHeight=50)
+        end = MyEntity(400 + 50 * endPoint[0], 200 + 50 * endPoint[1], bodyWidth=50, bodyHeight=50)
         self.end = end
         end.getTextureComponent().color = (0,255,0)
         self.entities.append(end)
@@ -71,5 +74,5 @@ class LabTest:
         for y in range(len(labyrinth)):
             for x in range(len(labyrinth[0])):
                 if labyrinth[y][x] == 1:
-                    self.entities.append(MyEntity(300 + x * 50, 200 + y * 50, 0, 50, 50))
+                    self.entities.append(MyEntity(400 + x * 50, 200 + y * 50, 0, 50, 50))
         

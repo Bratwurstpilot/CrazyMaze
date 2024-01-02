@@ -22,7 +22,8 @@ class Agent(Entity):
 
     
     def __del__(self) -> None:
-        print("deleted")
+        
+        pass
 
 
     def setup(self, viewSpace : list) -> None:
@@ -30,7 +31,7 @@ class Agent(Entity):
         self.algorithm.setViewSpace(viewSpace)
         self.algorithm.execRoutine()
         self.path = self.algorithm.getPath()
-        if self.path == -1:
+        if self.path == []:
             return
         self.positionRelative = self.path[-1]
         self.path.remove(self.path[-1])

@@ -239,7 +239,7 @@ class AStar(Algorithm):
                 maxNode : Node = predList[0]
             except IndexError:
                 print("no path")
-                return -1
+                return []
 
             for node in predList:
                 if node.value <= maxNode.value:
