@@ -38,12 +38,12 @@ def main():
     def customFunc(scene, package : dict, instance, gameInfo):
         
         bot = package["bot"]
-        bot.tickMax = (2 - gameInfo.botDifficulty[0] + 1) * 144 * 0.2
+        bot.tickMax = (2 - gameInfo.botDifficulty[0] + 1) * 144 * 0.1
         botPos = package["pos"]
         botPlayScene = package["scene"]
             
         if botPos[0] != bot.getPosition()[0] or botPos[1] != bot.getPosition()[1]:
-            elem = MyEntity(botPos.copy()[0], botPos.copy()[1], bodyWidth=50, bodyHeight=50)
+            elem = MyEntity(botPos.copy()[0], botPos.copy()[1], bodyWidth=bot.bodyWidth, bodyHeight=bot.bodyHeight)
             elem.getTextureComponent().color = (0,100,255)
             botPlayScene.elements.append(elem)
             botPos = bot.getPosition().copy()

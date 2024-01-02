@@ -14,7 +14,7 @@ class Agent(Entity):
 
         self.currentChoice = 0
 
-        self.stepWidth = 50
+        self.stepWidth = self.bodyWidth
 
         self.algorithm = AStar( {"Start" : 2 + playerNumber, "End" : 3 - playerNumber, "Obstacle" : 1})
         self.path = None
