@@ -142,8 +142,17 @@ class AStar(Algorithm):
             value : float = f
 
             if succNode in self.open or succNode in self.closed: 
-                if value > succNode.value:
+                if value >= succNode.value:
                     continue
+                else:
+                    try:
+                        self.open.remove(succNode)
+                    except Exception:
+                        pass
+                    try:
+                        self.closed.remove(succNode)
+                    except Exception:
+                        pass
 
             succNode.value = value
             succNode.iter = node.iter+1
@@ -201,6 +210,15 @@ class AStar(Algorithm):
         self.open.append(self.start)
 
 
+    def reset(self) -> None: 
+
+        self.open = []
+        self.closed = []
+        self.nodes = []
+        self.start = []
+        self.end = []
+
+
     def heuristic(self, position : tuple, endPoint : tuple) -> float:
         
         #Euclidean distance
@@ -217,7 +235,11 @@ class AStar(Algorithm):
                 break
 
             predList : list = current.pred
-            maxNode : Node = predList[0]
+            try:
+                maxNode : Node = predList[0]
+            except IndexError:
+                print("no path")
+                return -1
 
             for node in predList:
                 if node.value <= maxNode.value:

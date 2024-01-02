@@ -36,8 +36,3 @@ class GameInfo:
             elif self.botDifficulty[player] == len(self.difficulties):
                 self.botDifficulty[player] = len(self.difficulties) - 1
             self.difficulty[player] = self.difficulties[self.botDifficulty[player]]
-            
-
-
-    
-
