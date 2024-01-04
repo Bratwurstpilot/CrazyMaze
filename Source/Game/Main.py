@@ -28,27 +28,39 @@ def main():
 
     instance = LabTest.LabTest()
     instance.setupLab()
+    
 
     botPlayScene = Scene(screen, instance.entities, [], None)
-    bot = instance.bot
+    bot = instance.bot[0]
+    bBot = instance.bot[1]
     botPos = bot.getPosition().copy()
+    bBotPos = bBot.getPosition().copy()
 
-    botPackage = {"bot" : bot, "pos" : botPos, "scene" : botPlayScene}
+    botPackage = {"bot" : bot, "bot2" : bBot, "pos" : botPos, "pos2" : bBotPos, "scene" : botPlayScene}
     
     def customFunc(scene, package : dict, instance, gameInfo):
         
         bot = package["bot"]
         bot.tickMax = (2 - gameInfo.botDifficulty[0] + 1) * 144 * 0.1
+        bBot = package["bot2"]
+        bBot.tickMax = (2 - gameInfo.botDifficulty[1] + 1) * 144 * 0.1
         botPos = package["pos"]
+        bBotPos = package["pos2"]
         botPlayScene = package["scene"]
             
         if botPos[0] != bot.getPosition()[0] or botPos[1] != bot.getPosition()[1]:
-            elem = MyEntity(botPos.copy()[0], botPos.copy()[1], bodyWidth=bot.bodyWidth, bodyHeight=bot.bodyHeight)
+            elem = MyEntity(botPos.copy()[0], botPos.copy()[1], -1 ,bodyWidth=bot.bodyWidth, bodyHeight=bot.bodyHeight)
             elem.getTextureComponent().color = (0,100,255)
             botPlayScene.elements.append(elem)
             botPos = bot.getPosition().copy()
+        
+        if bBotPos[0] != bBot.getPosition()[0] or bBotPos[1] != bBot.getPosition()[1]:
+            elem = MyEntity(bBotPos.copy()[0], bBotPos.copy()[1], -1 ,bodyWidth=bBot.bodyWidth, bodyHeight=bBot.bodyHeight)
+            elem.getTextureComponent().color = (0, 255, 0)
+            botPlayScene.elements.append(elem)
+            bBotPos = bBot.getPosition().copy()
 
-        return botPos
+        return [botPos, bBotPos]
     
     #------------------------------------------------
 
@@ -64,9 +76,10 @@ def main():
     while stateDelegate.running:
 
         screen.fill((255,255,255))
-    
+        print(gameInfo.botDifficulty[1])
+        func = customFunc(stateDelegate.scene, botPackage, instance, gameInfo)
         #Function call + param update || NOT OPTIMAL TODO
-        botPackage = {"bot" : bot, "pos" : customFunc(stateDelegate.scene, botPackage, instance, gameInfo), "scene" : botPlayScene}
+        botPackage = {"bot" : bot, "bot2" : bBot, "pos" : func[0], "pos2" : func[1], "scene" : botPlayScene}
         #-------------------------------------------------
 
         for event in pygame.event.get():
@@ -79,11 +92,13 @@ def main():
                     instance.entities.clear()
                     instance.setupLab()
                     stateDelegate.scenes.remove(botPlayScene)
-                    bot = instance.bot
+                    bot = instance.bot[0]
+                    bBot = instance.bot[1]
                     botPos = bot.getPosition().copy()
+                    bBotPos = bBot.getPosition().copy()
                     botPlayScene = Scene(screen, instance.entities, [], None)
                     stateDelegate.scenes.append(botPlayScene)
-                    botPackage = {"bot" : bot, "pos" : botPos, "scene" : botPlayScene}
+                    botPackage = {"bot" : bot, "bot2" : bBot, "pos" : botPos, "pos2" : bBotPos, "scene" : botPlayScene}
 
         stateDelegate.update()
         stateDelegate.scene.render()

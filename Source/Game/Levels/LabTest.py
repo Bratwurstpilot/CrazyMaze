@@ -14,18 +14,30 @@ class LabTest:
 
         self.entities = []
         self.end = None
-        self.bot = None
+        self.bot = []
         
         labyrinth = Labyrinth(40,25).getLabyrinth()
 
-        START = [400,200]
+        WIDTH = len(labyrinth[0])
+        HEIGHT = len(labyrinth)
         LINEWIDTH = 30
+        playernum = 0
+        START = [400,200]
 
-        aBot = Agent(START[0] + LINEWIDTH, START[1] + LINEWIDTH, 1, LINEWIDTH, LINEWIDTH)
+
+        aBot = Agent(START[0] + (1-playernum) * LINEWIDTH + (WIDTH-2) * LINEWIDTH * playernum, START[1] + (1-playernum) * LINEWIDTH + (HEIGHT-2) * LINEWIDTH * playernum, 1, LINEWIDTH, LINEWIDTH, playerNumber=playernum)
         aBot.setup(labyrinth)
         self.entities.append(aBot)
         aBot.getTextureComponent().color = (255,0, 0)
-        self.bot = aBot
+        self.bot.append(aBot)
+
+        playernumB = 1
+
+        bBot = Agent(START[0] + (1-playernumB) * LINEWIDTH + (WIDTH-2) * LINEWIDTH * playernumB, START[1] + (1-playernumB) * LINEWIDTH + (HEIGHT-2) * LINEWIDTH * playernumB, 1, LINEWIDTH, LINEWIDTH, playerNumber=playernumB)
+        bBot.setup(labyrinth)
+        self.entities.append(bBot)
+        bBot.getTextureComponent().color = (255,255, 0)
+        self.bot.append(bBot)
 
         endPoint = aBot.algorithm.end.coords
         end = MyEntity(START[0] + LINEWIDTH * endPoint[0], START[1] + LINEWIDTH * endPoint[1], bodyWidth=LINEWIDTH, bodyHeight=LINEWIDTH)

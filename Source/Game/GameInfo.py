@@ -27,12 +27,9 @@ class GameInfo:
 
     def setBotDifficulty(self, state : int, player : int) -> None:
         
-        if self.playerAlgorithm[player] == "Manuell":
-            pass
-        else:
-            self.botDifficulty[player] += state
-            if self.botDifficulty[player] < 0:
-                self.botDifficulty[player] = 0
-            elif self.botDifficulty[player] == len(self.difficulties):
-                self.botDifficulty[player] = len(self.difficulties) - 1
-            self.difficulty[player] = self.difficulties[self.botDifficulty[player]]
+        self.botDifficulty[player] += state
+        if self.botDifficulty[player] < 0:
+            self.botDifficulty[player] = 0
+        elif self.botDifficulty[player] == len(self.difficulties):
+            self.botDifficulty[player] = len(self.difficulties) - 1
+        self.difficulty[player] = self.difficulties[self.botDifficulty[player]]

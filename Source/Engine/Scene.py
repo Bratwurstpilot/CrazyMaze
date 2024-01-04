@@ -13,6 +13,7 @@ class Scene():
 
     def render(self) -> None:
         
+        self.elements = self.depthSort(self.elements)
         self.__renderElements()
         self.__renderUI()
         pygame.display.update()
