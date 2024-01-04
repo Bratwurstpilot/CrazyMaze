@@ -12,7 +12,7 @@ from Source.Game.GameInfo import GameInfo
 from Source.Game.Levels import Menu
 from Source.Game.Levels import Create
 from Source.Game.Levels import LabTest
-
+from Source.Game.Levels import KnightTest
 
 
 
@@ -64,6 +64,13 @@ def main():
     
     #------------------------------------------------
 
+    #----------Knight Testing-------------
+
+    KnightTest.setup(screen)
+    knightScene = KnightTest.gameScene
+    entitiyControllers = KnightTest.controllers
+
+    #-------------------------------------
 
     stateDelegate = GameDelegate(True)
     gameInfo = GameInfo()
@@ -71,12 +78,11 @@ def main():
     Menu.setup(screen, stateDelegate)
     Create.setup(screen, stateDelegate, gameInfo)
 
-    stateDelegate.setup([Menu.gameScene, Create.gameScene, botPlayScene])
+    stateDelegate.setup([Menu.gameScene, Create.gameScene, knightScene])
     
     while stateDelegate.running:
 
         screen.fill((255,255,255))
-        print(gameInfo.botDifficulty[1])
         func = customFunc(stateDelegate.scene, botPackage, instance, gameInfo)
         #Function call + param update || NOT OPTIMAL TODO
         botPackage = {"bot" : bot, "bot2" : bBot, "pos" : func[0], "pos2" : func[1], "scene" : botPlayScene}
@@ -100,15 +106,18 @@ def main():
                     stateDelegate.scenes.append(botPlayScene)
                     botPackage = {"bot" : bot, "bot2" : bBot, "pos" : botPos, "pos2" : bBotPos, "scene" : botPlayScene}
 
+                for controller in entitiyControllers:
+                    controller.update(event.key, True)
+            if event.type == pygame.KEYUP:
+                for controller in entitiyControllers:
+                    controller.update(event.key, False)
+
         stateDelegate.update()
         stateDelegate.scene.render()
    
         for animation in animations:
             animation.update()
-    
-               
-        #for animation in mainScene.animations: TODO
-        #    animation.update()
 
         clock.tick(144)
+
     pygame.quit()

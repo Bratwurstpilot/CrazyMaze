@@ -32,11 +32,13 @@ class EntityController(ABC):
         pass
     
 
-    def update_(self, key, mode : bool) -> None:
+    def updateInputs(self, key, mode : bool) -> None:
         
         '''
         The Controller expects to get the key by the main program
         and does the job to evaluate the pressed key.
+        Mode must be set True for keyDown events and False for 
+        keyUp events.
         '''
         input = self.processInput(key)
         
@@ -46,7 +48,6 @@ class EntityController(ABC):
         elif input not in self.keysPressed:
             self.keysPressed.append(input)
         
-        self.update()
     
 
     # Set Methods

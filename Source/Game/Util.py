@@ -39,7 +39,9 @@ class MyController2(EntityController):
         super().__init__(entities, id)
 
 
-    def update(self) -> None:
+    def update(self, key, mode) -> None:
+        
+        self.updateInputs(key, mode)
 
         for entity in self.controlledEntities:
             entity.getPhysicsComponent().resetMomentum()

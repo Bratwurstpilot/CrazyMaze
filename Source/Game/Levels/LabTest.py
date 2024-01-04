@@ -27,6 +27,7 @@ class LabTest:
 
         aBot = Agent(START[0] + (1-playernum) * LINEWIDTH + (WIDTH-2) * LINEWIDTH * playernum, START[1] + (1-playernum) * LINEWIDTH + (HEIGHT-2) * LINEWIDTH * playernum, 1, LINEWIDTH, LINEWIDTH, playerNumber=playernum)
         aBot.setup(labyrinth)
+
         self.entities.append(aBot)
         aBot.getTextureComponent().color = (255,0, 0)
         self.bot.append(aBot)
