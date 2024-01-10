@@ -40,21 +40,15 @@ def main():
     LabTest.setup(screen)
 
     instance = LabTest.object
-
-    bot = instance.bot[0]
-    bBot = instance.bot[1]
-    botPos = bot.getPosition().copy()
-    bBotPos = bBot.getPosition().copy()
-    botPackage = {"bot" : bot, "bot2" : bBot, "pos" : botPos, "pos2" : bBotPos, "scene" : LabTest.gameScene}
-    
-    LabTest.setup(screen, LabTest.customFunc, [LabTest.botPackage, gameInfo])
+    botPackage = LabTest.botPackage
     stateDelegate.setup([Menu.gameScene, Create.gameScene, LabTest.gameScene])
     
     while stateDelegate.running:
 
-        func = LabTest.gameScene.execFunc()
+        func = LabTest.customFunc(botPackage, gameInfo)
+        
         #Function call + param update || NOT OPTIMAL TODO
-        botPackage = {"bot" : bot, "bot2" : bBot, "pos" : func[0], "pos2" : func[1], "scene" : LabTest.gameScene}
+        botPackage = {"bot" : instance.bot[0], "bot2" : instance.bot[1], "pos" : func[0], "pos2" : func[1], "scene" : LabTest.gameScene}
         #-------------------------------------------------
 
         for event in pygame.event.get():
@@ -67,8 +61,8 @@ def main():
                     instance.entities.clear()
                     instance.setupLab()
                     stateDelegate.scenes.remove(LabTest.gameScene)
+                    LabTest.setup(screen)
                     botPackage = LabTest.botPackage
-                    LabTest.setup(screen, LabTest.customFunc, [botPackage, gameInfo])
                     stateDelegate.scenes.append(LabTest.gameScene)
                     
                 for controller in entitiyControllers:

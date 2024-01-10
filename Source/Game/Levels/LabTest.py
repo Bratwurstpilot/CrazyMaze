@@ -79,13 +79,16 @@ def customFunc(package : dict, gameInfo):
         bBotPos = bBot.getPosition().copy()
 
     return [botPos, bBotPos]
-    
+
+
 #------------------------------------------------
+
 object = LabTest()
 object.setupLab()
 gameScene = None
 botPackage = {}
 background = pygame.image.load("Source/Game/Files/createBackground.png")
+
 
 def setup(screen, func = None, param = None):
 
@@ -98,4 +101,4 @@ def setup(screen, func = None, param = None):
     bBotPos = bBot.getPosition().copy()
     botPackage = {"bot" : bot, "bot2" : bBot, "pos" : botPos, "pos2" : bBotPos, "scene" : gameScene}
 
-    gameScene = Scene(screen, object.entities, [], background, func, param)
+    gameScene = Scene(screen, object.entities, [], background)
