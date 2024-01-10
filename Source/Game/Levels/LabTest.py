@@ -16,7 +16,7 @@ class LabTest:
         self.end = None
         self.bot = []
         
-        labyrinth = Labyrinth(40,25).getLabyrinth()
+        labyrinth = Labyrinth(39,25).getLabyrinth()
 
         WIDTH = len(labyrinth[0])
         HEIGHT = len(labyrinth)
