@@ -7,6 +7,9 @@ pygame.init()
 
 class Button(Entity):
 
+    '''
+    The Button class is like a Label with a function.
+    '''
     def defaultFunc(param):
         print(param)
 

@@ -25,18 +25,6 @@ def main():
     screen : pygame.display = Screen.setScreen(1920, 1080, "")
 
     #------------Setup-------------------------------
-
-    instance = LabTest.LabTest()
-    instance.setupLab()
-    
-
-    botPlayScene = Scene(screen, instance.entities, [], None)
-    bot = instance.bot[0]
-    bBot = instance.bot[1]
-    botPos = bot.getPosition().copy()
-    bBotPos = bBot.getPosition().copy()
-
-    botPackage = {"bot" : bot, "bot2" : bBot, "pos" : botPos, "pos2" : bBotPos, "scene" : botPlayScene}
     
     def customFunc(scene, package : dict, instance, gameInfo):
         
@@ -77,8 +65,19 @@ def main():
     
     Menu.setup(screen, stateDelegate)
     Create.setup(screen, stateDelegate, gameInfo)
+    LabTest.setup(screen)
+    instance = LabTest.object
+    
 
-    stateDelegate.setup([Menu.gameScene, Create.gameScene, knightScene])
+    botPlayScene = Scene(screen, instance.entities, [], None)
+    bot = instance.bot[0]
+    bBot = instance.bot[1]
+    botPos = bot.getPosition().copy()
+    bBotPos = bBot.getPosition().copy()
+
+    botPackage = {"bot" : bot, "bot2" : bBot, "pos" : botPos, "pos2" : bBotPos, "scene" : botPlayScene}
+
+    stateDelegate.setup([Menu.gameScene, Create.gameScene, botPlayScene])
     
     while stateDelegate.running:
 
@@ -90,7 +89,7 @@ def main():
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = False
+                stateDelegate.running = False
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
 

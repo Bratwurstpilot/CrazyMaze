@@ -1,7 +1,8 @@
 from Source.Game.Util import *
 from Source.Algorithms.Agent import Agent
 from Source.Game.Labyrinth import Labyrinth
-import pygame 
+from Source.Engine.Scene import Scene
+
 
 class LabTest:
 
@@ -50,4 +51,47 @@ class LabTest:
             for x in range(len(labyrinth[0])):
                 if labyrinth[y][x] == 1:
                     self.entities.append(MyEntity(START[0] + x * LINEWIDTH, START[1] + y * LINEWIDTH, 0, LINEWIDTH, LINEWIDTH))
+
+#------------Setup-------------------------------
+    
+def customFunc(scene, package : dict, instance, gameInfo):
+    
+    bot = package["bot"]
+    bot.tickMax = (2 - gameInfo.botDifficulty[0] + 1) * 144 * 0.1
+    bBot = package["bot2"]
+    bBot.tickMax = (2 - gameInfo.botDifficulty[1] + 1) * 144 * 0.1
+    botPos = package["pos"]
+    bBotPos = package["pos2"]
+    botPlayScene = package["scene"]
         
+    if botPos[0] != bot.getPosition()[0] or botPos[1] != bot.getPosition()[1]:
+        elem = MyEntity(botPos.copy()[0], botPos.copy()[1], -1 ,bodyWidth=bot.bodyWidth, bodyHeight=bot.bodyHeight)
+        elem.getTextureComponent().color = (0,100,255)
+        botPlayScene.elements.append(elem)
+        botPos = bot.getPosition().copy()
+    
+    if bBotPos[0] != bBot.getPosition()[0] or bBotPos[1] != bBot.getPosition()[1]:
+        elem = MyEntity(bBotPos.copy()[0], bBotPos.copy()[1], -1 ,bodyWidth=bBot.bodyWidth, bodyHeight=bBot.bodyHeight)
+        elem.getTextureComponent().color = (0, 255, 0)
+        botPlayScene.elements.append(elem)
+        bBotPos = bBot.getPosition().copy()
+
+    return [botPos, bBotPos]
+    
+#------------------------------------------------
+object = LabTest()
+object.setupLab()
+gameScene = None
+botPackage = {}
+
+def setup(screen):
+
+    global gameScene
+    global botPackage
+    gameScene = Scene(screen, object.entities, [], None)
+    bot = object.bot[0]
+    bBot = object.bot[1]
+    botPos = bot.getPosition().copy()
+    bBotPos = bBot.getPosition().copy()
+
+    botPackage = {"bot" : bot, "bot2" : bBot, "pos" : botPos, "pos2" : bBotPos, "scene" : gameScene}

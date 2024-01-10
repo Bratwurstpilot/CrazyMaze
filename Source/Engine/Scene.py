@@ -3,16 +3,25 @@ import pygame
 
 class Scene():
 
-    def __init__(self, screen : pygame.display, elements : list, uiElements : list, image : pygame.image = None) -> None:
+    '''
+    The Scene class can be used to create a scene, which
+    has renderable Elements.
+    '''
+
+    def __init__(self, screen : pygame.display, elements : list, uiElements : list, image : pygame.image = None, sceneFunction = None, param : list = []) -> None:
 
         self.screen : pygame.display = screen
         self.elements : list = self.depthSort(elements)
         self.uiElements : list = uiElements
         self.background : pygame.image = image
+        self.sceneFunc = sceneFunction
+        self.sceneParam : list = param
 
 
     def render(self) -> None:
         
+        if self.sceneFunc != None:
+            self.__execFunc()
         self.elements = self.depthSort(self.elements)
         self.__renderElements()
         self.__renderUI()
@@ -38,6 +47,11 @@ class Scene():
         for element in self.uiElements:
             pygame.draw.rect(self.screen, element.getBgColor(), (element.getPositionX(), element.getPositionY(), element.getBodyWidth(), element.getBodyHeight()))
             self.screen.blit(element.getTextFont(), element.getTextRect())
+
+
+    def __execFunc(self) -> None:
+
+        self.sceneFunc(*self.param)
 
 
     def depthSort(self, elements : list) -> list :
