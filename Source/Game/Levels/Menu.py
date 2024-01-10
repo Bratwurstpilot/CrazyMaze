@@ -29,7 +29,7 @@ class Menu:
     uiEntities.append(quitGame)
 
     pygame.init()
-    mainMenu = Music("Source/Game/Files/DriftveilCity.mp3", 0.1)
+    mainMenu = Music("Source/Game/Files/DriftveilCity.wav", 0.1)
     mainMenu.play()
 
 
