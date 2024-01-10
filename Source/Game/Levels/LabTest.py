@@ -16,13 +16,13 @@ class LabTest:
         self.end = None
         self.bot = []
         
-        labyrinth = Labyrinth(39,25).getLabyrinth()
+        labyrinth = Labyrinth(45,31).getLabyrinth()
 
         WIDTH = len(labyrinth[0])
         HEIGHT = len(labyrinth)
-        LINEWIDTH = 30
+        LINEWIDTH = 20
         playernum = 0
-        START = [400,200]
+        START = [300,200]
 
         
 
