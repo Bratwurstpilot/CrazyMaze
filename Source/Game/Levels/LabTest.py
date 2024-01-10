@@ -1,3 +1,5 @@
+import pygame
+
 from Source.Game.Util import *
 from Source.Algorithms.Agent import Agent
 from Source.Game.Labyrinth import Labyrinth
@@ -54,7 +56,7 @@ class LabTest:
 
 #------------Setup-------------------------------
     
-def customFunc(scene, package : dict, instance, gameInfo):
+def customFunc(package : dict, gameInfo):
     
     bot = package["bot"]
     bot.tickMax = (2 - gameInfo.botDifficulty[0] + 1) * 144 * 0.1
@@ -83,15 +85,17 @@ object = LabTest()
 object.setupLab()
 gameScene = None
 botPackage = {}
+background = pygame.image.load("Source/Game/Files/createBackground.png")
 
-def setup(screen):
+def setup(screen, func = None, param = None):
 
     global gameScene
     global botPackage
-    gameScene = Scene(screen, object.entities, [], None)
+    
     bot = object.bot[0]
     bBot = object.bot[1]
     botPos = bot.getPosition().copy()
     bBotPos = bBot.getPosition().copy()
-
     botPackage = {"bot" : bot, "bot2" : bBot, "pos" : botPos, "pos2" : bBotPos, "scene" : gameScene}
+
+    gameScene = Scene(screen, object.entities, [], background, func, param)

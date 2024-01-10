@@ -9,6 +9,7 @@ class Label(Entity):
     '''
     Create a Label to render a Text.
     '''
+    
     def __init__(self, positionX : int = 0, positionY : int = 0, positionZ : int = 0, bodyWidth : int = 100, bodyHeight : int = 100, text : str = "Crazy Maze", textColor : tuple = (255, 255, 255), size : int = 20):
 
         super().__init__(positionX, positionY, positionZ, bodyWidth, bodyHeight)

@@ -20,8 +20,6 @@ class Scene():
 
     def render(self) -> None:
         
-        if self.sceneFunc != None:
-            self.__execFunc()
         self.elements = self.depthSort(self.elements)
         self.__renderElements()
         self.__renderUI()
@@ -49,9 +47,10 @@ class Scene():
             self.screen.blit(element.getTextFont(), element.getTextRect())
 
 
-    def __execFunc(self) -> None:
+    def execFunc(self) -> None:
 
-        self.sceneFunc(*self.param)
+        print(self.sceneParam)
+        return self.sceneFunc(*self.sceneParam)
 
 
     def depthSort(self, elements : list) -> list :
