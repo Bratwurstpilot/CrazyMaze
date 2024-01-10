@@ -78,7 +78,7 @@ def main():
     Menu.setup(screen, stateDelegate)
     Create.setup(screen, stateDelegate, gameInfo)
 
-    stateDelegate.setup([Menu.gameScene, Create.gameScene, knightScene])
+    stateDelegate.setup([Menu.gameScene, Create.gameScene, botPlayScene])
     
     while stateDelegate.running:
 

@@ -8,7 +8,7 @@ class Labyrinth:
         self.create(width, height)
         
 
-    def create(self, width, height) -> None:
+    def createRandom(self, width, height) -> None:
 
         self.field = [[0 for _ in range(width+2)] for __ in range(height+2)]
 
@@ -30,6 +30,38 @@ class Labyrinth:
 
         for row in self.field:
             print(*row)
+
+    
+    def create(self, width, height):
+
+        def getWalls(field : list, point : list):
+            pass
+
+        self.field = [[(i%2+j%2)%2 for i in range(width+2)] for j in range(height+2)]
+
+        randomsetX : list = []
+        print("Creating...")
+
+        count = 0
+        randomCoord : list = []
+
+        for i in range(len(self.field)):
+            for j in range(len(self.field[0])):
+                if self.field[i][j] == 0:
+                    randomCoord.append([j,i])
+                    
+        #Pick a random cell
+        choice : list = randomCoord[random.randint(0,len(randomCoord)-1)]
+
+        labParts : list = []
+        labParts.append(choice)
+
+
+
+        print("Finished creating")
+        
+        self.field[1][1] = 2
+        self.field[height][width] = 3
 
 
     def getLabyrinth(self) -> list:
