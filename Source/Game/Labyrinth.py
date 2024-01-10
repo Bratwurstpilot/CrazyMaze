@@ -70,8 +70,6 @@ class Labyrinth:
             return walls
         
 
-        print("Creating...")
-
         self.field = [[1 for _ in range(width+2)] for __ in range(height+2)]
 
         randomCoord : list = []
@@ -94,13 +92,13 @@ class Labyrinth:
         while len(walls) > 0:
 
             #Get a random Wall
-            choice = walls[random.randint(0,len(walls)-1)].copy()
+            choice = walls[random.randint(0,len(walls)-1)]
             walls.remove(choice)
 
             #Get the devided cells
             devide = getItem(self.field, choice, 0)
 
-            #Check visited Cells
+            #Check number of visited Cells
             devideCount = 0
             unVisited = None
             for elem in devide:
@@ -109,7 +107,7 @@ class Labyrinth:
                 else:
                     unVisited = elem
             
-            #If only one cells devided is visited, make the wall a passage
+            #If only one of the cells devided is visited, make the wall a passage
             if devideCount <= 1 and unVisited != None:
                 passage.append(choice)
                 labParts.append(unVisited)
@@ -120,21 +118,13 @@ class Labyrinth:
                     if wall not in passage and wall not in labParts:
                         walls.append(wall)
 
-        print("Finished creating")
+        for cell in labParts + passage:
+            self.field[cell[1]][cell[0]] = 0
 
-        for cell in labParts:
-            self.field[cell[1]][cell[0]] = 0
-        for cell in passage:
-            self.field[cell[1]][cell[0]] = 0
         self.field[1][1] = 2
         self.field[height][width] = 3
-
-        #for elem in self.field:
-            #print(*elem)
 
 
     def getLabyrinth(self) -> list:
 
         return self.field
-
-lab = Labyrinth(10, 10)
