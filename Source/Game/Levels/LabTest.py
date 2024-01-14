@@ -53,4 +53,3 @@ class LabTest:
             for x in range(len(labyrinth[0])):
                 if labyrinth[y][x] == 1:
                     self.entities.append(MyEntity(START[0] + x * LINEWIDTH, START[1] + y * LINEWIDTH, 0, LINEWIDTH, LINEWIDTH))
-        

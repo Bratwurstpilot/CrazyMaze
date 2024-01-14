@@ -173,25 +173,37 @@ class AStar(Algorithm):
 
     def setup(self) -> None:
         
-        def getNodeNeighbours(x : int, y : int) -> list:
-            
-            neighbours : list = []
+        def getNodeNeighbours(cNode : Node, x : int, y : int) -> None:
 
             for node in self.nodes:
 
                 if node.coords[0] == x - 1 and node.coords[1] == y:
-                    neighbours.append(node)
-                elif node.coords[0] == x + 1 and node.coords[1] == y:
-                    neighbours.append(node)
-                elif node.coords[0] == x and node.coords[1] == y - 1:
-                    neighbours.append(node)
-                elif node.coords[0] == x and node.coords[1] == y + 1:
-                    neighbours.append(node)
+                    if node not in cNode.neighbours:
+                        cNode.neighbours.append(node)
+                    if cNode not in node.neighbours:
+                        node.neighbours.append(cNode)
 
-                if len(neighbours) >= 4: 
+                elif node.coords[0] == x + 1 and node.coords[1] == y:
+                    if node not in cNode.neighbours:
+                        cNode.neighbours.append(node)
+                    if cNode not in node.neighbours:
+                        node.neighbours.append(cNode)
+
+                elif node.coords[0] == x and node.coords[1] == y - 1:
+                    if node not in cNode.neighbours:
+                        cNode.neighbours.append(node)
+                    if cNode not in node.neighbours:
+                        node.neighbours.append(cNode)
+
+                elif node.coords[0] == x and node.coords[1] == y + 1:
+                    if node not in cNode.neighbours:
+                        cNode.neighbours.append(node)
+                    if cNode not in node.neighbours:
+                        node.neighbours.append(cNode)
+
+                if len(cNode.neighbours) >= 4: 
                     break
-            
-            return neighbours
+
 
         for i in range(len(self.viewSpace)):
             for j in range(len(self.viewSpace[0])):
@@ -206,9 +218,8 @@ class AStar(Algorithm):
                     continue
 
                 self.nodes.append(node)
+                getNodeNeighbours(node, *node.coords)
 
-        for node in self.nodes:
-            node.neighbours = getNodeNeighbours(*node.coords)
                 
         self.open.append(self.start)
 
@@ -234,7 +245,6 @@ class AStar(Algorithm):
         current : Node = self.end
         
         while True:
-
             if current == self.start:
                 break
 
