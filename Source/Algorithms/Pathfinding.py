@@ -135,11 +135,7 @@ class AStar(Algorithm):
             if succNode in node.pred:
                 continue
 
-            g : float = node.iter+1
-            h : float = self.heuristic(succNode.coords, self.end.coords)
-            f : float = g + h
-
-            value : float = f
+            value : float = node.iter+1 + self.heuristic(succNode.coords, self.end.coords)
 
             if succNode in self.open or succNode in self.closed: 
                 if value >= succNode.value:
@@ -176,36 +172,54 @@ class AStar(Algorithm):
 
 
     def setup(self) -> None:
+        
+        def getNodeNeighbours(cNode : Node, x : int, y : int) -> None:
 
-        def getNodeNeighbours(x : int, y : int) -> list:
-
-            neighbours : list = []
             for node in self.nodes:
+
                 if node.coords[0] == x - 1 and node.coords[1] == y:
-                    neighbours.append(node)
+                    if node not in cNode.neighbours:
+                        cNode.neighbours.append(node)
+                    if cNode not in node.neighbours:
+                        node.neighbours.append(cNode)
+
                 elif node.coords[0] == x + 1 and node.coords[1] == y:
-                    neighbours.append(node)
+                    if node not in cNode.neighbours:
+                        cNode.neighbours.append(node)
+                    if cNode not in node.neighbours:
+                        node.neighbours.append(cNode)
+
                 elif node.coords[0] == x and node.coords[1] == y - 1:
-                    neighbours.append(node)
+                    if node not in cNode.neighbours:
+                        cNode.neighbours.append(node)
+                    if cNode not in node.neighbours:
+                        node.neighbours.append(cNode)
+
                 elif node.coords[0] == x and node.coords[1] == y + 1:
-                    neighbours.append(node)
-            
-            return neighbours
+                    if node not in cNode.neighbours:
+                        cNode.neighbours.append(node)
+                    if cNode not in node.neighbours:
+                        node.neighbours.append(cNode)
+
+                if len(cNode.neighbours) >= 4: 
+                    break
+
 
         for i in range(len(self.viewSpace)):
             for j in range(len(self.viewSpace[0])):
+
                 node = Node(j,i)
+
                 if self.viewSpace[i][j] == self.symbol["Start"]:
                     self.start = node
                 elif self.viewSpace[i][j] == self.symbol["End"]:
                     self.end = node
                 elif self.viewSpace[i][j] == self.symbol["Obstacle"]:
-                    node = Node(-10,-10)
-                self.nodes.append(node)
+                    continue
 
-        for node in self.nodes:
-            neighbours = getNodeNeighbours(*node.coords)
-            node.neighbours = neighbours
+                self.nodes.append(node)
+                getNodeNeighbours(node, *node.coords)
+
                 
         self.open.append(self.start)
 
@@ -221,8 +235,8 @@ class AStar(Algorithm):
 
     def heuristic(self, position : tuple, endPoint : tuple) -> float:
         
-        #Euclidean distance
-        return sqrt((endPoint[0] - position[0]) ** 2 + (endPoint[1] - position[1]) ** 2)
+        #Manhatten distance
+        return abs(endPoint[0] - position[0]) + abs(endPoint[1] - position[1])
     
 
     def getPath(self) -> list:
@@ -235,11 +249,11 @@ class AStar(Algorithm):
                 break
 
             predList : list = current.pred
-            try:
-                maxNode : Node = predList[0]
-            except IndexError:
-                print("no path")
+
+            if len(predList) == 0:
                 return []
+
+            maxNode = predList[0]
 
             for node in predList:
                 if node.value <= maxNode.value:

@@ -19,14 +19,15 @@ class LabTest:
         self.end = None
         self.bot = []
         
-        labyrinth = Labyrinth(40,25).getLabyrinth()
+        labyrinth = Labyrinth(45,31).getLabyrinth()
 
         WIDTH = len(labyrinth[0])
         HEIGHT = len(labyrinth)
-        LINEWIDTH = 30
+        LINEWIDTH = 20
         playernum = 0
-        START = [400,200]
+        START = [300,200]
 
+        
 
         aBot = Agent(START[0] + (1-playernum) * LINEWIDTH + (WIDTH-2) * LINEWIDTH * playernum, START[1] + (1-playernum) * LINEWIDTH + (HEIGHT-2) * LINEWIDTH * playernum, 1, LINEWIDTH, LINEWIDTH, playerNumber=playernum)
         aBot.setup(labyrinth)
@@ -42,17 +43,21 @@ class LabTest:
         self.entities.append(bBot)
         bBot.getTextureComponent().color = (255,255, 0)
         self.bot.append(bBot)
+    
 
         endPoint = aBot.algorithm.end.coords
         end = MyEntity(START[0] + LINEWIDTH * endPoint[0], START[1] + LINEWIDTH * endPoint[1], bodyWidth=LINEWIDTH, bodyHeight=LINEWIDTH)
         self.end = end
         end.getTextureComponent().color = (0,255,0)
         self.entities.append(end)
+        
 
         for y in range(len(labyrinth)):
             for x in range(len(labyrinth[0])):
                 if labyrinth[y][x] == 1:
+
                     self.entities.append(MyEntity(START[0] + x * LINEWIDTH, START[1] + y * LINEWIDTH, 0, LINEWIDTH, LINEWIDTH))
+                    
 
 #------------Setup-------------------------------
     
@@ -102,3 +107,4 @@ def setup(screen, func = None, param = None):
     botPackage = {"bot" : bot, "bot2" : bBot, "pos" : botPos, "pos2" : bBotPos, "scene" : gameScene}
 
     gameScene = Scene(screen, object.entities, [], background)
+
