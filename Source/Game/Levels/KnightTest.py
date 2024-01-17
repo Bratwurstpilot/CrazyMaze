@@ -21,8 +21,8 @@ def setup(screen):
     global gameScene
     global controllers
 
-    texPath1 : str = "Source/Game/Files/KnightSprite1.png"
-    texPath2 : str = "Source/Game/Files/KnightSprite2.png"
+    texPath1 : str = "Source/Game/Files/Echse_1.png"
+    texPath2 : str = "Source/Game/Files/Echse_2.png"
 
     knight = MyEntity(300, 300, 1)
     knight.textureComp.setTextureSet([texPath1, texPath2])
