@@ -26,7 +26,9 @@ class Labyrinth:
             for x in range(1,width+2):
                 choice = random.randint(0,100)
                 if choice >= 80 and self.field[y][x] == 0:
+
                     self.field[y][x] = 1
+                
 
         for row in self.field:
             print(*row)

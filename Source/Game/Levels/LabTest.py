@@ -1,4 +1,5 @@
 import pygame
+import random
 
 from Source.Game.Util import *
 from Source.Algorithms.Agent import Agent
@@ -12,12 +13,15 @@ class LabTest:
 
         self.entities = []
         self.end = None
+        
     
     def setupLab(self):
 
         self.entities = []
         self.end = None
         self.bot = []
+        self.portalBlue = False
+        self.portalOrange = False
         
         labyrinth = Labyrinth(45,31).getLabyrinth()
 
@@ -54,9 +58,23 @@ class LabTest:
 
         for y in range(len(labyrinth)):
             for x in range(len(labyrinth[0])):
+                choice = random.randint(0,100)
+
                 if labyrinth[y][x] == 1:
 
                     self.entities.append(MyEntity(START[0] + x * LINEWIDTH, START[1] + y * LINEWIDTH, 0, LINEWIDTH, LINEWIDTH))
+
+                if choice >= 95 and labyrinth[y][x] == 0 and not self.portalBlue:
+                    self.portalBlue = True
+                    portalBlue = MyEntity(START[0] + x * LINEWIDTH, START[1] + y * LINEWIDTH, 0, LINEWIDTH, LINEWIDTH)
+                    portalBlue.getTextureComponent().color = (0, 0, 255) #blue
+                    self.entities.append(portalBlue)
+
+                if choice >= 95 and y > (len(labyrinth) / 1.25) and labyrinth[y][x] == 0 and not self.portalOrange:
+                    self.portalOrange = True
+                    portalOrange = MyEntity(START[0] + x * LINEWIDTH, START[1] + y * LINEWIDTH, 0, LINEWIDTH, LINEWIDTH)
+                    portalOrange.getTextureComponent().color = (255, 165, 0) #orange
+                    self.entities.append(portalOrange)
                     
 
 #------------Setup-------------------------------

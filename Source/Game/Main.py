@@ -44,7 +44,7 @@ def main():
     botPackage = LabTest.botPackage
     
 
-    stateDelegate.setup([Menu.gameScene, Create.gameScene, knightScene])
+    stateDelegate.setup([Menu.gameScene, Create.gameScene, LabTest.gameScene])
 
     
     while stateDelegate.running:
