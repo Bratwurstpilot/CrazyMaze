@@ -64,3 +64,4 @@ def setup(screen, delegate):
     object.quitGame.setFunc([gameDelegate.setRunning])
     object.quitGame.setParam([[False]])
 
+

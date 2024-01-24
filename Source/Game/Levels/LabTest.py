@@ -13,15 +13,17 @@ class LabTest:
 
         self.entities = []
         self.end = None
-        
+    
+    def teleportation(self):
+        pass
     
     def setupLab(self):
 
         self.entities = []
         self.end = None
         self.bot = []
-        self.portalBlue = False
-        self.portalOrange = False
+        self.portalBlue = None
+        self.portalOrange = None
         
         labyrinth = Labyrinth(45,31).getLabyrinth()
 
@@ -64,17 +66,16 @@ class LabTest:
 
                     self.entities.append(MyEntity(START[0] + x * LINEWIDTH, START[1] + y * LINEWIDTH, 0, LINEWIDTH, LINEWIDTH))
 
-                if choice >= 95 and labyrinth[y][x] == 0 and not self.portalBlue:
-                    self.portalBlue = True
-                    portalBlue = MyEntity(START[0] + x * LINEWIDTH, START[1] + y * LINEWIDTH, 0, LINEWIDTH, LINEWIDTH)
-                    portalBlue.getTextureComponent().color = (0, 0, 255) #blue
-                    self.entities.append(portalBlue)
+                if choice >= 95 and labyrinth[y][x] == 0 and self.portalBlue == None:
+    
+                    self.portalBlue = MyEntity(START[0] + x * LINEWIDTH, START[1] + y * LINEWIDTH, 0, LINEWIDTH, LINEWIDTH)
+                    self.portalBlue.getTextureComponent().color = (0, 0, 255) #blue
+                    self.entities.append(self.portalBlue)
 
-                if choice >= 95 and y > (len(labyrinth) / 1.25) and labyrinth[y][x] == 0 and not self.portalOrange:
-                    self.portalOrange = True
-                    portalOrange = MyEntity(START[0] + x * LINEWIDTH, START[1] + y * LINEWIDTH, 0, LINEWIDTH, LINEWIDTH)
-                    portalOrange.getTextureComponent().color = (255, 165, 0) #orange
-                    self.entities.append(portalOrange)
+                if choice >= 95 and y > (len(labyrinth) / 1.25) and labyrinth[y][x] == 0 and self.portalOrange == None:
+                    self.portalOrange = MyEntity(START[0] + x * LINEWIDTH, START[1] + y * LINEWIDTH, 0, LINEWIDTH, LINEWIDTH)
+                    self.portalOrange.getTextureComponent().color = (255, 165, 0) #orange
+                    self.entities.append(self.portalOrange)
                     
 
 #------------Setup-------------------------------
@@ -88,6 +89,17 @@ def customFunc(package : dict, gameInfo):
     botPos = package["pos"]
     bBotPos = package["pos2"]
     botPlayScene = package["scene"]
+
+    portalBlue = package["blue"]
+    portalOrange = package["orange"]
+
+    if botPos[0] == portalBlue.getPosition()[0] and botPos[1] == portalBlue.getPosition()[1]:
+        botPos[0] = portalOrange.getPosition()[0]
+        botPos[1] = portalOrange.getPosition()[1]
+
+    if botPos[0] == portalOrange.getPosition()[0] and botPos[1] == portalOrange.getPosition()[1]:
+        botPos[0] = portalBlue.getPosition()[0]
+        botPos[1] = portalBlue.getPosition()[1]
         
     if botPos[0] != bot.getPosition()[0] or botPos[1] != bot.getPosition()[1]:
         elem = MyEntity(botPos.copy()[0], botPos.copy()[1], -1 ,bodyWidth=bot.bodyWidth, bodyHeight=bot.bodyHeight)
@@ -111,18 +123,35 @@ object.setupLab()
 gameScene = None
 botPackage = {}
 background = pygame.image.load("Source/Game/Files/createBackground.png")
+controllers = []
 
 
 def setup(screen, func = None, param = None):
 
     global gameScene
     global botPackage
+    global controllers
+    global knight
     
     bot = object.bot[0]
     bBot = object.bot[1]
     botPos = bot.getPosition().copy()
     bBotPos = bBot.getPosition().copy()
-    botPackage = {"bot" : bot, "bot2" : bBot, "pos" : botPos, "pos2" : bBotPos, "scene" : gameScene}
+    portalBlue = object.portalBlue
+    portalOrange = object.portalOrange
+    botPackage = {"bot" : bot, "bot2" : bBot, "pos" : botPos, "pos2" : bBotPos, "scene" : gameScene, "blue" : portalBlue, "orange" : portalOrange}
+
+    knight = MyEntity(300, 300, 1, 20, 20)
+    knight.getTextureComponent().color = (255, 255, 255)
+    object.entities.append(knight)
+
+    controller = MyController([knight])
+    controllers.append(controller)
 
     gameScene = Scene(screen, object.entities, [], background)
 
+
+
+
+
+    

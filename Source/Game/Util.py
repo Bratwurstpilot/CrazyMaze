@@ -24,12 +24,18 @@ class MyController(EntityController):
         super().__init__(entities, id)
 
 
-    def update(self) -> None:
+    def update(self, key, mode) -> None:
+        
+        self.updateInputs(key, mode)
 
         if "LEFT" in self.keysPressed:
-            self.controlledEntities[0].shiftPositionX(-200)
+            self.controlledEntities[0].shiftPositionX(-20)
         if "RIGHT" in self.keysPressed:
-            self.controlledEntities[0].shiftPositionX(200)
+            self.controlledEntities[0].shiftPositionX(20)
+        if "UP" in self.keysPressed:
+            self.controlledEntities[0].shiftPositionY(-20)
+        if "DOWN" in self.keysPressed:
+            self.controlledEntities[0].shiftPositionY(20)
 
 
 class MyController2(EntityController):
