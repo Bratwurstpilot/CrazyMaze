@@ -12,7 +12,7 @@ class GameInfo:
         self.difficulties : list = ["Einfach", "Mittel", "Schwer"]
         self.botDifficulty : list = [0, 0]
         
-        self.maze : list = []
+        
 
 
     def setPlayerAlgorithm(self, state : int, player : int) -> None:

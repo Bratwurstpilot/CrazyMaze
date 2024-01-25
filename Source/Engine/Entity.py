@@ -24,7 +24,7 @@ class Entity(ABC):
     def __init__(self, positionX : int = 0, positionY : int = 0, positionZ : int = 0, bodyWidth : int = 100, bodyHeight : int = 100,
                  physics = False, sound = False, texture = False):
 
-        self.physicsComp = PhysicsComponent()
+        self.physicsComp = PhysicsComponent(self)
         self.soundComp = SoundComponent()
         self.textureComp = TextureComponent()
 

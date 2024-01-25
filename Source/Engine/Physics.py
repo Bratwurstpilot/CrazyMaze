@@ -8,18 +8,22 @@ class PhysicsComponent:
     some basic physical properties and behaviour.
     '''
     
-    def __init__(self):
+    def __init__(self, entt = None):
 
         self.__inPhysics : bool = False
         self.__velocityX : float = 5.0
         self.__velocityY : float = 5.0
         self.__momentum : list[float, float] = [0.0, 0.0]
+        self.__entity = entt
 
 
     # Physics Model Functions
 
 
-    def checkCollide(self, entity1, entity2) -> bool:
+    def checkCollide(self, entity) -> bool:
+
+        entity1 = entity
+        entity2 = self.__entity
 
         entity1Position = entity1.getPosition()
         entity1Body = entity1.getBody()

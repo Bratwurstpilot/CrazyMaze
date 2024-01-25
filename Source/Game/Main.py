@@ -1,12 +1,6 @@
 import pygame
 
-
-from Source.Engine.Scene import Scene
-from Source.Engine.Animation import Animation
-from Source.Engine.Sound import Music
 from Source.Engine.Screen import Screen
-
-from Source.Game.Util import MyEntity
 from Source.Game.Delegate import GameDelegate
 from Source.Game.GameInfo import GameInfo
 from Source.Game.Levels import Menu
@@ -76,23 +70,25 @@ def main():
                 for controller in entitiyControllers:
                     controller.update(event.key, False)
             
-            if teleport:
             
-                if LabTest.knight.getPosition()[0] == instance.portalBlue.getPosition()[0] and LabTest.knight.getPosition()[1] == instance.portalBlue.getPosition()[1]:
-                    
-                    LabTest.knight.setPositionX(instance.portalOrange.getPosition()[0])
-                    LabTest.knight.setPositionY(instance.portalOrange.getPosition()[1])
-                    teleport = False
-                    print("1")
-                elif LabTest.knight.getPosition()[0] == instance.portalOrange.getPosition()[0] and LabTest.knight.getPosition()[1] == instance.portalOrange.getPosition()[1]:
-    
-                    LabTest.knight.setPositionX(instance.portalBlue.getPosition()[0])
-                    LabTest.knight.setPositionY(instance.portalBlue.getPosition()[1])
-                    teleport = False
-                    print("2")
-            elif not teleport: 
-                if LabTest.knight.getPosition()[0] != instance.portalBlue.getPosition()[0] and LabTest.knight.getPosition()[1] != instance.portalBlue.getPosition()[1] and LabTest.knight.getPosition()[0] != instance.portalOrange.getPosition()[0] and LabTest.knight.getPosition()[1] != instance.portalOrange.getPosition()[1]:
-                    teleport = True
+
+        if teleport:
+            
+            if instance.portalBlue.getPhysicsComponent().checkCollide(instance.bot[2]):
+                instance.bot[2].setPositionX(instance.portalOrange.getPosition()[0])
+                instance.bot[2].setPositionY(instance.portalOrange.getPosition()[1])
+                teleport = False
+
+            elif instance.portalOrange.getPhysicsComponent().checkCollide(instance.bot[2]):
+                instance.bot[2].setPositionX(instance.portalBlue.getPosition()[0])
+                instance.bot[2].setPositionY(instance.portalBlue.getPosition()[1])
+                teleport = False
+        
+        elif not teleport:
+
+            if not instance.portalBlue.getPhysicsComponent().checkCollide(instance.bot[2]) and not instance.portalOrange.getPhysicsComponent().checkCollide(instance.bot[2]):
+                teleport = True
+
         stateDelegate.update()
         stateDelegate.scene.render()
    

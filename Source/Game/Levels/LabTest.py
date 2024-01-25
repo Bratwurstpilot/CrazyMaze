@@ -144,6 +144,7 @@ def setup(screen, func = None, param = None):
     knight = MyEntity(300, 300, 1, 20, 20)
     knight.getTextureComponent().color = (255, 255, 255)
     object.entities.append(knight)
+    object.bot.append(knight)
 
     controller = MyController([knight])
     controllers.append(controller)
