@@ -32,6 +32,8 @@ def main():
     
     LabTest.setup(screen)
     Tournament.setup(screen)
+    Menu.setup(screen, stateDelegate)
+    Create.setup(screen, stateDelegate, gameInfo)
     entitiyControllers = LabTest.controllers
     teleport = True
 
@@ -40,12 +42,8 @@ def main():
     
     botPackage = LabTest.botPackage
     botPackage2 = Tournament.botPackage
-    
-    stateDelegate.allScenes = [Menu.gameScene, Create.gameScene, Tournament.gameScene, LabTest.gameScene]
-    Menu.setup(screen, stateDelegate)
-    Create.setup(screen, stateDelegate, gameInfo)
 
-    stateDelegate.setup([Menu.gameScene, Create.gameScene])
+    stateDelegate.setup([Menu.gameScene, Create.gameScene, Tournament.gameScene, LabTest.gameScene])
     
     while stateDelegate.running:
 
@@ -59,18 +57,15 @@ def main():
             botPackage2 = {"bot" : tournament.bot[0], "bot2" : tournament.bot[1], "pos" : func[0], "pos2" : func[1], "scene" : Tournament.gameScene, "blue" : tournament.portalBlue , "orange" : tournament.portalOrange }
             
             if stateDelegate.checkWin(tournament):
-                print("Check")
+
                 gameInfo.addWin(tournament)
-                print(gameInfo.winCount)
-                stateDelegate.reset(screen, tournament, Tournament)
+                stateDelegate.reset(screen, tournament, Tournament, 2)
                 botPackage2 = Tournament.botPackage
                 
                 if stateDelegate.rounds == stateDelegate.maxRounds:
                     stateDelegate.scene = stateDelegate.scenes[0]
                     stateDelegate.tournament = False
-                    
                     stateDelegate.rounds = 1
-                    #stateDelegate.scenes.remove(Tournament.gameScene)
 
                 else:
                     stateDelegate.scene = stateDelegate.scenes[2]
@@ -91,7 +86,7 @@ def main():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     if not stateDelegate.tournament:
-                        stateDelegate.reset(screen, instance, LabTest)
+                        stateDelegate.reset(screen, instance, LabTest, 3)
                         botPackage = LabTest.botPackage
                         
                 for controller in entitiyControllers:
