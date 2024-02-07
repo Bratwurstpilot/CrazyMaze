@@ -82,12 +82,15 @@ class LabTest:
                     self.entities.append(MyEntity(START[0] + x * LINEWIDTH, START[1] + y * LINEWIDTH, 0, LINEWIDTH, LINEWIDTH))
 
                 if choice >= 95 and labyrinth[y][x] == 0 and self.portalBlue == None:
-    
+                    
+                    labyrinth[y][x] = 6 #change value, dont interrupt with coins
                     self.portalBlue = MyEntity(START[0] + x * LINEWIDTH, START[1] + y * LINEWIDTH, 0, LINEWIDTH, LINEWIDTH)
                     self.portalBlue.getTextureComponent().color = (0, 0, 255) #blue
                     self.entities.append(self.portalBlue)
 
                 if choice >= 95 and y > (len(labyrinth) / 1.25) and labyrinth[y][x] == 0 and self.portalOrange == None:
+
+                    labyrinth[y][x] = 7
                     self.portalOrange = MyEntity(START[0] + x * LINEWIDTH, START[1] + y * LINEWIDTH, 0, LINEWIDTH, LINEWIDTH)
                     self.portalOrange.getTextureComponent().color = (255, 165, 0) #orange
                     self.entities.append(self.portalOrange)
