@@ -116,6 +116,11 @@ class AStar(Algorithm):
         self.end : tuple = None
 
 
+    def __del__(self):
+
+        pass
+
+
     def execRoutine(self) -> None:
         
         self.setup()
