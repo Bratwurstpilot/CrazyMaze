@@ -1,6 +1,5 @@
 import pygame
 
-
 from Source.Engine.Scene import Scene
 from Source.Engine.Animation import Animation
 from Source.Engine.Sound import Music

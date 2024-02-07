@@ -1,31 +1,5 @@
-from Pathfinding import AStar
 from random import randint
-
-class Timer:
-
-    def __init__(self, time = 1.0):
-
-        self.count = 0
-        self.TICKMAX = time
-
-    
-    def tick(self) -> bool:
-
-        self.count += 1
-
-        if self.count >= self.TICKMAX:
-            self.count = 0
-            return True
-        
-        return False
-
-
-class pointDist:
-
-    def __init__(self):
-
-        self.nextPoints : list = []
-        self.distances : list = []
+from random import shuffle
 
 
 class Individual:
@@ -33,6 +7,7 @@ class Individual:
     def __init__(self, genes : list = []):
 
         self.genes : list = genes
+        self.fixedPoints : list = []
         self.fitness : float = 0.0
 
     
@@ -41,20 +16,38 @@ class Individual:
         self.fitness = fitness
 
 
-class EvoAlgo(AStar):
+class EvoAlgo():
 
-    def __init__(self, populationCount = 10, fitnessFunc = None, fitnessParam = [],  symbols: dict = ...):
+    def __init__(self, populationCount : int = 10, points : list = [(0,0)], fixedStart : tuple = (0,0), bestEstimate : float = 100000, maxIterations : int = 1000) -> None:
+        
+        self.population : list = []
+        self.populationCount = populationCount
 
-        super().__init__(symbols)
+        self.bestEstimate : float = bestEstimate
+        self.iter : int = 0
+        self.maxIter : int = maxIterations
 
-        self.population : list = [Individual([randint(0,1) for __ in range(10)]) for _ in range(populationCount)]
-        self.fitnessFunc = fitnessFunc
-        self.fitnessParam = fitnessParam
+        self.fixedStart : tuple = fixedStart
+
+        self.setPopulation(points)
 
         for individual in self.population:
             self.fitness(individual)
+        
+        self.globalBest : list = [self.population[-1], 0]
+    
 
-        self.timer = Timer(0.04) #40ms
+    def reset(self) -> None:
+        
+        self.population = []
+        self.iter : int = 0
+        
+
+    def setPopulation(self, points) -> None:
+
+        for _ in range(self.populationCount):
+            self.population.append(Individual(points.copy()))
+            shuffle(points)
 
 
     def crossover(self, individuals : list, pX) -> Individual:
@@ -62,8 +55,11 @@ class EvoAlgo(AStar):
         Uniformly ordered Crossover.
         Probability measure x >= pX? -> change genes with pX in [0;10]
         '''
-        parent1 = individuals[0]
-        parent2 = individuals[1]
+        parent1 = Individual(individuals[0].genes)
+        parent1.fitness = individuals[0].fitness
+
+        parent2 = Individual(individuals[1].genes)
+        parent2.fitness = individuals[1].fitness
         
         changedGenesIndex : list = [] #What genes should be exchanged with respect to prob. pX
         changedGenesP1 : list = []
@@ -75,48 +71,57 @@ class EvoAlgo(AStar):
                 changedGenesIndex.append(choice)
         
         for i in range(len(parent1.genes)):
-            if randint(0,10) >= pX and i not in changedGenesIndex:
+            if randint(0,10) <= pX and i not in changedGenesIndex:
                 changedGenesIndex.append(i)
         
         changedGenesIndex.sort()
         for index in changedGenesIndex:
             changedGenesP1.append(parent1.genes[index])
             changedGenesP2.append(parent2.genes[index])
-
-        print(changedGenesIndex, "\n")
         
         genesP1InOrder = list(filter(lambda x : x in changedGenesP2, parent1.genes))
         genesP2InOrder = list(filter(lambda x : x in changedGenesP1, parent2.genes))
 
-        print(genesP1InOrder)
-        print(genesP2InOrder, "\n")
         for i in range(len(changedGenesIndex)):
             parent1.genes[changedGenesIndex[i]] = genesP2InOrder[0]
             genesP2InOrder.remove(genesP2InOrder[0])
             parent2.genes[changedGenesIndex[i]] = genesP1InOrder[0]
             genesP1InOrder.remove(genesP1InOrder[0])
         
+        return [parent1, parent2]
+    
 
     def mutate(self, individual : Individual, pX) -> None:
 
-        if randint(0,10) > pX:
-            choice = [randint(0, len(individual.genes)), randint(0, len(individual.genes))]
+        if randint(0,10) <= pX:
+            choice = [randint(0, len(individual.genes))-1, randint(0, len(individual.genes))-1]
             individual.genes[choice[0]], individual.genes[choice[1]] = individual.genes[choice[1]], individual.genes[choice[0]]
 
 
     def fitness(self, individual : Individual) -> None:
         
-        #return self.fitnessFunc(*self.fitnessParam)
-        pass
+        individual.fitness : float = 0.0
 
-    def selection(self, count = 2) -> list:
+        if len(individual.genes) > 0:
+            first = individual.genes[0]
+            individual.fitness += abs(self.fixedStart[0] - first[0]) + abs(self.fixedStart[1] - first[1])
+
+        for i in range(len(individual.genes)-1):
+            current = individual.genes[i]
+            succ = individual.genes[i+1]
+
+            #Manhatten distance
+            individual.fitness += abs(succ[0] - current[0]) + abs(succ[1] - current[1])
+
+
+    def selection(self, count = 2, preselected : int = 1) -> list:
 
         selected : list = []
 
         while len(selected) < count:
 
-            individual1 = self.population[randint(0,len(self.population)-1)]
-            individual2 = self.population[randint(0,len(self.population)-1)]
+            individual1 = self.population[randint(preselected-1,len(self.population)-1)]
+            individual2 = self.population[randint(preselected-1,len(self.population)-1)]
 
             if individual1.fitness >= individual2.fitness and individual1 not in selected:
                 selected.append(individual1)
@@ -128,6 +133,13 @@ class EvoAlgo(AStar):
 
     def update(self) -> bool:
         
+        #Interupt if there are only 2 points
+        if len(self.population[0].genes) < 2:
+            return True
+        
+        #update iteration count
+        self.iter += 1
+
         #save population size
         populationSize : int = len(self.population)
 
@@ -135,11 +147,12 @@ class EvoAlgo(AStar):
         parents = [self.selection(2) for _ in range(5)]
 
         for pair in parents:
-            self.population.append(self.crossover(pair))
+            for newMember in self.crossover(pair, 7):
+                self.population.append(newMember)
         
         #Environmental selection
-        self.population.sort(key=lambda x : x.fitness, reverse=True)
-        newGeneration : list = self.selection(populationSize-3)
+        self.population.sort(key=lambda x : x.fitness, reverse=False)
+        newGeneration : list = self.selection(count = populationSize-3, preselected = 3)
 
                 #Elitism
         newGeneration.append(self.population[0])
@@ -150,34 +163,32 @@ class EvoAlgo(AStar):
 
         #Mutation
         for individual in self.population:
-            if randint(0,10) >= 6:
-                self.mutate(individual)
+            self.mutate(individual, -1)
 
         #Update fitness
         for individual in self.population:
             self.fitness(individual)
-            if individual.fitness >= 10:
-                return True
-            
 
+            if individual.fitness < self.globalBest[0].fitness:
+                self.globalBest[0] = individual
+                self.globalBest[1] = self.iter
+
+            if self.bestEstimate != None:
+                if individual.fitness <= self.bestEstimate:
+                    #print("Optimal individual : ", individual.genes, " f: ", individual.fitness)
+                    #print("Global Best   at :", self.globalBest[0].genes, " f: ", self.globalBest[0].fitness, " after ", self.globalBest[1], " iterations")
+                    return True
+
+        if self.iter >= self.maxIter:
+            bestIndividual = min(self.population, key= lambda x : x.fitness)
+            #print("Best solution at :", bestIndividual.genes, " f: ", bestIndividual.fitness, " after ", self.iter, " iterations")
+            #print("Global Best   at :", self.globalBest[0].genes, " f: ", self.globalBest[0].fitness, " after ", self.globalBest[1], " iterations")
+            return True
+        
+        self.update()
+
+    
 #Testing
             
-algo = EvoAlgo(10)
-epoch = 1
-
-p1 = Individual([0,1,2,3,4])
-p2 = Individual([4,3,2,1,0])
-
-algo.crossover([p1,p2], 7)
-print(p1.genes)
-print(p2.genes)
-
-print("\n iter 2 \n")
-
-algo.crossover([p1,p2], 7)
-print(p1.genes)
-print(p2.genes)
-
-print("\ntest mutation with p1 : ", p1.genes)
-algo.mutate(p1, 7)
-print("result : ", p1.genes)
+#algo = EvoAlgo(10, [(0,1), (10,15), (20,10), (15,17)], (0,0), None, 500)
+#algo.update()
