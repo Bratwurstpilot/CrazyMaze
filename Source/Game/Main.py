@@ -30,8 +30,6 @@ def main():
     stateDelegate = GameDelegate(True)
     gameInfo = GameInfo()
     
-    Menu.setup(screen, stateDelegate)
-    Create.setup(screen, stateDelegate, gameInfo)
     LabTest.setup(screen)
     Tournament.setup(screen)
     entitiyControllers = LabTest.controllers
@@ -43,27 +41,38 @@ def main():
     botPackage = LabTest.botPackage
     botPackage2 = Tournament.botPackage
     
-    stateDelegate.setup([Menu.gameScene, Create.gameScene, Tournament.gameScene])
+    stateDelegate.allScenes = [Menu.gameScene, Create.gameScene, Tournament.gameScene, LabTest.gameScene]
+    Menu.setup(screen, stateDelegate)
+    Create.setup(screen, stateDelegate, gameInfo)
+
+    stateDelegate.setup([Menu.gameScene, Create.gameScene])
     
     while stateDelegate.running:
 
         if stateDelegate.tournament:
+            print(stateDelegate.scenes)
             func = Tournament.customFunc(botPackage2, gameInfo)
         
             #Function call + param update || NOT OPTIMAL TODO
             botPackage2 = {"bot" : tournament.bot[0], "bot2" : tournament.bot[1], "pos" : func[0], "pos2" : func[1], "scene" : Tournament.gameScene, "blue" : tournament.portalBlue , "orange" : tournament.portalOrange }
-            print("Tournament")
+            
             if stateDelegate.checkWin(tournament):
-                print("End")
-
+                print("Check")
                 gameInfo.addWin(tournament)
-                tournament.entities.clear()
-                tournament.setupLab()
-                stateDelegate.scenes.remove(Tournament.gameScene)
-                Tournament.setup(screen)
-                botPackage = Tournament.botPackage
-                stateDelegate.scenes.append(Tournament.gameScene)
-                stateDelegate.scene = stateDelegate.scenes[2]
+                print(gameInfo.winCount)
+                stateDelegate.reset(screen, tournament, Tournament)
+                botPackage2 = Tournament.botPackage
+                
+
+                if stateDelegate.rounds == stateDelegate.maxRounds:
+                    stateDelegate.scene = stateDelegate.scenes[0]
+                    stateDelegate.tournament = False
+                    
+                    stateDelegate.rounds = 1
+                    stateDelegate.scenes.remove(Tournament.gameScene)
+                else:
+                    stateDelegate.scene = stateDelegate.scenes[2]
+                    stateDelegate.rounds += 1
 
         #-------------------------------------------------
 
@@ -79,13 +88,8 @@ def main():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     if not stateDelegate.tournament:
-                        stateDelegate.scene = stateDelegate.scenes[0]
-                        instance.entities.clear()
-                        instance.setupLab()
-                        stateDelegate.scenes.remove(LabTest.gameScene)
-                        LabTest.setup(screen)
+                        stateDelegate.reset(screen, instance, LabTest)
                         botPackage = LabTest.botPackage
-                        stateDelegate.scenes.append(LabTest.gameScene)
                         
                 for controller in entitiyControllers:
                     controller.update(event.key, True)

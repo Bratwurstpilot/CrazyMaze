@@ -13,6 +13,7 @@ class Tournament:
 
         self.entities = []
         self.end = None
+        
     
     def teleportation(self):
         pass
@@ -90,7 +91,7 @@ def customFunc(package : dict, gameInfo):
     bot = package["bot"]
     bot.tickMax = (0.2) * 144 * 0.1
     bBot = package["bot2"]
-    bBot.tickMax = (0.2) * 144 * 0.1
+    bBot.tickMax = (0.001) * 144 * 0.1
     botPos = package["pos"]
     bBotPos = package["pos2"]
     botPlayScene = package["scene"]
@@ -136,7 +137,6 @@ def setup(screen, func = None, param = None):
     global gameScene
     global botPackage
     global controllers
-    
     
     bot = object.bot[0]
     bBot = object.bot[1]

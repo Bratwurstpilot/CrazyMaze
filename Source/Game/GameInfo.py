@@ -37,8 +37,14 @@ class GameInfo:
     
     def addWin(self, instance):
 
-        if instance.bot[0].getPosition() == instance.end[1] and instance.bot[0].getPosition() == instance.end[1]:
+        if instance.bot[0].getPosition() == instance.end[1] and instance.bot[1].getPosition() == instance.end[0]:
             self.winCount[2] += 1
+
+        elif instance.bot[0].getPosition() == instance.end[1] and not instance.bot[1].getPosition() == instance.end[0]:
+            self.winCount[0] += 1
+
+        elif instance.bot[1].getPosition() == instance.end[0] and not instance.bot[0].getPosition() == instance.end[1]:
+            self.winCount[1] += 1
 
     
 
