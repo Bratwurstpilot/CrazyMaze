@@ -99,6 +99,7 @@ class AgentEvo(Entity):
         self.marked = False
         self.currentPath = 0
         self.rethoughtPaths = []
+        self.visited = []
 
         start = -1
         end = -1
@@ -127,50 +128,19 @@ class AgentEvo(Entity):
         self.algorithm.fixedStart = start
         self.algorithm.update()
 
-        aStar = AStar(symbols=self.symbols)
-
         #Pre process Labyrinth map to resemble start and end as the first points
         #of the optimal found route
         viewSpace[end[1]][end[0]] = 0
         viewSpace[start[1]][start[0]] = 0
 
-
         self.paths = []
-        currentPoint = 0
+        self.currentPoint = 0
 
-        relativeStart = list(self.algorithm.fixedStart)
+        self.relativeStart = list(self.algorithm.fixedStart)
+        self.relativeEnd = self.algorithm.globalBest[0].genes[0]
 
-        while True:
-            
-            aStar.reset()
+        self.currentPath = self.getPath(self.relativeStart, self.relativeEnd)
 
-            relativeEnd = self.algorithm.globalBest[0].genes[currentPoint]
-
-            viewSpace[relativeEnd[1]][relativeEnd[0]] = self.symbols["End"]
-            viewSpace[relativeStart[1]][relativeStart[0]] = self.symbols["Start"]
-
-            aStar.setViewSpace(viewSpace)
-
-            aStar.execRoutine()
-            self.path = aStar.getPath()
-            self.path.reverse()
-
-            if self.path == []:
-                return
-            self.positionRelative = self.path[0]
-            self.path.remove(self.path[0])
-            self.paths.append(self.path.copy())
-
-            currentPoint += 1
-            
-            viewSpace[relativeEnd[1]][relativeEnd[0]] = 0
-            viewSpace[relativeStart[1]][relativeStart[0]] = 0
-
-            relativeStart = list(relativeEnd).copy()
-
-            if currentPoint >= len(self.algorithm.globalBest[0].genes):
-                break
-            
         self.positionRelative = start
             
 
@@ -180,56 +150,26 @@ class AgentEvo(Entity):
 
         if self.tick < self.tickMax : return
 
-        if len(self.paths[self.currentPath]) > 0:
-            if self.paths[self.currentPath][-1] == self.end:
-                self.marked = True
+        if self.currentPoint >= len(self.algorithm.globalBest[0].genes):
+            return
 
-        try:
-            choice = list(self.paths[self.currentPath][0])
-            self.paths[self.currentPath].remove(tuple(choice))
-
-            self.position_ = choice.copy()
-
-            self.shiftPosition((choice[0] - self.positionRelative[0]) * self.stepWidth, (choice[1] - self.positionRelative[1]) * self.stepWidth)
-            self.positionRelative = choice.copy()
-
-            if choice not in self.visited: 
-                self.visited.append(choice.copy())
-
-            self.tick = 0
-
-        except IndexError:
-
-            if len(self.paths) < 1:
-                return
+        if len(self.currentPath) == 0:
             
-            if self.marked:
-                return
-            
-            self.tick = 0
-            self.currentPath += 1
+            self.currentPoint += 1
+            self.relativeEnd = self.algorithm.globalBest[0].genes[self.currentPoint]
 
-            if self.currentPath >= len(self.paths) - 1 :
-                return
-                   
-            if len(self.paths[self.currentPath]) == 0:
-                return
-            
-            mark = False
+            self.currentPath = self.getPath(self.positionRelative, self.relativeEnd)
+        
+        choice = self.currentPath[-1]
+        self.currentPath.remove(choice)
 
-            while True:
-                if list(self.paths[self.currentPath][-1]) in self.visited and list(self.paths[self.currentPath][-1]) not in self.rethoughtPaths:
-                    self.paths.remove(self.paths[self.currentPath])
-                    mark = True
+        self.shiftPosition((choice[0] - self.positionRelative[0]) * self.stepWidth, (choice[1] - self.positionRelative[1]) * self.stepWidth)
+        self.positionRelative = choice
 
-                else:
-                    break
-                print("Let me rethink that...")
-            
-            if mark:
-                self.paths[self.currentPath] = self.getPath(self.position_, list(self.paths[self.currentPath][-1]))
-                self.rethoughtPaths.append(self.paths[self.currentPath])
-            
+        self.visited.append(choice)
+
+        self.tick = 0
+     
 
     def getPath(self, start, end) -> list:
 
@@ -248,7 +188,7 @@ class AgentEvo(Entity):
         aStar.execRoutine()
         path = aStar.getPath()
         path.remove(path[0])
-        #path.reverse()
+        path.reverse()
 
         aStar.__del__()
 
