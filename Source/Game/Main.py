@@ -50,9 +50,11 @@ def main():
     while stateDelegate.running:
 
         if stateDelegate.tournament:
-            print(stateDelegate.scenes)
+
+            stateDelegate.scene = stateDelegate.scenes[2]
+
+            #print(stateDelegate.scenes)
             func = Tournament.customFunc(botPackage2, gameInfo)
-        
             #Function call + param update || NOT OPTIMAL TODO
             botPackage2 = {"bot" : tournament.bot[0], "bot2" : tournament.bot[1], "pos" : func[0], "pos2" : func[1], "scene" : Tournament.gameScene, "blue" : tournament.portalBlue , "orange" : tournament.portalOrange }
             
@@ -63,15 +65,16 @@ def main():
                 stateDelegate.reset(screen, tournament, Tournament)
                 botPackage2 = Tournament.botPackage
                 
-
                 if stateDelegate.rounds == stateDelegate.maxRounds:
                     stateDelegate.scene = stateDelegate.scenes[0]
                     stateDelegate.tournament = False
                     
                     stateDelegate.rounds = 1
-                    stateDelegate.scenes.remove(Tournament.gameScene)
+                    #stateDelegate.scenes.remove(Tournament.gameScene)
+
                 else:
                     stateDelegate.scene = stateDelegate.scenes[2]
+                    botPackage2 = Tournament.botPackage
                     stateDelegate.rounds += 1
 
         #-------------------------------------------------

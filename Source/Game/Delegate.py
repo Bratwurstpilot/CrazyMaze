@@ -17,6 +17,7 @@ class GameDelegate:
         self.maxRounds = 0
         self.rounds = 1        
 
+
     def setup(self, scenes : list):
 
         self.scene = scenes[0]
@@ -45,6 +46,7 @@ class GameDelegate:
 
 
     def update(self):
+
         for entitie in self.scene.elements: 
             entitie.update()
         for entitie in self.scene.uiElements:
@@ -61,7 +63,6 @@ class GameDelegate:
         self.scene = self.scenes[0]
         instance.entities.clear()
         instance.setupLab()
-        self.scenes.pop()
+        self.scenes.pop(2)
         level.setup(screen)
-        self.scenes.append(level.gameScene)
-
+        self.scenes.insert(2, level.gameScene)
