@@ -92,30 +92,27 @@ class AgentEvo(Entity):
 
     def setup(self, viewSpace_ : list) -> None:
         
-        self.viewSpace = viewSpace_
+        self.viewSpace = [ [0 for _ in range(len(viewSpace_[0]))] for __ in range(len(viewSpace_)) ]
 
         if self.algorithm != None : self.algorithm.reset()
 
         self.marked = False
         self.currentPath = 0
-        self.rethoughtPaths = []
         self.visited = []
 
         start = -1
         end = -1
 
-        #Process Viewspace
-        viewSpace = viewSpace_.copy()
-
         relevantPoints = []
-        for y in range(len(viewSpace)):
-            for x in range(len(viewSpace[0])):
-                if viewSpace[y][x] == self.symbols["Start"]:
-                    #relevantPoints.append((x,y))
+        for y in range(len(viewSpace_)):
+            for x in range(len(viewSpace_[0])):
+                if viewSpace_[y][x] == self.symbols["Start"]:
                     start = (x,y)
-                if viewSpace[y][x] == self.symbols["End"]:
+                if viewSpace_[y][x] == self.symbols["End"]:
                     relevantPoints.append((x,y))
                     end = (x,y)
+                if viewSpace_[y][x] == self.symbols["Obstacle"]:
+                    self.viewSpace[y][x] = self.symbols["Obstacle"]
 
         self.start = start
         self.end = end
@@ -128,18 +125,12 @@ class AgentEvo(Entity):
         self.algorithm.fixedStart = start
         self.algorithm.update()
 
-        #Pre process Labyrinth map to resemble start and end as the first points
-        #of the optimal found route
-        viewSpace[end[1]][end[0]] = 0
-        viewSpace[start[1]][start[0]] = 0
-
-        self.paths = []
         self.currentPoint = 0
 
         self.relativeStart = list(self.algorithm.fixedStart)
         self.relativeEnd = self.algorithm.globalBest[0].genes[0]
 
-        self.currentPath = self.getPath(self.relativeStart, self.relativeEnd)
+        self.currentPath = self.getPath(self.relativeStart, self.relativeEnd) #Here happens crazy shit
 
         self.positionRelative = start
             
@@ -153,10 +144,11 @@ class AgentEvo(Entity):
         if self.currentPoint >= len(self.algorithm.globalBest[0].genes):
             return
 
-        if len(self.currentPath) == 0:
+        if len(self.currentPath) == 0 and self.currentPoint <= len(self.algorithm.globalBest[0].genes)-1:
             self.currentPoint += 1
             self.relativeEnd = self.algorithm.globalBest[0].genes[self.currentPoint]
-            self.currentPath = self.getPath(self.positionRelative, self.relativeEnd)
+            self.currentPath = []
+            self.currentPath = self.getPath(self.positionRelative, self.relativeEnd).copy()
         
         choice = self.currentPath[-1]
         self.currentPath.remove(choice)
@@ -165,29 +157,33 @@ class AgentEvo(Entity):
         self.positionRelative = choice
 
         self.visited.append(choice)
-
+    
         self.tick = 0
      
 
-    def getPath(self, start, end) -> list:
+    def getPath(self, start_, end_) -> list:
 
-        aStar = AStar()
+        aStar = AStar(symbols=self.symbols)
+        aStar.reset()
 
-        viewSpace = self.viewSpace.copy()
+        viewSpace = []
 
-        viewSpace[self.start[1]][self.start[0]] = 0
-        viewSpace[self.end[1]][self.end[0]] = 0
+        for element in self.viewSpace:
+            viewSpace.append(element.copy())
 
-        viewSpace[end[1]][end[0]] = self.symbols["End"]
-        viewSpace[start[1]][start[0]] = self.symbols["Start"]
+        viewSpace[start_[1]][start_[0]] = self.symbols["Start"]
+        viewSpace[end_[1]][end_[0]] = self.symbols["End"]
 
-        aStar.setViewSpace(viewSpace)
+        for line in self.viewSpace:
+            print(*line)
+        
+
+        aStar.viewSpace = viewSpace
 
         aStar.execRoutine()
-        path = aStar.getPath()
-        path.remove(path[0])
-        path.reverse()
+        path = aStar.getPath().copy()
 
+        path.remove(path[-1])
         aStar.__del__()
 
         return path
