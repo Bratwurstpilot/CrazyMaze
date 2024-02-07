@@ -82,6 +82,8 @@ class AgentEvo(Entity):
 
         self.marked = False
 
+        self.rethoughtPaths : list = []
+
     
     def __del__(self) -> None:
         
@@ -96,6 +98,7 @@ class AgentEvo(Entity):
 
         self.marked = False
         self.currentPath = 0
+        self.rethoughtPaths = []
 
         start = -1
         end = -1
@@ -185,10 +188,10 @@ class AgentEvo(Entity):
             choice = list(self.paths[self.currentPath][0])
             self.paths[self.currentPath].remove(tuple(choice))
 
-            self.position_ = choice
+            self.position_ = choice.copy()
 
             self.shiftPosition((choice[0] - self.positionRelative[0]) * self.stepWidth, (choice[1] - self.positionRelative[1]) * self.stepWidth)
-            self.positionRelative = choice
+            self.positionRelative = choice.copy()
 
             if choice not in self.visited: 
                 self.visited.append(choice.copy())
@@ -206,18 +209,26 @@ class AgentEvo(Entity):
             self.tick = 0
             self.currentPath += 1
 
+            if self.currentPath >= len(self.paths) - 1 :
+                return
+                   
             if len(self.paths[self.currentPath]) == 0:
                 return
             
             mark = False
 
-            while list(self.paths[self.currentPath][-1]) in self.visited:
-                self.currentPath += 1
+            while True:
+                if list(self.paths[self.currentPath][-1]) in self.visited and list(self.paths[self.currentPath][-1]) not in self.rethoughtPaths:
+                    self.paths.remove(self.paths[self.currentPath])
+                    mark = True
+
+                else:
+                    break
                 print("Let me rethink that...")
-                mark = True
             
             if mark:
-                self.paths[self.currentPath] = self.getPath(self.paths[self.currentPath][-1], self.position_).copy()
+                self.paths[self.currentPath] = self.getPath(self.position_, list(self.paths[self.currentPath][-1]))
+                self.rethoughtPaths.append(self.paths[self.currentPath])
             
 
     def getPath(self, start, end) -> list:
@@ -236,7 +247,8 @@ class AgentEvo(Entity):
 
         aStar.execRoutine()
         path = aStar.getPath()
-        path.reverse()
+        path.remove(path[0])
+        #path.reverse()
 
         aStar.__del__()
 

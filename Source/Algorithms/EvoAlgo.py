@@ -41,7 +41,7 @@ class EvoAlgo():
         
         self.population = []
         self.iter : int = 0
-        
+
 
     def setPopulation(self, points) -> None:
 
@@ -163,14 +163,15 @@ class EvoAlgo():
 
         #Mutation
         for individual in self.population:
-            self.mutate(individual, -1)
+            self.mutate(individual, 5)
 
         #Update fitness
         for individual in self.population:
             self.fitness(individual)
 
             if individual.fitness < self.globalBest[0].fitness:
-                self.globalBest[0] = individual
+                self.globalBest[0] = Individual(individual.genes)
+                self.globalBest[0].fitness = individual.fitness
                 self.globalBest[1] = self.iter
 
             if self.bestEstimate != None:
