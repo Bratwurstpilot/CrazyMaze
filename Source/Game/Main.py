@@ -7,6 +7,7 @@ from Source.Game.Levels import Menu
 from Source.Game.Levels import Create
 from Source.Game.Levels import LabTest
 from Source.Game.Levels import KnightTest
+from Source.Game.Levels import Tournament
 
 
 
@@ -32,45 +33,58 @@ def main():
     Menu.setup(screen, stateDelegate)
     Create.setup(screen, stateDelegate, gameInfo)
     LabTest.setup(screen)
+    Tournament.setup(screen)
     entitiyControllers = LabTest.controllers
     teleport = True
 
     instance = LabTest.object
-    print(instance.bot)
+    tournament = Tournament.object
+    
     botPackage = LabTest.botPackage
     
-    stateDelegate.setup([Menu.gameScene, Create.gameScene, LabTest.gameScene])
+    stateDelegate.setup([Menu.gameScene, Create.gameScene])
     
     while stateDelegate.running:
 
-        func = LabTest.customFunc(botPackage, gameInfo)
+        if stateDelegate.tournament:
+            func = Tournament.customFunc(botPackage, gameInfo)
         
-        #Function call + param update || NOT OPTIMAL TODO
-        botPackage = {"bot" : instance.bot[0], "bot2" : instance.bot[1], "pos" : func[0], "pos2" : func[1], "scene" : LabTest.gameScene, "blue" : instance.portalBlue , "orange" : instance.portalOrange }
+            #Function call + param update || NOT OPTIMAL TODO
+            botPackage = {"bot" : instance.bot[0], "bot2" : instance.bot[1], "pos" : func[0], "pos2" : func[1], "scene" : Tournament.gameScene, "blue" : tournament.portalBlue , "orange" : tournament.portalOrange }
+
+            if stateDelegate.checkWin(tournament):
+                print("End")
+
+                gameInfo.addWin()
+
         #-------------------------------------------------
 
+        else:
+            func = LabTest.customFunc(botPackage, gameInfo)
+        
+            #Function call + param update || NOT OPTIMAL TODO
+            botPackage = {"bot" : instance.bot[0], "bot2" : instance.bot[1], "pos" : func[0], "pos2" : func[1], "scene" : LabTest.gameScene, "blue" : instance.portalBlue , "orange" : instance.portalOrange }    
+        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 stateDelegate.running = False
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-
-                    stateDelegate.scene = stateDelegate.scenes[0]
-                    instance.entities.clear()
-                    instance.setupLab()
-                    stateDelegate.scenes.remove(LabTest.gameScene)
-                    LabTest.setup(screen)
-                    botPackage = LabTest.botPackage
-                    stateDelegate.scenes.append(LabTest.gameScene)
-                    
+                    if not stateDelegate.tournament:
+                        stateDelegate.scene = stateDelegate.scenes[0]
+                        instance.entities.clear()
+                        instance.setupLab()
+                        stateDelegate.scenes.remove(LabTest.gameScene)
+                        LabTest.setup(screen)
+                        botPackage = LabTest.botPackage
+                        stateDelegate.scenes.append(LabTest.gameScene)
+                        
                 for controller in entitiyControllers:
                     controller.update(event.key, True)
 
             if event.type == pygame.KEYUP:
                 for controller in entitiyControllers:
                     controller.update(event.key, False)
-            
-            
 
         if teleport:
             
@@ -88,7 +102,7 @@ def main():
 
             if not instance.portalBlue.getPhysicsComponent().checkCollide(instance.bot[2]) and not instance.portalOrange.getPhysicsComponent().checkCollide(instance.bot[2]):
                 teleport = True
-
+        
         stateDelegate.update()
         stateDelegate.scene.render()
    

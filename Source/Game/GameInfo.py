@@ -11,10 +11,10 @@ class GameInfo:
         self.difficulty : list = ["Einfach", "Einfach"]
         self.difficulties : list = ["Einfach", "Mittel", "Schwer"]
         self.botDifficulty : list = [0, 0]
+
+        self.winCount : list = [0, 0, 0]
         
         
-
-
     def setPlayerAlgorithm(self, state : int, player : int) -> None:
 
         self.player[player] += state
@@ -33,3 +33,11 @@ class GameInfo:
         elif self.botDifficulty[player] == len(self.difficulties):
             self.botDifficulty[player] = len(self.difficulties) - 1
         self.difficulty[player] = self.difficulties[self.botDifficulty[player]]
+
+    
+    def addWin(self, state):
+
+        self.winCount[state] += 1
+
+    
+

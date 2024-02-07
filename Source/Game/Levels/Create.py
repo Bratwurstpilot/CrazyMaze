@@ -40,6 +40,10 @@ class Create:
     backMenu.setTextRect()
     uiEntities.append(backMenu)
 
+    tournament = Button(1920//2 - 250, 500, 0, 500, 50, "Tournament (10 Runden)", (0, 110, 18), 40)
+    tournament.setTextRect()
+    uiEntities.append(tournament)
+
     #---------------------------------Player One------------------------------------
     playerOne = Label(1920//4, 100, 0, 1, 1, "Spieler 1", (0, 110, 18), 70)
     playerOne.setTextRect()

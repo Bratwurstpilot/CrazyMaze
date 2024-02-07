@@ -7,7 +7,7 @@ from Source.Game.Labyrinth import Labyrinth
 from Source.Engine.Scene import Scene
 
 
-class LabTest:
+class Tournament:
 
     def __init__(self):
 
@@ -77,7 +77,11 @@ class LabTest:
                     self.portalOrange.getTextureComponent().color = (255, 165, 0) #orange
                     self.entities.append(self.portalOrange)
                     
-    
+    def checkWin(self):
+        if self.bot[0].getPosition() == self.end[1]:
+            print("Player1")
+        if self.bot[1].getPosition() == self.end[0]:
+            print("Player2")
 
 #------------Setup-------------------------------
     
@@ -119,7 +123,7 @@ def customFunc(package : dict, gameInfo):
 
 #------------------------------------------------
 
-object = LabTest()
+object = Tournament()
 object.setupLab()
 gameScene = None
 botPackage = {}
@@ -151,9 +155,3 @@ def setup(screen, func = None, param = None):
     controllers.append(controller)
 
     gameScene = Scene(screen, object.entities, [], background)
-
-
-
-
-
-    

@@ -11,6 +11,7 @@ class GameDelegate:
         self.scene : Scene = None
         self.running : bool = run
         self.scenes : list = []
+        self.tournament : bool = False
         
 
     def setup(self, scenes : list):
@@ -34,5 +35,10 @@ class GameDelegate:
             entitie.update()
         for entitie in self.scene.uiElements:
             entitie.update() 
+
+
+    def checkWin(self, instance):
+
+        return (instance.bot[0].getPosition() == instance.end[1]) or (instance.bot[1].getPosition() == instance.end[0])
         
 
