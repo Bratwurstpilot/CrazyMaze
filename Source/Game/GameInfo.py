@@ -35,9 +35,10 @@ class GameInfo:
         self.difficulty[player] = self.difficulties[self.botDifficulty[player]]
 
     
-    def addWin(self, state):
+    def addWin(self, instance):
 
-        self.winCount[state] += 1
+        if instance.bot[0].getPosition() == instance.end[1] and instance.bot[0].getPosition() == instance.end[1]:
+            self.winCount[2] += 1
 
     
 

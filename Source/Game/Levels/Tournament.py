@@ -88,9 +88,9 @@ class Tournament:
 def customFunc(package : dict, gameInfo):
     
     bot = package["bot"]
-    bot.tickMax = (2 - gameInfo.botDifficulty[0] + 1) * 144 * 0.1
+    bot.tickMax = (0.2) * 144 * 0.1
     bBot = package["bot2"]
-    bBot.tickMax = (2 - gameInfo.botDifficulty[1] + 1) * 144 * 0.1
+    bBot.tickMax = (0.2) * 144 * 0.1
     botPos = package["pos"]
     bBotPos = package["pos2"]
     botPlayScene = package["scene"]
@@ -106,7 +106,7 @@ def customFunc(package : dict, gameInfo):
         botPos[0] = portalBlue.getPosition()[0]
         botPos[1] = portalBlue.getPosition()[1]
         
-    if botPos[0] != bot.getPosition()[0] or botPos[1] != bot.getPosition()[1]:
+    """if botPos[0] != bot.getPosition()[0] or botPos[1] != bot.getPosition()[1]:
         elem = MyEntity(botPos.copy()[0], botPos.copy()[1], -1 ,bodyWidth=bot.bodyWidth, bodyHeight=bot.bodyHeight)
         elem.getTextureComponent().color = (0,100,255)
         botPlayScene.elements.append(elem)
@@ -116,7 +116,7 @@ def customFunc(package : dict, gameInfo):
         elem = MyEntity(bBotPos.copy()[0], bBotPos.copy()[1], -1 ,bodyWidth=bBot.bodyWidth, bodyHeight=bBot.bodyHeight)
         elem.getTextureComponent().color = (0, 255, 0)
         botPlayScene.elements.append(elem)
-        bBotPos = bBot.getPosition().copy()
+        bBotPos = bBot.getPosition().copy()"""
 
     return [botPos, bBotPos]
 
@@ -136,7 +136,7 @@ def setup(screen, func = None, param = None):
     global gameScene
     global botPackage
     global controllers
-    global knight
+    
     
     bot = object.bot[0]
     bBot = object.bot[1]
@@ -145,13 +145,5 @@ def setup(screen, func = None, param = None):
     portalBlue = object.portalBlue
     portalOrange = object.portalOrange
     botPackage = {"bot" : bot, "bot2" : bBot, "pos" : botPos, "pos2" : bBotPos, "scene" : gameScene, "blue" : portalBlue, "orange" : portalOrange}
-
-    knight = MyEntity(300, 300, 1, 20, 20)
-    knight.getTextureComponent().color = (255, 255, 255)
-    object.entities.append(knight)
-    object.bot.append(knight)
-
-    controller = MyController([knight])
-    controllers.append(controller)
 
     gameScene = Scene(screen, object.entities, [], background)

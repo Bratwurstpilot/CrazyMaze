@@ -40,7 +40,7 @@ class Create:
     backMenu.setTextRect()
     uiEntities.append(backMenu)
 
-    tournament = Button(1920//2 - 250, 500, 0, 500, 50, "Tournament (10 Runden)", (0, 110, 18), 40)
+    tournament = Button(1920//2 - 250, 400, 0, 500, 50, "Tournament (10 Runden)", (0, 110, 18), 40)
     tournament.setTextRect()
     uiEntities.append(tournament)
 
@@ -167,3 +167,6 @@ def setup(screen, delegate, info):
     #---------------------------------------------------------------------------
     object.startGame.setFunc([gameDelegate.setScene])
     object.startGame.setParam([[2]])
+
+    object.tournament.setFunc([gameDelegate.addScene ,gameDelegate.setScene, gameDelegate.setTournament])
+    object.tournament.setParam([[2], [True]])

@@ -30,7 +30,12 @@ class GameDelegate:
         self.running = run
     
 
-    def update(self,):
+    def setTournament(self, state):
+
+        self.tournament = state
+
+
+    def update(self):
         for entitie in self.scene.elements: 
             entitie.update()
         for entitie in self.scene.uiElements:

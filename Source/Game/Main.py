@@ -41,21 +41,29 @@ def main():
     tournament = Tournament.object
     
     botPackage = LabTest.botPackage
+    botPackage2 = Tournament.botPackage
     
-    stateDelegate.setup([Menu.gameScene, Create.gameScene])
+    stateDelegate.setup([Menu.gameScene, Create.gameScene, Tournament.gameScene])
     
     while stateDelegate.running:
 
         if stateDelegate.tournament:
-            func = Tournament.customFunc(botPackage, gameInfo)
+            func = Tournament.customFunc(botPackage2, gameInfo)
         
             #Function call + param update || NOT OPTIMAL TODO
-            botPackage = {"bot" : instance.bot[0], "bot2" : instance.bot[1], "pos" : func[0], "pos2" : func[1], "scene" : Tournament.gameScene, "blue" : tournament.portalBlue , "orange" : tournament.portalOrange }
-
+            botPackage2 = {"bot" : tournament.bot[0], "bot2" : tournament.bot[1], "pos" : func[0], "pos2" : func[1], "scene" : Tournament.gameScene, "blue" : tournament.portalBlue , "orange" : tournament.portalOrange }
+            print("Tournament")
             if stateDelegate.checkWin(tournament):
                 print("End")
 
-                gameInfo.addWin()
+                gameInfo.addWin(tournament)
+                tournament.entities.clear()
+                tournament.setupLab()
+                stateDelegate.scenes.remove(Tournament.gameScene)
+                Tournament.setup(screen)
+                botPackage = Tournament.botPackage
+                stateDelegate.scenes.append(Tournament.gameScene)
+                stateDelegate.scene = stateDelegate.scenes[2]
 
         #-------------------------------------------------
 
