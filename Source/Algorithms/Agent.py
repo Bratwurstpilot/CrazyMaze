@@ -154,10 +154,8 @@ class AgentEvo(Entity):
             return
 
         if len(self.currentPath) == 0:
-            
             self.currentPoint += 1
             self.relativeEnd = self.algorithm.globalBest[0].genes[self.currentPoint]
-
             self.currentPath = self.getPath(self.positionRelative, self.relativeEnd)
         
         choice = self.currentPath[-1]
