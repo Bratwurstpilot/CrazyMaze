@@ -143,7 +143,9 @@ def setup(screen, func = None, param = None):
     botPackage = {"bot" : bot, "bot2" : bBot, "pos" : botPos, "pos2" : bBotPos, "scene" : gameScene, "blue" : portalBlue, "orange" : portalOrange}
 
     knight = MyEntity(300, 300, 1, 20, 20)
-    knight.getTextureComponent().color = (255, 255, 255)
+    texPath1 : str = "Source/Game/Files/Echse_1.png"
+    knight.textureComp.setTexture(texPath1, (20, 20))
+
     object.entities.append(knight)
     object.bot.append(knight)
 

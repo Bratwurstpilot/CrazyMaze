@@ -25,15 +25,17 @@ def setup(screen):
     texPath2 : str = "Source/Game/Files/Echse_2.png"
 
     knight = MyEntity(300, 300, 1)
-    knight.textureComp.setTextureSet([texPath1, texPath2])
+    knight.textureComp.setTexture(texPath1)
     knight.textureComp.setFrameInterval(0.5)
     object.entities.append(knight)
 
+    
     rectangle = MyEntity(300,300,0,128,128)
     rectangle.getTextureComponent().color = (0, 0, 0)
+   
     object.entities.append(rectangle)
 
-    controller = MyController2([knight, rectangle])
+    controller = MyController2([rectangle])
     controllers.append(controller)
 
     gameScene = Scene(screen, object.entities, [], createBackground)

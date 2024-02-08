@@ -23,7 +23,7 @@ def main():
 
     KnightTest.setup(screen)
     knightScene = KnightTest.gameScene
-    #entitiyControllers = KnightTest.controllers
+    entitiyControllers = KnightTest.controllers
 
     #-------------------------------------
 
