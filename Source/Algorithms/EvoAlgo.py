@@ -1,6 +1,6 @@
 from random import randint
 from random import shuffle
-
+from math import sqrt
 
 class Individual:
 
@@ -50,7 +50,35 @@ class EvoAlgo():
             shuffle(points)
 
 
-    def crossover(self, individuals : list, pX) -> Individual:
+    def crossoverNPoint(self, individuals : list) -> list:
+        '''
+        Uniformly crossover individuals at 2 points at 
+        est. 1/3 and 2/3 of the length of the genome.
+        '''
+        parent1 = Individual(individuals[0].genes)
+
+        parent2 = Individual(individuals[1].genes)
+
+        nPoint1 = int(len(parent1.genes) * (0.33))
+        nPoint2 = int(len(parent1.genes) * (0.66))
+
+        newIndividual1 = Individual([0 for _ in range(len(parent1.genes))])
+        newIndividual2 = Individual([0 for _ in range(len(parent2.genes))])
+
+        for i in range(nPoint1):
+            newIndividual1.genes[i] = parent1.genes[i]
+            newIndividual2.genes[i] = parent2.genes[i]
+        for i in range(nPoint1, nPoint2):
+            newIndividual1.genes[i] = parent2.genes[i]
+            newIndividual2.genes[i] = parent1.genes[i]
+        for i in range(nPoint2, len(parent1.genes)):
+            newIndividual1.genes[i] = parent1.genes[i]
+            newIndividual2.genes[i] = parent2.genes[i]
+        
+        return [newIndividual1, newIndividual2]
+
+
+    def crossover(self, individuals : list, pX) -> list:
         '''
         Uniformly ordered Crossover.
         Probability measure x >= pX? -> change genes with pX in [0;10]
@@ -99,19 +127,19 @@ class EvoAlgo():
 
 
     def fitness(self, individual : Individual) -> None:
-        
+
         individual.fitness : float = 0.0
 
         if len(individual.genes) > 0:
             first = individual.genes[0]
-            individual.fitness += abs(self.fixedStart[0] - first[0]) + abs(self.fixedStart[1] - first[1])
+            individual.fitness += sqrt( (self.fixedStart[0] - first[0])**2 + (self.fixedStart[1] - first[1])**2 )
 
         for i in range(len(individual.genes)-1):
             current = individual.genes[i]
             succ = individual.genes[i+1]
 
             #Manhatten distance
-            individual.fitness += abs(succ[0] - current[0]) + abs(succ[1] - current[1])
+            individual.fitness += sqrt( (succ[0] - current[0])**2 + (succ[1] - current[1])**2 )
 
 
     def selection(self, count = 2, preselected : int = 1) -> list:
@@ -147,7 +175,7 @@ class EvoAlgo():
         parents = [self.selection(2) for _ in range(5)]
 
         for pair in parents:
-            for newMember in self.crossover(pair, 7):
+            for newMember in self.crossover(pair, 4):
                 self.population.append(newMember)
         
         #Environmental selection
@@ -163,7 +191,7 @@ class EvoAlgo():
 
         #Mutation
         for individual in self.population:
-            self.mutate(individual, 5)
+            self.mutate(individual, 2)
 
         #Update fitness
         for individual in self.population:
@@ -193,3 +221,17 @@ class EvoAlgo():
             
 #algo = EvoAlgo(10, [(0,1), (10,15), (20,10), (15,17)], (0,0), None, 500)
 #algo.update()
+
+'''
+ind1 = Individual([1 for _ in range(10)])
+ind2 = Individual([0 for _ in range(10)])
+
+algo = EvoAlgo()
+newInd = algo.crossoverNPoint([ind1, ind2])
+
+ind1 = newInd[0]
+ind2 = newInd[1]
+
+print("1 : ", ind1.genes)
+print("2 : ", ind2.genes)
+'''       

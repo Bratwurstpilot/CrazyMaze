@@ -130,8 +130,7 @@ class AgentEvo(Entity):
         self.relativeStart = list(self.algorithm.fixedStart)
         self.relativeEnd = self.algorithm.globalBest[0].genes[0]
 
-        self.currentPath = self.getPath(self.relativeStart, self.relativeEnd) #Here happens crazy shit
-
+        self.currentPath = self.getPath(self.relativeStart, self.relativeEnd) 
         self.positionRelative = start
             
 
@@ -141,11 +140,16 @@ class AgentEvo(Entity):
 
         if self.tick < self.tickMax : return
 
-        if self.currentPoint >= len(self.algorithm.globalBest[0].genes):
+        if self.currentPoint >= len(self.algorithm.globalBest[0].genes) or self.positionRelative == self.end:
             return
 
         if len(self.currentPath) == 0 and self.currentPoint <= len(self.algorithm.globalBest[0].genes)-1:
             self.currentPoint += 1
+
+            while self.algorithm.globalBest[0].genes[self.currentPoint] in self.visited:
+                self.currentPoint += 1
+                print("Let me rethink that...")
+
             self.relativeEnd = self.algorithm.globalBest[0].genes[self.currentPoint]
             self.currentPath = []
             self.currentPath = self.getPath(self.positionRelative, self.relativeEnd).copy()
@@ -173,10 +177,6 @@ class AgentEvo(Entity):
 
         viewSpace[start_[1]][start_[0]] = self.symbols["Start"]
         viewSpace[end_[1]][end_[0]] = self.symbols["End"]
-
-        for line in self.viewSpace:
-            print(*line)
-        
 
         aStar.viewSpace = viewSpace
 
