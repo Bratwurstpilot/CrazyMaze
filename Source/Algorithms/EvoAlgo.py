@@ -157,7 +157,6 @@ class EvoAlgo():
                     individual.fitness += self.distances[i+1]
 
 
-
     def selection(self, count = 2, preselected : int = 1) -> list:
 
         selected : list = []
@@ -167,7 +166,7 @@ class EvoAlgo():
             individual1 = self.population[randint(preselected-1,len(self.population)-1)]
             individual2 = self.population[randint(preselected-1,len(self.population)-1)]
 
-            if individual1.fitness >= individual2.fitness and individual1 not in selected:
+            if individual1.fitness <= individual2.fitness and individual1 not in selected:
                 selected.append(individual1)
             elif individual2 not in selected:
                 selected.append(individual2)
@@ -183,6 +182,7 @@ class EvoAlgo():
         
         #update iteration count
         self.iter += 1
+        print(self.iter)
 
         #save population size
         populationSize : int = len(self.population)
@@ -191,7 +191,7 @@ class EvoAlgo():
         parents = [self.selection(2) for _ in range(5)]
 
         for pair in parents:
-            for newMember in self.crossover(pair, 4):
+            for newMember in self.crossover(pair, 2):
                 self.population.append(newMember)
         
         #Environmental selection
@@ -203,6 +203,7 @@ class EvoAlgo():
         newGeneration.append(self.population[1])
         newGeneration.append(self.population[2])
 
+        #newGeneration = self.population[0::populationSize]
         self.population = newGeneration.copy()
 
         #Mutation
@@ -214,7 +215,7 @@ class EvoAlgo():
             self.fitness(individual)
 
             if individual.fitness < self.globalBest[0].fitness:
-                self.globalBest[0] = Individual(individual.genes)
+                self.globalBest[0] = Individual(individual.genes.copy())
                 self.globalBest[0].fitness = individual.fitness
                 self.globalBest[1] = self.iter
 
