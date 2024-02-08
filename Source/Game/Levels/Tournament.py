@@ -2,19 +2,18 @@ import pygame
 import random
 
 from Source.Game.Util import *
-from Source.Algorithms.Agent import Agent, AgentEvo
+from Source.Algorithms.Agent import Agent
 from Source.Game.Labyrinth import Labyrinth
 from Source.Engine.Scene import Scene
 
 
-from random import randint
-
-class LabTest:
+class Tournament:
 
     def __init__(self):
 
         self.entities = []
         self.end = None
+        
     
     def teleportation(self):
         pass
@@ -45,20 +44,7 @@ class LabTest:
 
         playernumB = 1
 
-        bBot = AgentEvo(START[0] + (1-playernumB) * LINEWIDTH + (WIDTH-2) * LINEWIDTH * playernumB, START[1] + (1-playernumB) * LINEWIDTH + (HEIGHT-2) * LINEWIDTH * playernumB, 1, LINEWIDTH, LINEWIDTH, playerNumber=playernumB)
-        
-        #------Testing Tsp Solver
-        
-        point = None
-        for y in range(len(labyrinth)):
-            for x in range(len(labyrinth[0])):
-                if randint(0,100) >= 95 and labyrinth[y][x] == 0:
-                    bBot.anchorPoints.append((x,y))
-                    entt = MyEntity(START[0] + x * LINEWIDTH, START[1] + y * LINEWIDTH, 0, LINEWIDTH, LINEWIDTH)
-                    entt.textureComp.color = (0,255,255)
-                    self.entities.append(entt)
-        #-----------------------
-                    
+        bBot = Agent(START[0] + (1-playernumB) * LINEWIDTH + (WIDTH-2) * LINEWIDTH * playernumB, START[1] + (1-playernumB) * LINEWIDTH + (HEIGHT-2) * LINEWIDTH * playernumB, 1, LINEWIDTH, LINEWIDTH, playerNumber=playernumB)
         bBot.setup(labyrinth)
         self.entities.append(bBot)
         bBot.getTextureComponent().color = (255,255, 0)
@@ -82,29 +68,30 @@ class LabTest:
                     self.entities.append(MyEntity(START[0] + x * LINEWIDTH, START[1] + y * LINEWIDTH, 0, LINEWIDTH, LINEWIDTH))
 
                 if choice >= 95 and labyrinth[y][x] == 0 and self.portalBlue == None:
-                    
-                    labyrinth[y][x] = 6 #change value, dont interrupt with coins
+    
                     self.portalBlue = MyEntity(START[0] + x * LINEWIDTH, START[1] + y * LINEWIDTH, 0, LINEWIDTH, LINEWIDTH)
                     self.portalBlue.getTextureComponent().color = (0, 0, 255) #blue
                     self.entities.append(self.portalBlue)
 
                 if choice >= 95 and y > (len(labyrinth) / 1.25) and labyrinth[y][x] == 0 and self.portalOrange == None:
-
-                    labyrinth[y][x] = 7
                     self.portalOrange = MyEntity(START[0] + x * LINEWIDTH, START[1] + y * LINEWIDTH, 0, LINEWIDTH, LINEWIDTH)
                     self.portalOrange.getTextureComponent().color = (255, 165, 0) #orange
                     self.entities.append(self.portalOrange)
                     
-    
+    def checkWin(self):
+        if self.bot[0].getPosition() == self.end[1]:
+            print("Player1")
+        if self.bot[1].getPosition() == self.end[0]:
+            print("Player2")
 
 #------------Setup-------------------------------
     
 def customFunc(package : dict, gameInfo):
     
     bot = package["bot"]
-    bot.tickMax = (2 - gameInfo.botDifficulty[0] + 1) * 144 * 0.1
+    bot.tickMax = (0.2) * 144 * 0.1
     bBot = package["bot2"]
-    bBot.tickMax = (2 - gameInfo.botDifficulty[1] + 1) * 144 * 0.1
+    bBot.tickMax = (0.001) * 144 * 0.1
     botPos = package["pos"]
     bBotPos = package["pos2"]
     botPlayScene = package["scene"]
@@ -120,7 +107,7 @@ def customFunc(package : dict, gameInfo):
         botPos[0] = portalBlue.getPosition()[0]
         botPos[1] = portalBlue.getPosition()[1]
         
-    if botPos[0] != bot.getPosition()[0] or botPos[1] != bot.getPosition()[1]:
+    """if botPos[0] != bot.getPosition()[0] or botPos[1] != bot.getPosition()[1]:
         elem = MyEntity(botPos.copy()[0], botPos.copy()[1], -1 ,bodyWidth=bot.bodyWidth, bodyHeight=bot.bodyHeight)
         elem.getTextureComponent().color = (0,100,255)
         botPlayScene.elements.append(elem)
@@ -130,14 +117,14 @@ def customFunc(package : dict, gameInfo):
         elem = MyEntity(bBotPos.copy()[0], bBotPos.copy()[1], -1 ,bodyWidth=bBot.bodyWidth, bodyHeight=bBot.bodyHeight)
         elem.getTextureComponent().color = (0, 255, 0)
         botPlayScene.elements.append(elem)
-        bBotPos = bBot.getPosition().copy()
+        bBotPos = bBot.getPosition().copy()"""
 
     return [botPos, bBotPos]
 
 
 #------------------------------------------------
 
-object = LabTest()
+object = Tournament()
 object.setupLab()
 gameScene = None
 botPackage = {}
@@ -150,7 +137,6 @@ def setup(screen, func = None, param = None):
     global gameScene
     global botPackage
     global controllers
-    global knight
     
     bot = object.bot[0]
     bBot = object.bot[1]
@@ -160,20 +146,4 @@ def setup(screen, func = None, param = None):
     portalOrange = object.portalOrange
     botPackage = {"bot" : bot, "bot2" : bBot, "pos" : botPos, "pos2" : bBotPos, "scene" : gameScene, "blue" : portalBlue, "orange" : portalOrange}
 
-    knight = MyEntity(300, 300, 1, 20, 20)
-    texPath1 : str = "Source/Game/Files/Echse_1.png"
-    knight.textureComp.setTexture(texPath1, (20, 20))
-
-    object.entities.append(knight)
-    object.bot.append(knight)
-
-    controller = MyController([knight])
-    controllers.append(controller)
-
     gameScene = Scene(screen, object.entities, [], background)
-
-
-
-
-
-    

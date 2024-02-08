@@ -11,7 +11,11 @@ class GameDelegate:
         self.scene : Scene = None
         self.running : bool = run
         self.scenes : list = []
-        
+
+        self.tournament : bool = False
+        self.maxRounds = 0
+        self.rounds = 1        
+
 
     def setup(self, scenes : list):
 
@@ -29,10 +33,30 @@ class GameDelegate:
         self.running = run
     
 
-    def update(self,):
+    def setTournament(self, state, rounds):
+
+        self.tournament = state
+        self.maxRounds = rounds
+
+
+    def update(self):
+
         for entitie in self.scene.elements: 
             entitie.update()
         for entitie in self.scene.uiElements:
             entitie.update() 
-        
 
+
+    def checkWin(self, instance):
+
+        return (instance.bot[0].getPosition() == instance.end[1]) or (instance.bot[1].getPosition() == instance.end[0])
+        
+    
+    def reset(self, screen, instance, level, index):
+        
+        self.scene = self.scenes[0]
+        instance.entities.clear()
+        instance.setupLab()
+        self.scenes.pop(index)
+        level.setup(screen)
+        self.scenes.insert(index, level.gameScene)
