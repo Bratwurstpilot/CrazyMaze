@@ -2,6 +2,9 @@ from random import randint
 from random import shuffle
 from math import sqrt
 
+from Source.Algorithms.Pathfinding import AStar
+
+
 class Individual:
 
     def __init__(self, genes : list = []):
@@ -29,10 +32,15 @@ class EvoAlgo():
 
         self.fixedStart : tuple = fixedStart
 
+        self.points : list = points.copy()
+
         self.setPopulation(points)
 
-        for individual in self.population:
-            self.fitness(individual)
+        self.viewSpace : list = None
+        self.distances : list = []
+
+        #for individual in self.population:
+            #self.fitness(individual)
         
         self.globalBest : list = [self.population[-1], 0]
     
@@ -40,6 +48,8 @@ class EvoAlgo():
     def reset(self) -> None:
         
         self.population = []
+        self.viewSpace = []
+        self.distances = []
         self.iter : int = 0
 
 
@@ -139,7 +149,13 @@ class EvoAlgo():
             succ = individual.genes[i+1]
 
             #Manhatten distance
-            individual.fitness += sqrt( (succ[0] - current[0])**2 + (succ[1] - current[1])**2 )
+            #individual.fitness += sqrt( (succ[0] - current[0])**2 + (succ[1] - current[1])**2 )
+
+            #AStar Distance
+            for i in range(0, len(self.distances), 2):
+                if self.distances[i] == (current, succ) or self.distances[i] == (succ, current):
+                    individual.fitness += self.distances[i+1]
+
 
 
     def selection(self, count = 2, preselected : int = 1) -> list:
@@ -215,6 +231,60 @@ class EvoAlgo():
             return True
         
         self.update()
+
+    
+    def setUp(self, viewSpace_ : list = [[]], symbols : dict = {}) -> None:
+        '''
+        Setup should be executed after the population is set. 
+        Here the AStar calculations are made.
+        '''
+
+        print("Starting Setup...")
+        self.viewSpace = []
+        self.symbols = symbols
+
+        for line in viewSpace_:
+            self.viewSpace.append(line.copy())
+
+        for i in range(len(self.points)):
+            for j in range(len(self.points)):
+                point1 = self.points[i]
+                point2 = self.points[j]
+
+                if point1 == point2:
+                    continue
+
+                if (point1, point2) not in self.distances or (point2, point1) not in self.distances:
+                    distance : int = len(self.getPath(point1, point2))
+                    self.distances.append((point1, point2))
+                    self.distances.append(distance)
+        
+        print("Finished Setup")
+
+
+    def getPath(self, start_, end_) -> list:
+
+        aStar = AStar(symbols=self.symbols)
+        aStar.reset()
+
+        viewSpace = []
+
+        for element in self.viewSpace:
+            viewSpace.append(element.copy())
+
+        viewSpace[start_[1]][start_[0]] = self.symbols["Start"]
+        viewSpace[end_[1]][end_[0]] = self.symbols["End"]
+
+
+        aStar.viewSpace = viewSpace
+
+        aStar.execRoutine()
+        path = aStar.getPath().copy()
+
+        path.remove(path[-1])
+        aStar.__del__()
+
+        return path
 
     
 #Testing

@@ -28,8 +28,8 @@ class Labyrinth:
                 if choice >= 80 and self.field[y][x] == 0:
                     self.field[y][x] = 1
 
-        for row in self.field:
-            print(*row)
+        #for row in self.field:
+            #print(*row)
 
     
     def create(self, width, height):

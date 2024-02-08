@@ -123,6 +123,7 @@ class AgentEvo(Entity):
         
         self.algorithm = EvoAlgo(populationCount=10, points=relevantPoints, bestEstimate=None, maxIterations=600)
         self.algorithm.fixedStart = start
+        self.algorithm.setUp(self.viewSpace.copy(), self.symbols.copy())
         self.algorithm.update()
 
         self.currentPoint = 0
