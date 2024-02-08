@@ -92,29 +92,27 @@ class AgentEvo(Entity):
 
     def setup(self, viewSpace_ : list) -> None:
         
-        self.viewSpace = viewSpace_
+        self.viewSpace = [ [0 for _ in range(len(viewSpace_[0]))] for __ in range(len(viewSpace_)) ]
 
         if self.algorithm != None : self.algorithm.reset()
 
         self.marked = False
         self.currentPath = 0
-        self.rethoughtPaths = []
+        self.visited = []
 
         start = -1
         end = -1
 
-        #Process Viewspace
-        viewSpace = viewSpace_.copy()
-
         relevantPoints = []
-        for y in range(len(viewSpace)):
-            for x in range(len(viewSpace[0])):
-                if viewSpace[y][x] == self.symbols["Start"]:
-                    #relevantPoints.append((x,y))
+        for y in range(len(viewSpace_)):
+            for x in range(len(viewSpace_[0])):
+                if viewSpace_[y][x] == self.symbols["Start"]:
                     start = (x,y)
-                if viewSpace[y][x] == self.symbols["End"]:
+                if viewSpace_[y][x] == self.symbols["End"]:
                     relevantPoints.append((x,y))
                     end = (x,y)
+                if viewSpace_[y][x] == self.symbols["Obstacle"]:
+                    self.viewSpace[y][x] = self.symbols["Obstacle"]
 
         self.start = start
         self.end = end
@@ -125,52 +123,15 @@ class AgentEvo(Entity):
         
         self.algorithm = EvoAlgo(populationCount=10, points=relevantPoints, bestEstimate=None, maxIterations=600)
         self.algorithm.fixedStart = start
+        self.algorithm.setUp(self.viewSpace.copy(), self.symbols.copy())
         self.algorithm.update()
 
-        aStar = AStar(symbols=self.symbols)
+        self.currentPoint = 0
 
-        #Pre process Labyrinth map to resemble start and end as the first points
-        #of the optimal found route
-        viewSpace[end[1]][end[0]] = 0
-        viewSpace[start[1]][start[0]] = 0
+        self.relativeStart = list(self.algorithm.fixedStart)
+        self.relativeEnd = self.algorithm.globalBest[0].genes[0]
 
-
-        self.paths = []
-        currentPoint = 0
-
-        relativeStart = list(self.algorithm.fixedStart)
-
-        while True:
-            
-            aStar.reset()
-
-            relativeEnd = self.algorithm.globalBest[0].genes[currentPoint]
-
-            viewSpace[relativeEnd[1]][relativeEnd[0]] = self.symbols["End"]
-            viewSpace[relativeStart[1]][relativeStart[0]] = self.symbols["Start"]
-
-            aStar.setViewSpace(viewSpace)
-
-            aStar.execRoutine()
-            self.path = aStar.getPath()
-            self.path.reverse()
-
-            if self.path == []:
-                return
-            self.positionRelative = self.path[0]
-            self.path.remove(self.path[0])
-            self.paths.append(self.path.copy())
-
-            currentPoint += 1
-            
-            viewSpace[relativeEnd[1]][relativeEnd[0]] = 0
-            viewSpace[relativeStart[1]][relativeStart[0]] = 0
-
-            relativeStart = list(relativeEnd).copy()
-
-            if currentPoint >= len(self.algorithm.globalBest[0].genes):
-                break
-            
+        self.currentPath = self.getPath(self.relativeStart, self.relativeEnd) 
         self.positionRelative = start
             
 
@@ -180,76 +141,50 @@ class AgentEvo(Entity):
 
         if self.tick < self.tickMax : return
 
-        if len(self.paths[self.currentPath]) > 0:
-            if self.paths[self.currentPath][-1] == self.end:
-                self.marked = True
+        if self.currentPoint >= len(self.algorithm.globalBest[0].genes) or self.positionRelative == self.end:
+            return
 
-        try:
-            choice = list(self.paths[self.currentPath][0])
-            self.paths[self.currentPath].remove(tuple(choice))
+        if len(self.currentPath) == 0 and self.currentPoint <= len(self.algorithm.globalBest[0].genes)-1:
+            self.currentPoint += 1
 
-            self.position_ = choice.copy()
-
-            self.shiftPosition((choice[0] - self.positionRelative[0]) * self.stepWidth, (choice[1] - self.positionRelative[1]) * self.stepWidth)
-            self.positionRelative = choice.copy()
-
-            if choice not in self.visited: 
-                self.visited.append(choice.copy())
-
-            self.tick = 0
-
-        except IndexError:
-
-            if len(self.paths) < 1:
-                return
-            
-            if self.marked:
-                return
-            
-            self.tick = 0
-            self.currentPath += 1
-
-            if self.currentPath >= len(self.paths) - 1 :
-                return
-                   
-            if len(self.paths[self.currentPath]) == 0:
-                return
-            
-            mark = False
-
-            while True:
-                if list(self.paths[self.currentPath][-1]) in self.visited and list(self.paths[self.currentPath][-1]) not in self.rethoughtPaths:
-                    self.paths.remove(self.paths[self.currentPath])
-                    mark = True
-
-                else:
-                    break
+            while self.algorithm.globalBest[0].genes[self.currentPoint] in self.visited:
+                self.currentPoint += 1
                 print("Let me rethink that...")
-            
-            if mark:
-                self.paths[self.currentPath] = self.getPath(self.position_, list(self.paths[self.currentPath][-1]))
-                self.rethoughtPaths.append(self.paths[self.currentPath])
-            
 
-    def getPath(self, start, end) -> list:
+            self.relativeEnd = self.algorithm.globalBest[0].genes[self.currentPoint]
+            self.currentPath = []
+            self.currentPath = self.getPath(self.positionRelative, self.relativeEnd).copy()
+        
+        choice = self.currentPath[-1]
+        self.currentPath.remove(choice)
 
-        aStar = AStar()
+        self.shiftPosition((choice[0] - self.positionRelative[0]) * self.stepWidth, (choice[1] - self.positionRelative[1]) * self.stepWidth)
+        self.positionRelative = choice
 
-        viewSpace = self.viewSpace.copy()
+        self.visited.append(choice)
+    
+        self.tick = 0
+     
 
-        viewSpace[self.start[1]][self.start[0]] = 0
-        viewSpace[self.end[1]][self.end[0]] = 0
+    def getPath(self, start_, end_) -> list:
 
-        viewSpace[end[1]][end[0]] = self.symbols["End"]
-        viewSpace[start[1]][start[0]] = self.symbols["Start"]
+        aStar = AStar(symbols=self.symbols)
+        aStar.reset()
 
-        aStar.setViewSpace(viewSpace)
+        viewSpace = []
+
+        for element in self.viewSpace:
+            viewSpace.append(element.copy())
+
+        viewSpace[start_[1]][start_[0]] = self.symbols["Start"]
+        viewSpace[end_[1]][end_[0]] = self.symbols["End"]
+
+        aStar.viewSpace = viewSpace
 
         aStar.execRoutine()
-        path = aStar.getPath()
-        path.remove(path[0])
-        #path.reverse()
+        path = aStar.getPath().copy()
 
+        path.remove(path[-1])
         aStar.__del__()
 
         return path

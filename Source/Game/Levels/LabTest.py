@@ -49,10 +49,11 @@ class LabTest:
         
         #------Testing Tsp Solver
         
-        point = None
+        coins = 0
         for y in range(len(labyrinth)):
             for x in range(len(labyrinth[0])):
-                if randint(0,100) >= 95 and labyrinth[y][x] == 0:
+                if randint(0,100) >= 95 and labyrinth[y][x] == 0 and coins < 10:
+                    coins += 1
                     bBot.anchorPoints.append((x,y))
                     entt = MyEntity(START[0] + x * LINEWIDTH, START[1] + y * LINEWIDTH, 0, LINEWIDTH, LINEWIDTH)
                     entt.textureComp.color = (0,255,255)

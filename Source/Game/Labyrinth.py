@@ -30,8 +30,8 @@ class Labyrinth:
                     self.field[y][x] = 1
                 
 
-        for row in self.field:
-            print(*row)
+        #for row in self.field:
+            #print(*row)
 
     
     def create(self, width, height):
