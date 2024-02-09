@@ -80,7 +80,7 @@ class LabTest:
                     self.portalBlue.getTextureComponent().color = (0, 0, 255) #blue
                     self.entities.append(self.portalBlue)
 
-                if choice >= 95 and y > (len(labyrinth) / 1.25) and labyrinth[y][x] == 0 and self.portalOrange == None:
+                if choice >= 95 and y > (len(labyrinth) * 0.80) and labyrinth[y][x] == 0 and self.portalOrange == None:
 
                     labyrinth[y][x] = 7
                     self.portalOrange = MyEntity(START[0] + x * LINEWIDTH, START[1] + y * LINEWIDTH, 0, LINEWIDTH, LINEWIDTH)

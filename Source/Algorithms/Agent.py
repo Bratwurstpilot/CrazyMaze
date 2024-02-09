@@ -121,7 +121,7 @@ class AgentEvo(Entity):
         for anchor in self.anchorPoints:
             relevantPoints.append(anchor)
         
-        self.algorithm = EvoAlgo(populationCount=10, points=relevantPoints, bestEstimate=None, maxIterations=600)
+        self.algorithm = EvoAlgo(populationCount=100, points=relevantPoints, bestEstimate=None, maxIterations=300)
         self.algorithm.fixedStart = start
         self.algorithm.setUp(self.viewSpace.copy(), self.symbols.copy())
         self.algorithm.update()
