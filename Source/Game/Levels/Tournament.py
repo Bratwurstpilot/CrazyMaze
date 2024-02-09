@@ -50,14 +50,6 @@ class Tournament:
         bBot.getTextureComponent().color = (255,255, 0)
         self.bot.append(bBot)
         self.end.append(bBot.getPosition())
-    
-
-        #endPoint = aBot.algorithm.end.coords
-        #end = MyEntity(START[0] + LINEWIDTH * endPoint[0], START[1] + LINEWIDTH * endPoint[1], bodyWidth=LINEWIDTH, bodyHeight=LINEWIDTH)
-        #self.end = end
-        #end.getTextureComponent().color = (0,255,0)
-        #self.entities.append(end)
-        
 
         for y in range(len(labyrinth)):
             for x in range(len(labyrinth[0])):
@@ -98,14 +90,6 @@ def customFunc(package : dict, gameInfo):
 
     portalBlue = package["blue"]
     portalOrange = package["orange"]
-
-    if botPos[0] == portalBlue.getPosition()[0] and botPos[1] == portalBlue.getPosition()[1]:
-        botPos[0] = portalOrange.getPosition()[0]
-        botPos[1] = portalOrange.getPosition()[1]
-
-    if botPos[0] == portalOrange.getPosition()[0] and botPos[1] == portalOrange.getPosition()[1]:
-        botPos[0] = portalBlue.getPosition()[0]
-        botPos[1] = portalBlue.getPosition()[1]
         
     """if botPos[0] != bot.getPosition()[0] or botPos[1] != bot.getPosition()[1]:
         elem = MyEntity(botPos.copy()[0], botPos.copy()[1], -1 ,bodyWidth=bot.bodyWidth, bodyHeight=bot.bodyHeight)

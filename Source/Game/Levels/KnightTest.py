@@ -25,7 +25,7 @@ def setup(screen):
     texPath2 : str = "Source/Game/Files/Echse_2.png"
 
     knight = MyEntity(300, 300, 1)
-    knight.textureComp.setTexture(texPath1)
+    knight.textureComp.setTexture(texPath1, (20, 20))
     knight.textureComp.setFrameInterval(0.5)
     object.entities.append(knight)
 

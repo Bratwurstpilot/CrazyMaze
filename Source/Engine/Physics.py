@@ -20,10 +20,7 @@ class PhysicsComponent:
     # Physics Model Functions
 
 
-    def checkCollide(self, entity) -> bool:
-
-        entity1 = entity
-        entity2 = self.__entity
+    def checkCollide(self, entity1, entity2) -> bool:
 
         entity1Position = entity1.getPosition()
         entity1Body = entity1.getBody()
@@ -34,7 +31,6 @@ class PhysicsComponent:
         ENTITY2RECT = pygame.Rect(entity2Position[0], entity2Position[1], entity2Body[0], entity2Body[1])
         
         return ENTITY1RECT.colliderect(ENTITY2RECT)
-
     # Set Methods 
 
 

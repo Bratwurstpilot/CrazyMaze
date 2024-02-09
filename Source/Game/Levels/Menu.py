@@ -30,7 +30,7 @@ class Menu:
 
     pygame.init()
     mainMenu = Music("Source/Game/Files/DriftveilCity.wav", 0.1)
-    mainMenu.play()
+    #mainMenu.play()
 
 
 

@@ -13,12 +13,11 @@ class LabTest:
 
     def __init__(self):
 
-        self.entities = []
-        self.end = None
+        self.entities : list = []
+        self.end : list = None
+        self.bot : list = []
     
-    def teleportation(self):
-        pass
-    
+
     def setupLab(self):
 
         self.entities = []
@@ -56,7 +55,7 @@ class LabTest:
                     coins += 1
                     bBot.anchorPoints.append((x,y))
                     entt = MyEntity(START[0] + x * LINEWIDTH, START[1] + y * LINEWIDTH, 0, LINEWIDTH, LINEWIDTH)
-                    entt.textureComp.color = (0,255,255)
+                    entt.textureComp.color = (138,43,226) #violet
                     self.entities.append(entt)
         #-----------------------
                     
@@ -65,14 +64,6 @@ class LabTest:
         bBot.getTextureComponent().color = (255,255, 0)
         self.bot.append(bBot)
         self.end.append(bBot.getPosition())
-    
-
-        #endPoint = aBot.algorithm.end.coords
-        #end = MyEntity(START[0] + LINEWIDTH * endPoint[0], START[1] + LINEWIDTH * endPoint[1], bodyWidth=LINEWIDTH, bodyHeight=LINEWIDTH)
-        #self.end = end
-        #end.getTextureComponent().color = (0,255,0)
-        #self.entities.append(end)
-        
 
         for y in range(len(labyrinth)):
             for x in range(len(labyrinth[0])):
@@ -150,8 +141,6 @@ def setup(screen, func = None, param = None):
 
     global gameScene
     global botPackage
-    global controllers
-    global knight
     
     bot = object.bot[0]
     bBot = object.bot[1]
@@ -160,16 +149,6 @@ def setup(screen, func = None, param = None):
     portalBlue = object.portalBlue
     portalOrange = object.portalOrange
     botPackage = {"bot" : bot, "bot2" : bBot, "pos" : botPos, "pos2" : bBotPos, "scene" : gameScene, "blue" : portalBlue, "orange" : portalOrange}
-
-    knight = MyEntity(300, 300, 1, 20, 20)
-    texPath1 : str = "Source/Game/Files/Echse_1.png"
-    knight.textureComp.setTexture(texPath1, (20, 20))
-
-    object.entities.append(knight)
-    object.bot.append(knight)
-
-    controller = MyController([knight])
-    controllers.append(controller)
 
     gameScene = Scene(screen, object.entities, [], background)
 

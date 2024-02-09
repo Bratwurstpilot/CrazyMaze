@@ -16,7 +16,6 @@ class Create:
     entities : list = []
     animations : list = []
     uiEntities : list = []
-    delegate = 0
 
     createBackground = pygame.image.load("Source/Game/Files/createBackground.png")
 
