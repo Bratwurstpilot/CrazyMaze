@@ -13,7 +13,6 @@ from Source.Game.Levels import KnightTest
 from Source.Game.Levels import Tournament
 
 
-
 def main():
         
     pygame.init()
@@ -99,6 +98,7 @@ def main():
                 for controller in entitiyControllers:
                     controller.update(event.key, False)
 
+        '''
         if teleport:
             
             if instance.portalBlue.getPhysicsComponent().checkCollide(instance.bot[2]):
@@ -115,6 +115,7 @@ def main():
 
             if not instance.portalBlue.getPhysicsComponent().checkCollide(instance.bot[2]) and not instance.portalOrange.getPhysicsComponent().checkCollide(instance.bot[2]):
                 teleport = True
+        '''
         
         stateDelegate.update()
         stateDelegate.scene.render()

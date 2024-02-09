@@ -21,8 +21,10 @@ class Individual:
 
 class EvoAlgo():
 
-    def __init__(self, populationCount : int = 10, points : list = [(0,0)], fixedStart : tuple = (0,0), bestEstimate : float = 100000, maxIterations : int = 1000) -> None:
-        
+    def __init__(self, populationCount : int = 10, points : list = [(0,0)], fixedStart : tuple = (0,0), bestEstimate : float = 100000, maxIterations : int = 1000, metric : str = "Manhatten") -> None:
+        '''
+        metric -> Manhatten | AStar
+        '''
         self.population : list = []
         self.populationCount = populationCount
 
@@ -43,6 +45,8 @@ class EvoAlgo():
             #self.fitness(individual)
         
         self.globalBest : list = [self.population[-1], 0]
+
+        self.metric = metric
     
 
     def reset(self) -> None:
@@ -103,7 +107,8 @@ class EvoAlgo():
         changedGenesP1 : list = []
         changedGenesP2 : list = []
 
-        while len(changedGenesIndex) < 2:
+        changeVar : int = randint(0, len(parent1.genes)-1)
+        while len(changedGenesIndex) < changeVar:
             choice = randint(0,len(parent1.genes)-1)
             if choice not in changedGenesIndex:
                 changedGenesIndex.append(choice)
@@ -149,12 +154,14 @@ class EvoAlgo():
             succ = individual.genes[i+1]
 
             #Manhatten distance
-            #individual.fitness += sqrt( (succ[0] - current[0])**2 + (succ[1] - current[1])**2 )
+            if self.metric == "Manhatten":
+                individual.fitness += sqrt( (succ[0] - current[0])**2 + (succ[1] - current[1])**2 )
 
             #AStar Distance
-            for i in range(0, len(self.distances), 2):
-                if self.distances[i] == (current, succ) or self.distances[i] == (succ, current):
-                    individual.fitness += self.distances[i+1]
+            if self.metric == "AStar":
+                for i in range(0, len(self.distances), 2):
+                    if self.distances[i] == (current, succ) or self.distances[i] == (succ, current):
+                        individual.fitness += self.distances[i+1]
 
 
     def selection(self, count = 2, preselected : int = 1) -> list:
@@ -191,7 +198,7 @@ class EvoAlgo():
         parents = [self.selection(2) for _ in range(5)]
 
         for pair in parents:
-            for newMember in self.crossover(pair, 2):
+            for newMember in self.crossover(pair, 4):
                 self.population.append(newMember)
         
         #Environmental selection
@@ -210,8 +217,7 @@ class EvoAlgo():
         for individual in self.population:
             self.mutate(individual, 2)
 
-        #Update fitness
-        for individual in self.population:
+            #Update fitness
             self.fitness(individual)
 
             if individual.fitness < self.globalBest[0].fitness:
@@ -236,11 +242,15 @@ class EvoAlgo():
     
     def setUp(self, viewSpace_ : list = [[]], symbols : dict = {}) -> None:
         '''
-        Setup should be executed after the population is set. 
+        Setup should be executed after the population is set (Constructor or manually). 
         Here the AStar calculations are made.
         '''
-
         print("Starting Setup...")
+        
+        if self.metric == "Manhatten":
+            print("Finished Setup")
+            return
+        
         self.viewSpace = []
         self.symbols = symbols
 
