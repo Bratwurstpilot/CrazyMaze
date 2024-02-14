@@ -99,6 +99,35 @@ class Node:
         def getNeighbours(self) -> list:
 
             return self.neighbours
+        
+
+class TransportNode(Node):
+
+    def __init__(self, x, y):
+
+        super().__init__(x,y)
+
+        self.partnerNode : TransportNode = None
+        self.keyCode : str = None
+    
+
+    def setPartnerNode(self, node):
+        
+        self.partnerNode = node
+        self.neighbours.append(self.partnerNode)
+
+    
+    def setKeyCode(self, code : str) -> None:
+
+        if self.keyCode == None:
+            self.keyCode = code
+        else:
+            print("Node already has a valid key code")
+
+
+    def update(self):
+
+        self.neighbours.append(self.partnerNode)
 
 
 class AStar(Algorithm):
@@ -114,6 +143,8 @@ class AStar(Algorithm):
 
         self.start : tuple = None
         self.end : tuple = None
+
+        self.transportNodes : list = []
 
 
     def __del__(self):
@@ -177,9 +208,9 @@ class AStar(Algorithm):
 
 
     def setup(self) -> None:
-        
-        def getNodeNeighbours(cNode : Node, x : int, y : int) -> None:
 
+        def getNodeNeighbours(cNode : Node, x : int, y : int) -> None:
+            
             for node in self.nodes:
 
                 if node.coords[0] == x - 1 and node.coords[1] == y:
@@ -206,9 +237,6 @@ class AStar(Algorithm):
                     if cNode not in node.neighbours:
                         node.neighbours.append(cNode)
 
-                if len(cNode.neighbours) >= 4: 
-                    break
-
 
         for i in range(len(self.viewSpace)):
             for j in range(len(self.viewSpace[0])):
@@ -221,11 +249,23 @@ class AStar(Algorithm):
                     self.end = node
                 elif self.viewSpace[i][j] == self.symbol["Obstacle"]:
                     continue
-
+                elif self.viewSpace[i][j] in self.symbol["Transport"]:
+                    node = TransportNode(j,i)
+                    node.setKeyCode(self.viewSpace[i][j])
+                    self.transportNodes.append(node)
+                    print("Found TP Node")
+                print(self.viewSpace[i][j])
                 self.nodes.append(node)
                 getNodeNeighbours(node, *node.coords)
 
-                
+        for transportNodeCurrent in self.transportNodes:
+            for transportNodePartner in self.transportNodes:
+                if transportNodeCurrent == transportNodePartner:
+                    continue
+                if transportNodeCurrent.keyCode == transportNodePartner.keyCode:
+                    transportNodeCurrent.setPartnerNode(transportNodePartner)
+
+        print(len(self.transportNodes))
         self.open.append(self.start)
 
 

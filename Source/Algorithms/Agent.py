@@ -6,21 +6,30 @@ from Source.Algorithms.EvoAlgo import EvoAlgo
 
 class Agent(Entity):
 
-    def __init__(self, xPosition = 500, yPosition = 500, zPosition = 1, bodyWidth = 50, bodyHeight = 50, playerNumber : int = 0):
-        
+    def __init__(self, xPosition = 500, yPosition = 500, zPosition = 1, bodyWidth = 50, bodyHeight = 50, playerNumber : int = 0, start : int = None, end : int = None, obstacle : int = 1, transport : list = []):
+
         super().__init__(xPosition, yPosition, zPosition, bodyWidth, bodyHeight, True, True, True)
         self.tick = 0
-        self.tickMax = 144 * 5
+        self.tickMax = 144 * 0.5
+
+        if start == None:
+            start = 2 + playerNumber
+        if end == None:
+            end = 3 - playerNumber
+
+        self.symbols = {"Start" : start, "End" : end, "Obstacle" : obstacle, "Transport" : transport}
+
+        self.anchorPoints = []
 
         self.currentChoice = 0
 
+        self.currentPath = 0
+
         self.stepWidth = self.bodyWidth
 
-        self.algorithm = AStar( {"Start" : 2 + playerNumber, "End" : 3 - playerNumber, "Obstacle" : 1} )
+        self.algorithm = AStar(self.symbols)
         self.path = None
         self.currentPositionRelative : tuple = (0,0)
-
-        self.currentPath = 0
 
     
     def __del__(self) -> None:
@@ -58,13 +67,18 @@ class Agent(Entity):
 
 class AgentEvo(Entity):
 
-    def __init__(self, xPosition = 500, yPosition = 500, zPosition = 1, bodyWidth = 50, bodyHeight = 50, playerNumber : int = 0):
+    def __init__(self, xPosition = 500, yPosition = 500, zPosition = 1, bodyWidth = 50, bodyHeight = 50, playerNumber : int = 0, start : int = None, end : int = None, obstacle : int = 1, transport : list = []):
         
         super().__init__(xPosition, yPosition, zPosition, bodyWidth, bodyHeight, True, True, True)
         self.tick = 0
         self.tickMax = 144 * 0.5
 
-        self.symbols = {"Start" : 2 + playerNumber, "End" : 3 - playerNumber, "Obstacle" : 1}
+        if start == None:
+            start = 2 + playerNumber
+        if end == None:
+            end = 3 - playerNumber
+
+        self.symbols = {"Start" : start, "End" : end, "Obstacle" : obstacle, "Transport" : transport}
 
         self.anchorPoints = []
 
@@ -121,9 +135,10 @@ class AgentEvo(Entity):
         for anchor in self.anchorPoints:
             relevantPoints.append(anchor)
         
-        self.algorithm = EvoAlgo(populationCount=100, points=relevantPoints, bestEstimate=None, maxIterations=300)
+        print(self.symbols)
+        self.algorithm = EvoAlgo(populationCount=300, points=relevantPoints, bestEstimate=None, maxIterations=300, metric="Manhatten")
         self.algorithm.fixedStart = start
-        self.algorithm.setUp(self.viewSpace.copy(), self.symbols.copy())
+        self.algorithm.setUp(self.viewSpace.copy(), self.symbols)
         self.algorithm.update()
 
         self.currentPoint = 0

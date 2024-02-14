@@ -97,41 +97,41 @@ class EvoAlgo():
         Uniformly ordered Crossover.
         Probability measure x >= pX? -> change genes with pX in [0;10]
         '''
-        parent1 = Individual(individuals[0].genes)
-        parent1.fitness = individuals[0].fitness
+        offSpring1 = Individual(individuals[0].genes)
+        offSpring1.fitness = individuals[0].fitness
 
-        parent2 = Individual(individuals[1].genes)
-        parent2.fitness = individuals[1].fitness
+        offSpring2 = Individual(individuals[1].genes)
+        offSpring2.fitness = individuals[1].fitness
         
         changedGenesIndex : list = [] #What genes should be exchanged with respect to prob. pX
         changedGenesP1 : list = []
         changedGenesP2 : list = []
 
-        changeVar : int = randint(0, len(parent1.genes)-1)
+        changeVar : int = randint(0, len(offSpring1.genes)-1)
         while len(changedGenesIndex) < changeVar:
-            choice = randint(0,len(parent1.genes)-1)
+            choice = randint(0,len(offSpring1.genes)-1)
             if choice not in changedGenesIndex:
                 changedGenesIndex.append(choice)
         
-        for i in range(len(parent1.genes)):
+        for i in range(len(offSpring1.genes)):
             if randint(0,10) <= pX and i not in changedGenesIndex:
                 changedGenesIndex.append(i)
         
         changedGenesIndex.sort()
         for index in changedGenesIndex:
-            changedGenesP1.append(parent1.genes[index])
-            changedGenesP2.append(parent2.genes[index])
+            changedGenesP1.append(offSpring1.genes[index])
+            changedGenesP2.append(offSpring2.genes[index])
         
-        genesP1InOrder = list(filter(lambda x : x in changedGenesP2, parent1.genes))
-        genesP2InOrder = list(filter(lambda x : x in changedGenesP1, parent2.genes))
+        genesP1InOrder = list(filter(lambda x : x in changedGenesP2, offSpring1.genes))
+        genesP2InOrder = list(filter(lambda x : x in changedGenesP1, offSpring2.genes))
 
         for i in range(len(changedGenesIndex)):
-            parent1.genes[changedGenesIndex[i]] = genesP2InOrder[0]
+            offSpring1.genes[changedGenesIndex[i]] = genesP2InOrder[0]
             genesP2InOrder.remove(genesP2InOrder[0])
-            parent2.genes[changedGenesIndex[i]] = genesP1InOrder[0]
+            offSpring2.genes[changedGenesIndex[i]] = genesP1InOrder[0]
             genesP1InOrder.remove(genesP1InOrder[0])
         
-        return [parent1, parent2]
+        return [offSpring1, offSpring2]
     
 
     def mutate(self, individual : Individual, pX) -> None:
@@ -143,7 +143,7 @@ class EvoAlgo():
 
     def fitness(self, individual : Individual) -> None:
 
-        individual.fitness : float = 0.0
+        individual.fitness = 0.0
 
         if len(individual.genes) > 0:
             first = individual.genes[0]
@@ -158,7 +158,7 @@ class EvoAlgo():
                 individual.fitness += sqrt( (succ[0] - current[0])**2 + (succ[1] - current[1])**2 )
 
             #AStar Distance
-            if self.metric == "AStar":
+            elif self.metric == "AStar":
                 for i in range(0, len(self.distances), 2):
                     if self.distances[i] == (current, succ) or self.distances[i] == (succ, current):
                         individual.fitness += self.distances[i+1]
@@ -189,13 +189,13 @@ class EvoAlgo():
         
         #update iteration count
         self.iter += 1
-        print(self.iter)
+        #print(self.iter)
 
         #save population size
         populationSize : int = len(self.population)
 
         #Recombination
-        parents = [self.selection(2) for _ in range(5)]
+        parents = [self.selection(2) for _ in range(int(len(self.population)*0.5))]
 
         for pair in parents:
             for newMember in self.crossover(pair, 4):
@@ -204,7 +204,7 @@ class EvoAlgo():
         #Environmental selection
         self.population.sort(key=lambda x : x.fitness, reverse=False)
         newGeneration : list = self.selection(count = populationSize-3, preselected = 3)
-
+ 
                 #Elitism
         newGeneration.append(self.population[0])
         newGeneration.append(self.population[1])
@@ -215,12 +215,12 @@ class EvoAlgo():
 
         #Mutation
         for individual in self.population:
-            self.mutate(individual, 2)
+            self.mutate(individual, 1)
 
             #Update fitness
             self.fitness(individual)
 
-            if individual.fitness < self.globalBest[0].fitness:
+            if individual.fitness <= self.globalBest[0].fitness:
                 self.globalBest[0] = Individual(individual.genes.copy())
                 self.globalBest[0].fitness = individual.fitness
                 self.globalBest[1] = self.iter
