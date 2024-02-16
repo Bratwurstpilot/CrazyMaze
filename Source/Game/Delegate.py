@@ -6,11 +6,12 @@ from Source.Engine.Scene import Scene
 pygame.init()
 class GameDelegate:
 
-    def __init__(self,run : bool):
+    def __init__(self, run : bool):
 
         self.scene : Scene = None
         self.running : bool = run
         self.scenes : list = []
+        self.allScenes : list = []
 
         self.tournament : bool = False
         self.maxRounds = 0
@@ -24,8 +25,12 @@ class GameDelegate:
 
 
     def setScene(self, index : int) -> None: 
-        
-        self.scene = self.scenes[index]
+
+        try: 
+            self.scenes[index].setup()
+            self.scene = self.scenes[index]
+        except:
+            self.scene = self.scenes[index]
 
 
     def setRunning(self, run : bool) -> None:
@@ -51,6 +56,9 @@ class GameDelegate:
 
         return (instance.bot[0].getPosition() == instance.end[1]) or (instance.bot[1].getPosition() == instance.end[0])
         
+    def addScene(self, scene):
+
+        self.scenes.append(scene)
     
     def reset(self, screen, instance, level, index):
         

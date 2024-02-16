@@ -16,7 +16,16 @@ class LabTest:
         self.entities : list = []
         self.end : list = None
         self.bot : list = []
-    
+        self.gameInfo = None
+
+    def setPlayer(self, gameInfo, start : list, linewidth : int, width : int, height : int, playernum : int):
+
+        if gameInfo == "A Star":
+            player = Agent(start[0] + (1-playernum) * linewidth + (width-2) * linewidth * playernum, start[1] + (1-playernum) * linewidth + (height-2) * linewidth * playernum, 1, linewidth, linewidth, playerNumber=playernum)
+        
+        elif gameInfo == "TSP Solver":
+            player = AgentEvo(start[0] + (1-playernum) * linewidth + (width-2) * linewidth * playernum, start[1] + (1-playernum) * linewidth + (height-2) * linewidth * playernum, 1, linewidth, linewidth, playerNumber=playernum)
+        return player
 
     def setupLab(self):
 
@@ -34,8 +43,12 @@ class LabTest:
         playernum = 0
         START = [500 ,200] #x = 1920//4 + 20
 
+        
 
-        aBot = Agent(START[0] + (1-playernum) * LINEWIDTH + (WIDTH-2) * LINEWIDTH * playernum, START[1] + (1-playernum) * LINEWIDTH + (HEIGHT-2) * LINEWIDTH * playernum, 1, LINEWIDTH, LINEWIDTH, playerNumber=playernum)
+        aBot = self.setPlayer(self.gameInfo.playerAlgorithm[0], START, LINEWIDTH, WIDTH, HEIGHT, 0)
+        bBot = self.setPlayer(self.gameInfo.playerAlgorithm[1], START, LINEWIDTH, WIDTH, HEIGHT, 1)
+
+        #aBot = Agent(START[0] + (1-playernum) * LINEWIDTH + (WIDTH-2) * LINEWIDTH * playernum, START[1] + (1-playernum) * LINEWIDTH + (HEIGHT-2) * LINEWIDTH * playernum, 1, LINEWIDTH, LINEWIDTH, playerNumber=playernum)
         aBot.setup(labyrinth)
         self.entities.append(aBot)
         aBot.getTextureComponent().color = (255,0, 0)
@@ -44,21 +57,26 @@ class LabTest:
 
         playernumB = 1
 
-        bBot = AgentEvo(START[0] + (1-playernumB) * LINEWIDTH + (WIDTH-2) * LINEWIDTH * playernumB, START[1] + (1-playernumB) * LINEWIDTH + (HEIGHT-2) * LINEWIDTH * playernumB, 1, LINEWIDTH, LINEWIDTH, playerNumber=playernumB)
+        #bBot = AgentEvo(START[0] + (1-playernumB) * LINEWIDTH + (WIDTH-2) * LINEWIDTH * playernumB, START[1] + (1-playernumB) * LINEWIDTH + (HEIGHT-2) * LINEWIDTH * playernumB, 1, LINEWIDTH, LINEWIDTH, playerNumber=playernumB)
         
         #------Testing Tsp Solver
+        
         
         coins = 0
         for y in range(len(labyrinth)):
             for x in range(len(labyrinth[0])):
                 if randint(0,100) >= 95 and labyrinth[y][x] == 0 and coins < 10:
                     coins += 1
-                    bBot.anchorPoints.append((x,y))
+                    if self.gameInfo.playerAlgorithm[0] == "TSP Solver":
+                        bBot.anchorPoints.append((x,y))
+                    if self.gameInfo.playerAlgorithm[1] == "TSP Solver":
+                        aBot.anchorPoints.append((x,y))
                     entt = MyEntity(START[0] + x * LINEWIDTH, START[1] + y * LINEWIDTH, 0, LINEWIDTH, LINEWIDTH)
                     entt.textureComp.color = (138,43,226) #violet
                     self.entities.append(entt)
+        
         #-----------------------
-                    
+                
         bBot.setup(labyrinth)
         self.entities.append(bBot)
         bBot.getTextureComponent().color = (255,255, 0)
@@ -129,19 +147,24 @@ def customFunc(package : dict, gameInfo):
 
 #------------------------------------------------
 
+
 object = LabTest()
-object.setupLab()
+#object.setupLab()
 gameScene = None
+
 botPackage = {}
 background = pygame.image.load("Source/Game/Files/createBackground.png")
 controllers = []
 
 
-def setup(screen, func = None, param = None):
+def setup(screen, Info):
 
     global gameScene
+    
     global botPackage
     
+    object.gameInfo = Info
+    object.setupLab()
     bot = object.bot[0]
     bBot = object.bot[1]
     botPos = bot.getPosition().copy()
@@ -151,7 +174,7 @@ def setup(screen, func = None, param = None):
     botPackage = {"bot" : bot, "bot2" : bBot, "pos" : botPos, "pos2" : bBotPos, "scene" : gameScene, "blue" : portalBlue, "orange" : portalOrange}
 
     gameScene = Scene(screen, object.entities, [], background)
-
+    
 
 
 
