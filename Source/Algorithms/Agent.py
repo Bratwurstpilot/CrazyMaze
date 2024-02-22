@@ -135,7 +135,6 @@ class AgentEvo(Entity):
         for anchor in self.anchorPoints:
             relevantPoints.append(anchor)
         
-        print(self.symbols)
         self.algorithm = EvoAlgo(populationCount=300, points=relevantPoints, bestEstimate=None, maxIterations=300, metric="Manhatten")
         self.algorithm.fixedStart = start
         self.algorithm.setUp(self.viewSpace.copy(), self.symbols)

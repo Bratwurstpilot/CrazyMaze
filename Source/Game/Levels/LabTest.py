@@ -34,6 +34,10 @@ class LabTest:
         playernum = 0
         START = [500 ,200] #x = 1920//4 + 20
 
+        labBG = MyEntity(START[0], START[1], 0, 47*LINEWIDTH, 33*LINEWIDTH)
+        labBG.getTextureComponent().color = (100,100,100)
+        self.entities.append(labBG)
+
         #TP Test--------------------------
 
         tpSpots = ["T1"]
@@ -45,8 +49,8 @@ class LabTest:
                 choice = random.randint(0,100)
 
                 if labyrinth[y][x] == 1:
-
-                    self.entities.append(MyEntity(START[0] + x * LINEWIDTH, START[1] + y * LINEWIDTH, 0, LINEWIDTH, LINEWIDTH))
+                    wallEntt = MyEntity(START[0] + x * LINEWIDTH, START[1] + y * LINEWIDTH, 0, LINEWIDTH, LINEWIDTH)
+                    self.entities.append(wallEntt)
 
                 if choice >= 95 and labyrinth[y][x] == 0 and self.portalBlue == None:
                     
@@ -92,6 +96,31 @@ class LabTest:
         bBot.getTextureComponent().color = (255,255, 0)
         self.bot.append(bBot)
         self.end.append(bBot.getPosition())
+
+        #UI Elements (sprites, infotables, etc)
+
+        towerLeft = MyEntity(-50, 500)
+        towerLeft.getTextureComponent().setTextureSet(["Source/Game/Files/Tower.png"], (600,600))
+        self.entities.append(towerLeft)
+
+        playerLeft = MyEntity(50, 460)
+        playerLeft.getTextureComponent().setTextureSet(["Source/Game/Files/KnightSprite1.png", "Source/Game/Files/KnightSprite2.png"], (400,400))
+        playerLeft.getTextureComponent().setFrameInterval(0.5)
+        self.entities.append(playerLeft)
+
+        towerRight = MyEntity(1370, 500)
+        towerRight.getTextureComponent().setTextureSet(["Source/Game/Files/Tower.png"], (600,600))
+        self.entities.append(towerRight)
+
+        playerRight = MyEntity(1470, 420)
+        playerRight.getTextureComponent().setTextureSet(["Source/Game/Files/Echse_1.png", "Source/Game/Files/Echse_2.png"], (400,400))
+        playerRight.getTextureComponent().setFrameInterval(0.5)
+        self.entities.append(playerRight)
+
+
+
+
+        #------------------------
                     
 #------------Setup-------------------------------
     
@@ -137,7 +166,7 @@ object = LabTest()
 object.setupLab()
 gameScene = None
 botPackage = {}
-background = pygame.image.load("Source/Game/Files/createBackground.png")
+background = pygame.image.load("Source/Game/Files/CreateBackground.png")
 controllers = []
 
 

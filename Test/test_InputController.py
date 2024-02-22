@@ -27,5 +27,3 @@ def test_entity_controller(key):
     
     assert controller.controllerID == 0
     assert initial_keys == updated_keys
-
-  

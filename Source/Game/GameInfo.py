@@ -45,6 +45,3 @@ class GameInfo:
 
         elif instance.bot[1].getPosition() == instance.end[0] and not instance.bot[0].getPosition() == instance.end[1]:
             self.winCount[1] += 1
-
-    
-

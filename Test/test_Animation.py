@@ -16,4 +16,3 @@ def test_animation(x, y):
     updated_positions = [component.getPosition() for component in animation.getComponents()]
 
     assert initial_positions != updated_positions
-

@@ -26,6 +26,3 @@ def test_entity(x, y, z, width, height):
     assert entity.getBody() == [2*width, 2*height]
 
     assert entity.getCollide([entity, entity, MyEntity(10000,10000,10000,0,0)]) == [entity,entity]
-
-    
-
