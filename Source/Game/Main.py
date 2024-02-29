@@ -52,7 +52,8 @@ def main():
     
     while stateDelegate.running:
         
-        print(instance.bot)
+        #print(gameInfo.playerAlgorithm)
+        #print(botPackage["bot"])
         if stateDelegate.tournament:
 
             stateDelegate.scene = stateDelegate.scenes[2]
@@ -92,7 +93,7 @@ def main():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     if not stateDelegate.tournament:
-                        stateDelegate.reset(screen, instance, LabTest, 3)
+                        stateDelegate.reset(screen, instance, LabTest, 2, gameInfo)
                         botPackage = LabTest.botPackage
                         
                 for controller in entitiyControllers:

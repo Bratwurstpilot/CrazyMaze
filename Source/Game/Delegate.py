@@ -60,11 +60,11 @@ class GameDelegate:
 
         self.scenes.append(scene)
     
-    def reset(self, screen, instance, level, index):
+    def reset(self, screen, instance, level, index, info):
         
         self.scene = self.scenes[0]
         instance.entities.clear()
         instance.setupLab()
         self.scenes.pop(index)
-        level.setup(screen)
+        level.setup(screen, info)
         self.scenes.insert(index, level.gameScene)
