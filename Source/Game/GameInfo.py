@@ -4,9 +4,9 @@ class GameInfo:
 
     def __init__(self):
 
-        self.playerAlgorithm : list = ["Manuell", "Manuell"]
+        self.playerAlgorithm : list = ["A Star", "A Star"]
         self.algorithms : list = ["Manuell", "A Star", "TSP Solver"]
-        self.player : list = [0, 0]
+        self.player : list = [1, 1]
         
         self.difficulty : list = ["Einfach", "Einfach"]
         self.difficulties : list = ["Einfach", "Mittel", "Schwer"]

@@ -81,27 +81,11 @@ class Tournament:
 def customFunc(package : dict, gameInfo):
     
     bot = package["bot"]
-    bot.tickMax = (0.2) * 144 * 0.1
+    bot.tickMax = (0.001) * 144 * 0.1
     bBot = package["bot2"]
     bBot.tickMax = (0.001) * 144 * 0.1
     botPos = package["pos"]
     bBotPos = package["pos2"]
-    botPlayScene = package["scene"]
-
-    portalBlue = package["blue"]
-    portalOrange = package["orange"]
-        
-    """if botPos[0] != bot.getPosition()[0] or botPos[1] != bot.getPosition()[1]:
-        elem = MyEntity(botPos.copy()[0], botPos.copy()[1], -1 ,bodyWidth=bot.bodyWidth, bodyHeight=bot.bodyHeight)
-        elem.getTextureComponent().color = (0,100,255)
-        botPlayScene.elements.append(elem)
-        botPos = bot.getPosition().copy()
-    
-    if bBotPos[0] != bBot.getPosition()[0] or bBotPos[1] != bBot.getPosition()[1]:
-        elem = MyEntity(bBotPos.copy()[0], bBotPos.copy()[1], -1 ,bodyWidth=bBot.bodyWidth, bodyHeight=bBot.bodyHeight)
-        elem.getTextureComponent().color = (0, 255, 0)
-        botPlayScene.elements.append(elem)
-        bBotPos = bBot.getPosition().copy()"""
 
     return [botPos, bBotPos]
 

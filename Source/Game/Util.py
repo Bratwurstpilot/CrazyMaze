@@ -65,3 +65,18 @@ class MyController2(EntityController):
         elif "DOWN" in self.keysPressed:
             for entity in self.controlledEntities:
                 entity.getPhysicsComponent().setMomentumY()
+                
+class Coin(Entity):
+
+    def __init__(self, positionX : int = 0, positionY : int = 0, positionZ : int = 0, bodyWidth : int = 100, bodyHeight : int = 100):
+
+        super().__init__(positionX, positionY, positionZ, bodyWidth, bodyHeight, physics = True, sound = True, texture = True)
+
+
+    def update(self, bot) -> None:
+        
+        self.textureComp.update()
+
+        if self.checkCollide(bot):
+            bot.signal("Coin", (self.positionX, self.positionY))
+
