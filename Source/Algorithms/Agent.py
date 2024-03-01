@@ -119,6 +119,16 @@ class Agent(Entity):
             self.anchorPoints.remove(tuple(coords))
 
 
+    def updateGameState(self, enemyPos : tuple, penaltyPerMove : float, enemyPoints : int, thisPoints : int):
+        '''
+        enemyPos -> (x,y)
+        penaltyPerMove -> x : 0 or current Penalty in float
+        enemyPoints -> Current coin State of Enemy
+        thisPoints -> Current coin State of this Agent 
+        '''
+        pass
+
+
 class AgentEvo(Entity):
 
     def __init__(self, xPosition = 500, yPosition = 500, zPosition = 1, bodyWidth = 50, bodyHeight = 50, playerNumber : int = 0, start : int = None, end : int = None, obstacle : int = 1, transport : list = []):
@@ -257,6 +267,36 @@ class AgentEvo(Entity):
 
         return path
     
+
+    def evaluateSituation(self, enemyPos : tuple, penaltyPerMove : float, enemyPoints : int, thisPoints : int):
+
+        enemyDistTillReach = abs(self.start[0] - enemyPos[0]) + abs(self.Start[1] - enemyPos[1]) 
+        #thisDistTillReach = 
+    
     
     def signal(self, str = "Coin", coords = [0,0]):
+        
+        if str == "Coin":
+
+            self.visited.append(tuple(coords))
+
+            if tuple(self.path[0]) == tuple(coords):
+                self.currentPoint += 1
+
+                while self.algorithm.globalBest[0].genes[self.currentPoint] in self.visited:
+                    self.currentPoint += 1
+                    print("Let me rethink that...")
+
+                self.relativeEnd = self.algorithm.globalBest[0].genes[self.currentPoint]
+                self.currentPath = []
+                self.currentPath = self.getPath(self.positionRelative, self.relativeEnd).copy()
+
+
+    def updateGameState(self, enemyPos : tuple, penaltyPerMove : float, enemyPoints : int, thisPoints : int):
+        '''
+        enemyPos -> (x,y)
+        penaltyPerMove -> x : 0 or current Penalty in float
+        enemyPoints -> Current coin State of Enemy
+        thisPoints -> Current coin State of this Agent 
+        '''
         pass
