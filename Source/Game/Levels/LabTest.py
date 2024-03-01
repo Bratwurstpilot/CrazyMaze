@@ -68,11 +68,6 @@ class LabTest:
 
 
         aBot = Agent(START[0] + (1-playernum) * LINEWIDTH + (WIDTH-2) * LINEWIDTH * playernum, START[1] + (1-playernum) * LINEWIDTH + (HEIGHT-2) * LINEWIDTH * playernum, 1, LINEWIDTH, LINEWIDTH, playerNumber=playernum, transport = tpSpots)
-        aBot.setup(labyrinth)
-        self.entities.append(aBot)
-        aBot.getTextureComponent().color = (255,0, 0)
-        self.bot.append(aBot)
-        self.end.append(aBot.getPosition())
 
         playernumB = 1
 
@@ -86,10 +81,17 @@ class LabTest:
                 if randint(0,100) >= 95 and labyrinth[y][x] == 0 and coins < 10:
                     coins += 1
                     bBot.anchorPoints.append((x,y))
+                    aBot.anchorPoints.append((x,y))
                     entt = MyEntity(START[0] + x * LINEWIDTH, START[1] + y * LINEWIDTH, 0, LINEWIDTH, LINEWIDTH)
                     entt.textureComp.color = (138,43,226) #violet
                     self.entities.append(entt)
         #-----------------------
+                    
+        aBot.setup(labyrinth)
+        self.entities.append(aBot)
+        aBot.getTextureComponent().color = (255,0, 0)
+        self.bot.append(aBot)
+        self.end.append(aBot.getPosition())
                     
         bBot.setup(labyrinth)
         self.entities.append(bBot)

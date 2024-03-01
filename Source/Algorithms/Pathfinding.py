@@ -142,7 +142,9 @@ class AStar(Algorithm):
         self.nodes : list = []
 
         self.start : tuple = None
-        self.end : tuple = None
+        self.end : tuple = ()
+        
+        self.possibleEnds : list = []
 
         self.transportNodes : list = []
 
@@ -160,7 +162,7 @@ class AStar(Algorithm):
 
             currentNode = self.getMin()
             self.expandNode(currentNode)  
-            self.closed.append(currentNode)          
+            self.closed.append(currentNode)   
 
 
     def expandNode(self, node : Node) -> list:
@@ -237,6 +239,7 @@ class AStar(Algorithm):
                     if cNode not in node.neighbours:
                         node.neighbours.append(cNode)
 
+        possibleEnds : list = []
 
         for i in range(len(self.viewSpace)):
             for j in range(len(self.viewSpace[0])):
@@ -246,17 +249,20 @@ class AStar(Algorithm):
                 if self.viewSpace[i][j] == self.symbol["Start"]:
                     self.start = node
                 elif self.viewSpace[i][j] == self.symbol["End"]:
-                    self.end = node
+                    possibleEnds.append(node)
                 elif self.viewSpace[i][j] == self.symbol["Obstacle"]:
                     continue
                 elif self.viewSpace[i][j] in self.symbol["Transport"]:
                     node = TransportNode(j,i)
                     node.setKeyCode(self.viewSpace[i][j])
                     self.transportNodes.append(node)
-                    print("Found TP Node")
-                print(self.viewSpace[i][j])
+
                 self.nodes.append(node)
                 getNodeNeighbours(node, *node.coords)
+        
+        possibleEnds.sort(key=lambda x : self.heuristic(self.start.coords, x.coords))
+        self.end = Node(len(self.viewSpace[0])-1, len(self.viewSpace)-1)
+        self.possibleEnds = possibleEnds
 
         for transportNodeCurrent in self.transportNodes:
             for transportNodePartner in self.transportNodes:
@@ -265,7 +271,6 @@ class AStar(Algorithm):
                 if transportNodeCurrent.keyCode == transportNodePartner.keyCode:
                     transportNodeCurrent.setPartnerNode(transportNodePartner)
 
-        print(len(self.transportNodes))
         self.open.append(self.start)
 
 
@@ -276,6 +281,7 @@ class AStar(Algorithm):
         self.nodes = []
         self.start = []
         self.end = []
+        self.possibleEnds = []
 
 
     def heuristic(self, position : tuple, endPoint : tuple) -> float:
@@ -285,12 +291,14 @@ class AStar(Algorithm):
     
 
     def getPath(self) -> list:
-
+        
+        self.possibleEnds.sort(key=lambda x:x.value)
+        self.end = self.possibleEnds[0]
         path : list = [self.end.coords]
         current : Node = self.end
-        
+
         while True:
-            if current == self.start:
+            if current.coords == self.start.coords:
                 break
 
             predList : list = current.pred
