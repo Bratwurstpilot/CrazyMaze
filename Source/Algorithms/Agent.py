@@ -10,7 +10,7 @@ class Agent(Entity):
 
         super().__init__(xPosition, yPosition, zPosition, bodyWidth, bodyHeight, True, True, True)
         self.tick = 0
-        self.tickMax = 144 * 0.5
+        self.tickMax = 144 * 0.1
 
         if start == None:
             start = 2 + playerNumber
@@ -27,6 +27,8 @@ class Agent(Entity):
 
         self.stepWidth = self.bodyWidth
 
+        self.viewSpaceOriginal = None
+
         self.algorithm = AStar(self.symbols)
         self.path = None
         self.currentPositionRelative : tuple = (0,0)
@@ -37,15 +39,42 @@ class Agent(Entity):
         pass
 
 
+    def defineViewSpace(self, viewSpace : list):
+
+        if len(self.anchorPoints) < 1:
+            return viewSpace
+        
+        newViewSpace : list = []
+        for line in viewSpace:
+            newViewSpace.append(line.copy())
+
+        for anchor in self.anchorPoints:
+            if newViewSpace[anchor[1]][anchor[0]] == self.symbols["Start"]:
+                pass
+            else:
+                newViewSpace[anchor[1]][anchor[0]] = self.symbols["End"]
+        
+        return newViewSpace
+    
+
     def setup(self, viewSpace : list) -> None:
         
-        self.algorithm.setViewSpace(viewSpace)
+        #Save initial viewSpace
+        self.viewSpaceOriginal = []
+        for line in viewSpace:
+            self.viewSpaceOriginal.append(line.copy())
+
+        self.algorithm.__del__()
+        self.algorithm = AStar(self.symbols)
+        self.algorithm.setViewSpace(self.defineViewSpace(self.viewSpaceOriginal))
         self.algorithm.execRoutine()
         self.path = self.algorithm.getPath()
         if self.path == []:
             return
         self.positionRelative = self.path[-1]
         self.path.remove(self.path[-1])
+        if tuple(self.path[0]) not in self.anchorPoints:
+            self.anchorPoints.clear()
 
 
     def update(self) -> None:
@@ -54,6 +83,9 @@ class Agent(Entity):
         
         if self.tick < self.tickMax : return
         try:
+            #Is the current endNode already taken by the enemy:
+            if tuple(self.path[0]) != tuple(self.algorithm.end.coords) and tuple(self.path[0]) not in self.anchorPoints:
+                self.path.clear()
             choice = self.path[-1]
             self.path.remove(choice)
 
@@ -61,8 +93,37 @@ class Agent(Entity):
             self.positionRelative = choice
 
             self.tick = 0
+
         except IndexError:
+            #No Anchor Points - No need to restart update process
+            if len(self.anchorPoints) < 1:
+                return
+            #Delete current anchor
+            if tuple(self.algorithm.end.coords) in self.anchorPoints:
+                self.anchorPoints.remove(tuple(self.algorithm.end.coords))
+            #Set Start to current position
+            self.viewSpaceOriginal[self.algorithm.start.coords[1]][self.algorithm.start.coords[0]] = 0
+            self.viewSpaceOriginal[self.positionRelative[1]][self.positionRelative[0]] = self.symbols["Start"]
+            #Compute path to next nearest coin or end node
+            viewSpaceCopy = []
+            for line in self.viewSpaceOriginal:
+                viewSpaceCopy.append(line.copy())
+
+            self.setup(viewSpaceCopy)
             self.tick = 0
+
+    
+    def signal(self, str = "Coin", coords = (0,0)):
+        #Remove Coins from Anchor points
+        if tuple(coords) in self.anchorPoints:
+            self.anchorPoints.remove(tuple(coords))
+
+
+    def updateGameState(self, enemyPos : tuple, penaltyPerMove : float, enemyPoints : int, thisPoints : int):
+        '''
+        Nothing happens here. AStar is greedy.
+        '''
+        pass
 
 
 class AgentEvo(Entity):
@@ -71,7 +132,7 @@ class AgentEvo(Entity):
         
         super().__init__(xPosition, yPosition, zPosition, bodyWidth, bodyHeight, True, True, True)
         self.tick = 0
-        self.tickMax = 144 * 0.5
+        self.tickMax = 144 * 0.1
 
         if start == None:
             start = 2 + playerNumber
@@ -97,6 +158,8 @@ class AgentEvo(Entity):
         self.marked = False
 
         self.rethoughtPaths : list = []
+
+        self.isGoingToGoal : bool = False
 
     
     def __del__(self) -> None:
@@ -202,3 +265,76 @@ class AgentEvo(Entity):
         aStar.__del__()
 
         return path
+    
+    
+    def signal(self, str = "Coin", coords = [0,0]):
+        
+        if str == "Coin":
+
+            self.visited.append(tuple(coords))
+
+            if len(self.currentPath) < 1:
+                return
+            
+            if tuple(self.currentPath[0]) == tuple(coords):
+                self.currentPoint += 1
+
+                while self.algorithm.globalBest[0].genes[self.currentPoint] in self.visited:
+                    self.currentPoint += 1
+                    print("Let me rethink that...")
+
+                self.relativeEnd = self.algorithm.globalBest[0].genes[self.currentPoint]
+                self.currentPath = []
+                self.currentPath = self.getPath(self.positionRelative, self.relativeEnd).copy()
+    
+
+    def goToGoal(self) -> None:
+
+        if self.isGoingToGoal:
+            return
+
+        self.isGoingToGoal = True
+
+        while tuple(self.algorithm.globalBest[0].genes[self.currentPoint]) != tuple(self.end) and self.currentPoint <= len(self.algorithm.globalBest[0].genes)-1:
+            self.currentPoint += 1
+        
+        self.relativeEnd = self.algorithm.globalBest[0].genes[self.currentPoint]
+        self.currentPath = []
+        self.currentPath = self.getPath(self.positionRelative, self.relativeEnd).copy()
+
+
+    def updateGameState(self, enemyPos : tuple, enemyPoints : int, thisPoints : int):
+        '''
+        enemyPos -> (x,y)
+        enemyPoints -> Current coin State of Enemy
+        thisPoints -> Current coin State of this Agent 
+
+        Assumption : there are 10 coins in the map and no penalty for being late to the goal
+        '''
+
+        def delta(this : tuple, enemy : tuple) -> bool:
+            
+            #Return true if the agent is closer to his goal than the enemy to his
+            return ( abs(self.end[0] - this[0]) + abs(self.end[1] - this[1]) ) >= ( abs(self.start[0] - enemy[0]) + abs(self.start[1] - enemy[1]) )
+
+        if tuple(enemyPos) == tuple(self.start) and enemyPoints < thisPoints:
+            return self.goToGoal()
+
+        if thisPoints >= 4:
+            if delta(self.positionRelative, enemyPos):
+                return self.goToGoal()
+            else:
+                #Enemy is closer to the goal
+                if (10 - enemyPoints) > 5:
+                    #There is still hope
+                    return
+                else:
+                    return self.goToGoal()
+        else:
+            if (thisPoints + 2 > 5) and delta(self.positionRelative, enemyPos):
+                return self.goToGoal()
+            else:
+                if (enemyPoints + 2) < 5:
+                    return
+                else:
+                    return self.goToGoal()

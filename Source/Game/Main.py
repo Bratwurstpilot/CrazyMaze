@@ -4,6 +4,7 @@ from Source.Engine.Scene import Scene
 from Source.Engine.Animation import Animation
 from Source.Engine.Sound import Music
 from Source.Engine.Screen import Screen
+from Source.Engine.Label import Label
 from Source.Game.Delegate import GameDelegate
 from Source.Game.GameInfo import GameInfo
 from Source.Game.Levels import Menu
@@ -11,6 +12,7 @@ from Source.Game.Levels import Create
 from Source.Game.Levels import LabTest
 from Source.Game.Levels import KnightTest
 from Source.Game.Levels import Tournament
+from Source.Game.Util import MyEntity
 
 
 def main():
@@ -44,7 +46,20 @@ def main():
     botPackage = LabTest.botPackage
     botPackage2 = Tournament.botPackage
 
+
     stateDelegate.setup([Menu.gameScene, Create.gameScene, LabTest.gameScene])
+
+
+    coins = instance.coins
+    coinsBot0 = 0
+    coinsBot1 = 0
+    labelBot0 = Label(positionX=100, positionY=100, bodyWidth=1, bodyHeight=1, text=str(coinsBot0), size=50)
+    labelBot0.setTextRect()
+    labelBot1 = Label(positionX=1750, positionY=100, bodyWidth=1, bodyHeight=1, text=str(coinsBot1), size=50)
+    labelBot1.setTextRect()
+    LabTest.gameScene.uiElements.append(labelBot0)
+    LabTest.gameScene.uiElements.append(labelBot1)
+
     
     while stateDelegate.running:
         
@@ -96,7 +111,30 @@ def main():
         
             #Function call + param update || NOT OPTIMAL TODO
             botPackage = {"bot" : instance.bot[0], "bot2" : instance.bot[1], "pos" : func[0], "pos2" : func[1], "scene" : LabTest.gameScene, "blue" : instance.portalBlue , "orange" : instance.portalOrange }    
-        
+            
+            
+            #Algorithm Testing
+            instance.bot[1].updateGameState(enemyPos = instance.bot[0].positionRelative, enemyPoints = coinsBot0, thisPoints = coinsBot1)
+
+            for coin in coins:
+                if coin.checkCollide(instance.bot[0]):
+                    print("Bot 0 collected coin")
+                    coinsBot0 += 1
+                    labelBot0.setText(str(coinsBot0))
+                    instance.bot[1].signal("Coin", [coin.positionX, coin.positionY])
+                    coins.remove(coin)
+
+                elif coin.checkCollide(instance.bot[1]):
+                    print("Bot 1 collected coin")
+                    coinsBot1 += 1
+                    labelBot1.setText(str(coinsBot1))
+                    instance.bot[0].signal("Coin", [coin.positionX, coin.positionY])
+                    coins.remove(coin)
+
+
+            
+            #------------------
+                
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 stateDelegate.running = False
@@ -105,8 +143,16 @@ def main():
                     if not stateDelegate.tournament:
                         stateDelegate.reset(stateDelegate, screen, instance, LabTest, 2, gameInfo)
                         botPackage = LabTest.botPackage
-                        print(instance.entities)
-                        
+
+                        coins = instance.coins
+                        coinsBot0 = 0
+                        coinsBot1 = 0
+                        labelBot0.setText(str(0))
+                        labelBot0.setText(str(0))
+                        LabTest.gameScene.uiElements.append(labelBot0)
+                        LabTest.gameScene.uiElements.append(labelBot1)
+
+
                 for controller in entitiyControllers:
                     controller.update(event.key, True)
 

@@ -75,13 +75,14 @@ class LabTest:
                     self.portalOrange = MyEntity(START[0] + x * LINEWIDTH, START[1] + y * LINEWIDTH, 0, LINEWIDTH, LINEWIDTH)
                     self.portalOrange.getTextureComponent().color = (255, 165, 0) #orange
                     self.entities.append(self.portalOrange)
-
-
       
 
         aBot = self.setPlayer(self.gameInfo.playerAlgorithm[0], START, LINEWIDTH, WIDTH, HEIGHT, 0)
         bBot = self.setPlayer(self.gameInfo.playerAlgorithm[1], START, LINEWIDTH, WIDTH, HEIGHT, 1)
 
+
+
+        self.coins = []
 
         #------Testing Tsp Solver
         
@@ -96,10 +97,14 @@ class LabTest:
                     entt = MyEntity(START[0] + x * LINEWIDTH, START[1] + y * LINEWIDTH, 0, LINEWIDTH, LINEWIDTH)
                     entt.textureComp.color = (138,43,226) #violet
                     self.entities.append(entt)
-        
+                    self.coins.append(entt)
         #-----------------------
 
         #aBot = Agent(START[0] + (1-playernum) * LINEWIDTH + (WIDTH-2) * LINEWIDTH * playernum, START[1] + (1-playernum) * LINEWIDTH + (HEIGHT-2) * LINEWIDTH * playernum, 1, LINEWIDTH, LINEWIDTH, playerNumber=playernum)
+
+                    
+        #-----------------------
+
         aBot.setup(labyrinth)
         self.entities.append(aBot)
         aBot.getTextureComponent().color = (255,0, 0)
@@ -107,6 +112,7 @@ class LabTest:
         self.end.append(aBot.getPosition())
 
         #bBot = AgentEvo(START[0] + (1-playernumB) * LINEWIDTH + (WIDTH-2) * LINEWIDTH * playernumB, START[1] + (1-playernumB) * LINEWIDTH + (HEIGHT-2) * LINEWIDTH * playernumB, 1, LINEWIDTH, LINEWIDTH, playerNumber=playernumB)
+
         bBot.setup(labyrinth)
         self.entities.append(bBot)
         bBot.getTextureComponent().color = (255,255, 0)
@@ -133,9 +139,6 @@ class LabTest:
         playerRight.getTextureComponent().setFrameInterval(0.5)
         self.entities.append(playerRight)
 
-
-
-
         #------------------------
                     
 #------------Setup-------------------------------
@@ -143,9 +146,9 @@ class LabTest:
 def customFunc(package : dict, gameInfo):
     
     bot = package["bot"]
-    bot.tickMax = (2 - gameInfo.botDifficulty[0] + 1) * 144 * 0.1
+    bot.tickMax = (2 - gameInfo.botDifficulty[0] + 1) * 144 * 0.01
     bBot = package["bot2"]
-    bBot.tickMax = (2 - gameInfo.botDifficulty[1] + 1) * 144 * 0.1
+    bBot.tickMax = (2 - gameInfo.botDifficulty[1] + 1) * 144 * 0.01
     botPos = package["pos"]
     bBotPos = package["pos2"]
     botPlayScene = package["scene"]
