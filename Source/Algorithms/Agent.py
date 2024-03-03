@@ -10,7 +10,7 @@ class Agent(Entity):
 
         super().__init__(xPosition, yPosition, zPosition, bodyWidth, bodyHeight, True, True, True)
         self.tick = 0
-        self.tickMax = 144 * 0.5
+        self.tickMax = 144 * 0.1
 
         if start == None:
             start = 2 + playerNumber
@@ -121,10 +121,7 @@ class Agent(Entity):
 
     def updateGameState(self, enemyPos : tuple, penaltyPerMove : float, enemyPoints : int, thisPoints : int):
         '''
-        enemyPos -> (x,y)
-        penaltyPerMove -> x : 0 or current Penalty in float
-        enemyPoints -> Current coin State of Enemy
-        thisPoints -> Current coin State of this Agent 
+        Nothing happens here. AStar is greedy.
         '''
         pass
 
@@ -135,7 +132,7 @@ class AgentEvo(Entity):
         
         super().__init__(xPosition, yPosition, zPosition, bodyWidth, bodyHeight, True, True, True)
         self.tick = 0
-        self.tickMax = 144 * 0.5
+        self.tickMax = 144 * 0.1
 
         if start == None:
             start = 2 + playerNumber
@@ -161,6 +158,8 @@ class AgentEvo(Entity):
         self.marked = False
 
         self.rethoughtPaths : list = []
+
+        self.isGoingToGoal : bool = False
 
     
     def __del__(self) -> None:
@@ -267,12 +266,6 @@ class AgentEvo(Entity):
 
         return path
     
-
-    def evaluateSituation(self, enemyPos : tuple, penaltyPerMove : float, enemyPoints : int, thisPoints : int):
-
-        enemyDistTillReach = abs(self.start[0] - enemyPos[0]) + abs(self.Start[1] - enemyPos[1]) 
-        #thisDistTillReach = 
-    
     
     def signal(self, str = "Coin", coords = [0,0]):
         
@@ -280,7 +273,10 @@ class AgentEvo(Entity):
 
             self.visited.append(tuple(coords))
 
-            if tuple(self.path[0]) == tuple(coords):
+            if len(self.currentPath) < 1:
+                return
+            
+            if tuple(self.currentPath[0]) == tuple(coords):
                 self.currentPoint += 1
 
                 while self.algorithm.globalBest[0].genes[self.currentPoint] in self.visited:
@@ -290,13 +286,55 @@ class AgentEvo(Entity):
                 self.relativeEnd = self.algorithm.globalBest[0].genes[self.currentPoint]
                 self.currentPath = []
                 self.currentPath = self.getPath(self.positionRelative, self.relativeEnd).copy()
+    
+
+    def goToGoal(self) -> None:
+
+        if self.isGoingToGoal:
+            return
+
+        self.isGoingToGoal = True
+
+        while tuple(self.algorithm.globalBest[0].genes[self.currentPoint]) != tuple(self.end) and self.currentPoint <= len(self.algorithm.globalBest[0].genes)-1:
+            self.currentPoint += 1
+        
+        self.relativeEnd = self.algorithm.globalBest[0].genes[self.currentPoint]
+        self.currentPath = []
+        self.currentPath = self.getPath(self.positionRelative, self.relativeEnd).copy()
 
 
-    def updateGameState(self, enemyPos : tuple, penaltyPerMove : float, enemyPoints : int, thisPoints : int):
+    def updateGameState(self, enemyPos : tuple, enemyPoints : int, thisPoints : int):
         '''
         enemyPos -> (x,y)
-        penaltyPerMove -> x : 0 or current Penalty in float
         enemyPoints -> Current coin State of Enemy
         thisPoints -> Current coin State of this Agent 
+
+        Assumption : there are 10 coins in the map and no penalty for being late to the goal
         '''
-        pass
+
+        def delta(this : tuple, enemy : tuple) -> bool:
+            
+            #Return true if the agent is closer to his goal than the enemy to his
+            return ( abs(self.end[0] - this[0]) + abs(self.end[1] - this[1]) ) >= ( abs(self.start[0] - enemy[0]) + abs(self.start[1] - enemy[1]) )
+
+        if tuple(enemyPos) == tuple(self.start) and enemyPoints < thisPoints:
+            return self.goToGoal()
+
+        if thisPoints >= 4:
+            if delta(self.positionRelative, enemyPos):
+                return self.goToGoal()
+            else:
+                #Enemy is closer to the goal
+                if (10 - enemyPoints) > 5:
+                    #There is still hope
+                    return
+                else:
+                    return self.goToGoal()
+        else:
+            if (thisPoints + 2 > 5) and delta(self.positionRelative, enemyPos):
+                return self.goToGoal()
+            else:
+                if (enemyPoints + 2) < 5:
+                    return
+                else:
+                    return self.goToGoal()

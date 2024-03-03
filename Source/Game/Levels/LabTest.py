@@ -73,6 +73,8 @@ class LabTest:
 
         bBot = AgentEvo(START[0] + (1-playernumB) * LINEWIDTH + (WIDTH-2) * LINEWIDTH * playernumB, START[1] + (1-playernumB) * LINEWIDTH + (HEIGHT-2) * LINEWIDTH * playernumB, 1, LINEWIDTH, LINEWIDTH, playerNumber=playernumB, transport=tpSpots)
         
+
+        self.coins = []
         #------Testing Tsp Solver
         
         coins = 0
@@ -85,6 +87,7 @@ class LabTest:
                     entt = MyEntity(START[0] + x * LINEWIDTH, START[1] + y * LINEWIDTH, 0, LINEWIDTH, LINEWIDTH)
                     entt.textureComp.color = (138,43,226) #violet
                     self.entities.append(entt)
+                    self.coins.append(entt)
         #-----------------------
                     
         aBot.setup(labyrinth)
@@ -119,9 +122,6 @@ class LabTest:
         playerRight.getTextureComponent().setFrameInterval(0.5)
         self.entities.append(playerRight)
 
-
-
-
         #------------------------
                     
 #------------Setup-------------------------------
@@ -129,9 +129,9 @@ class LabTest:
 def customFunc(package : dict, gameInfo):
     
     bot = package["bot"]
-    bot.tickMax = (2 - gameInfo.botDifficulty[0] + 1) * 144 * 0.1
+    bot.tickMax = (2 - gameInfo.botDifficulty[0] + 1) * 144 * 0.01
     bBot = package["bot2"]
-    bBot.tickMax = (2 - gameInfo.botDifficulty[1] + 1) * 144 * 0.1
+    bBot.tickMax = (2 - gameInfo.botDifficulty[1] + 1) * 144 * 0.01
     botPos = package["pos"]
     bBotPos = package["pos2"]
     botPlayScene = package["scene"]
