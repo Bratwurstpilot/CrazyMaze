@@ -119,7 +119,7 @@ class Agent(Entity):
             self.anchorPoints.remove(tuple(coords))
 
 
-    def updateGameState(self, enemyPos : tuple, penaltyPerMove : float, enemyPoints : int, thisPoints : int):
+    def updateGameState(self, enemyPos : tuple, enemyPoints : int, thisPoints : int):
         '''
         Nothing happens here. AStar is greedy.
         '''
