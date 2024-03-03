@@ -9,8 +9,6 @@ from Source.Engine.Button import Button
 from Source.Engine.Scene import Scene
 
 
-
-
 class Create:
     
     entities : list = []
@@ -48,7 +46,7 @@ class Create:
     playerOne.setTextRect()
     uiEntities.append(playerOne)
 
-    pOneAlgorithm = Label(1920//4, 205, 0, 1, 1, "Manuell", (0, 110, 18), 40)
+    pOneAlgorithm = Label(1920//4, 205, 0, 1, 1, "A Star", (0, 110, 18), 40)
     pOneAlgorithm.setTextRect()
     uiEntities.append(pOneAlgorithm)
 
@@ -81,7 +79,7 @@ class Create:
     playerTwo.setTextRect()
     uiEntities.append(playerTwo)
 
-    pTwoAlgorithm = Label((1920//4)*3, 205, 0, 1, 1, "Manuell", (0, 110, 18), 40)
+    pTwoAlgorithm = Label((1920//4)*3, 205, 0, 1, 1, "A Star", (0, 110, 18), 40)
     pTwoAlgorithm.setTextRect()
     uiEntities.append(pTwoAlgorithm)
 
@@ -135,7 +133,6 @@ def setup(screen, delegate, info):
         instance.setBotDifficulty(state,player)
         cgame.setText(instance.difficulty[player])
 
-    
 
     #----------------------------Switch Player One----------------------------
     object.switchLOneAlgorithm.setFunc([updateAlgorithm])
@@ -164,8 +161,8 @@ def setup(screen, delegate, info):
     object.switchRTwoDifficulty.setParam([[gameInfo, object.pTwoDifficulty, 1, 1]])
 
     #---------------------------------------------------------------------------
-    object.startGame.setFunc([gameDelegate.setScene])
-    object.startGame.setParam([[2]])
+    object.startGame.setFunc([gameDelegate.setStateGame, gameDelegate.setScene])
+    object.startGame.setParam([[True], [2]])
 
     object.tournament.setFunc([gameDelegate.setScene, gameDelegate.setTournament])
     object.tournament.setParam([[2], [True, 10]])

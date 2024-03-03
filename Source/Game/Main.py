@@ -32,13 +32,10 @@ def main():
     stateDelegate = GameDelegate(True)
     gameInfo = GameInfo()
     
-    
-    
     Menu.setup(screen, stateDelegate)
     Create.setup(screen, stateDelegate, gameInfo)
     LabTest.setup(screen, gameInfo)
 
-    
     entitiyControllers = LabTest.controllers
 
     instance = LabTest.object
@@ -47,7 +44,6 @@ def main():
     botPackage = LabTest.botPackage
     botPackage2 = Tournament.botPackage
 
-    
     stateDelegate.setup([Menu.gameScene, Create.gameScene, LabTest.gameScene])
     
     while stateDelegate.running:
@@ -82,6 +78,12 @@ def main():
         #-------------------------------------------------
 
         else:
+            print(gameInfo.playerAlgorithm)
+            if stateDelegate.stateGame == True:
+                LabTest.setup(screen, gameInfo)
+                stateDelegate.stateGame = False
+                botPackage = LabTest.botPackage
+                
             func = LabTest.customFunc(botPackage, gameInfo)
         
             #Function call + param update || NOT OPTIMAL TODO
