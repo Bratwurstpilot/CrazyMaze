@@ -48,6 +48,7 @@ def main():
     
     while stateDelegate.running:
         
+        
         #print(gameInfo.playerAlgorithm)
         #print(botPackage["bot"])
         if stateDelegate.tournament:
@@ -76,14 +77,21 @@ def main():
                     stateDelegate.rounds += 1
 
         #-------------------------------------------------
-
+        
         else:
-            print(gameInfo.playerAlgorithm)
+            #print(gameInfo.playerAlgorithm)
+            #print(instance.bot)
+            print(stateDelegate.stateGame)
             if stateDelegate.stateGame == True:
+                
                 LabTest.setup(screen, gameInfo)
+                instance = LabTest.object
                 stateDelegate.stateGame = False
                 botPackage = LabTest.botPackage
-                
+                stateDelegate.scenes.insert(2, LabTest.gameScene)
+                print("Finished")
+
+            #print(LabTest.gameScene)
             func = LabTest.customFunc(botPackage, gameInfo)
         
             #Function call + param update || NOT OPTIMAL TODO
@@ -95,8 +103,9 @@ def main():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     if not stateDelegate.tournament:
-                        stateDelegate.reset(screen, instance, LabTest, 2, gameInfo)
+                        stateDelegate.reset(stateDelegate, screen, instance, LabTest, 2, gameInfo)
                         botPackage = LabTest.botPackage
+                        print(instance.entities)
                         
                 for controller in entitiyControllers:
                     controller.update(event.key, True)

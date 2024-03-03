@@ -36,6 +36,7 @@ class LabTest:
         self.portalOrange = None
         
         labyrinth = Labyrinth(45,31).getLabyrinth()
+        print(labyrinth)
 
         WIDTH = len(labyrinth[0])
         HEIGHT = len(labyrinth)
@@ -190,11 +191,12 @@ controllers = []
 def setup(screen, Info):
 
     global gameScene
-    
     global botPackage
     
+    object.bot.clear()
     object.gameInfo = Info
     object.setupLab()
+    
     bot = object.bot[0]
     bBot = object.bot[1]
     botPos = bot.getPosition().copy()

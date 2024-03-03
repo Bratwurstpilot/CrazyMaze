@@ -12,7 +12,7 @@ class GameDelegate:
         self.running : bool = run
         self.scenes : list = []
         self.allScenes : list = []
-        self.stateGame : bool = False
+        self.stateGame : bool = True
 
         self.tournament : bool = False
         self.maxRounds = 0
@@ -68,11 +68,11 @@ class GameDelegate:
         self.scenes.append(scene)
     
 
-    def reset(self, screen, instance, level, index, info):
+    def reset(self, delegate, screen, instance, level, index, info):
         
+        delegate.setStateGame(True)
         self.scene = self.scenes[0]
         instance.entities.clear()
-        instance.setupLab()
+        
         self.scenes.pop(index)
-        level.setup(screen, info)
-        self.scenes.insert(index, level.gameScene)
+        
