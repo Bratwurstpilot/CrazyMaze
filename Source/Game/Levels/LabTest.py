@@ -34,7 +34,7 @@ class LabTest:
         playernum = 0
         START = [500 ,200] #x = 1920//4 + 20
 
-        labBG = MyEntity(START[0], START[1], 0, 47*LINEWIDTH, 33*LINEWIDTH)
+        labBG = MyEntity(START[0], START[1], -1, 47*LINEWIDTH, 33*LINEWIDTH)
         labBG.getTextureComponent().color = (100,100,100)
         self.entities.append(labBG)
 
@@ -148,13 +148,13 @@ def customFunc(package : dict, gameInfo):
         botPos[1] = portalBlue.getPosition()[1]
         
     if botPos[0] != bot.getPosition()[0] or botPos[1] != bot.getPosition()[1]:
-        elem = MyEntity(botPos.copy()[0], botPos.copy()[1], -1 ,bodyWidth=bot.bodyWidth, bodyHeight=bot.bodyHeight)
+        elem = MyEntity(botPos.copy()[0], botPos.copy()[1], 0 ,bodyWidth=bot.bodyWidth, bodyHeight=bot.bodyHeight)
         elem.getTextureComponent().color = (0,100,255)
         botPlayScene.elements.append(elem)
         botPos = bot.getPosition().copy()
     
     if bBotPos[0] != bBot.getPosition()[0] or bBotPos[1] != bBot.getPosition()[1]:
-        elem = MyEntity(bBotPos.copy()[0], bBotPos.copy()[1], -1 ,bodyWidth=bBot.bodyWidth, bodyHeight=bBot.bodyHeight)
+        elem = MyEntity(bBotPos.copy()[0], bBotPos.copy()[1], 0 ,bodyWidth=bBot.bodyWidth, bodyHeight=bBot.bodyHeight)
         elem.getTextureComponent().color = (0, 255, 0)
         botPlayScene.elements.append(elem)
         bBotPos = bBot.getPosition().copy()
@@ -186,3 +186,4 @@ def setup(screen, func = None, param = None):
     botPackage = {"bot" : bot, "bot2" : bBot, "pos" : botPos, "pos2" : bBotPos, "scene" : gameScene, "blue" : portalBlue, "orange" : portalOrange}
 
     gameScene = Scene(screen, object.entities, [], background)
+
