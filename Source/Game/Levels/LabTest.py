@@ -16,7 +16,16 @@ class LabTest:
         self.entities : list = []
         self.end : list = None
         self.bot : list = []
+        self.gameInfo = None
     
+    def setPlayer(self, gameInfo, start : list, linewidth : int, width : int, height : int, playernum : int, tpSpots : list):
+
+        if gameInfo == "A Star":
+            player = Agent(start[0] + (1-playernum) * linewidth + (width-2) * linewidth * playernum, start[1] + (1-playernum) * linewidth + (height-2) * linewidth * playernum, 1, linewidth, linewidth, playerNumber=playernum, transport = tpSpots)
+        
+        elif gameInfo == "TSP Solver":
+            player = AgentEvo(start[0] + (1-playernum) * linewidth + (width-2) * linewidth * playernum, start[1] + (1-playernum) * linewidth + (height-2) * linewidth * playernum, 1, linewidth, linewidth, playerNumber=playernum, transport = tpSpots)
+        return player
 
     def setupLab(self):
 
@@ -31,7 +40,7 @@ class LabTest:
         WIDTH = len(labyrinth[0])
         HEIGHT = len(labyrinth)
         LINEWIDTH = 20
-        playernum = 0
+        
         START = [500 ,200] #x = 1920//4 + 20
 
         labBG = MyEntity(START[0], START[1], -1, 47*LINEWIDTH, 33*LINEWIDTH)
@@ -55,24 +64,26 @@ class LabTest:
                 if choice >= 95 and labyrinth[y][x] == 0 and self.portalBlue == None:
                     
                     labyrinth[y][x] = "T1" #change value, dont interrupt with coins
-                    self.portalBlue = MyEntity(START[0] + x * LINEWIDTH, START[1] + y * LINEWIDTH, 0, LINEWIDTH, LINEWIDTH)
+                    self.portalBlue = MyEntity(START[0] + x * LINEWIDTH, START[1] + y * LINEWIDTH, 1, LINEWIDTH, LINEWIDTH)
                     self.portalBlue.getTextureComponent().color = (0, 0, 255) #blue
                     self.entities.append(self.portalBlue)
 
                 if choice >= 95 and y > (len(labyrinth) * 0.80) and labyrinth[y][x] == 0 and self.portalOrange == None:
 
                     labyrinth[y][x] = "T1"
-                    self.portalOrange = MyEntity(START[0] + x * LINEWIDTH, START[1] + y * LINEWIDTH, 0, LINEWIDTH, LINEWIDTH)
+                    self.portalOrange = MyEntity(START[0] + x * LINEWIDTH, START[1] + y * LINEWIDTH, 1, LINEWIDTH, LINEWIDTH)
                     self.portalOrange.getTextureComponent().color = (255, 165, 0) #orange
                     self.entities.append(self.portalOrange)
 
+        #playernum = 0
 
-        aBot = Agent(START[0] + (1-playernum) * LINEWIDTH + (WIDTH-2) * LINEWIDTH * playernum, START[1] + (1-playernum) * LINEWIDTH + (HEIGHT-2) * LINEWIDTH * playernum, 1, LINEWIDTH, LINEWIDTH, playerNumber=playernum, transport = tpSpots)
-
-        playernumB = 1
-
-        bBot = AgentEvo(START[0] + (1-playernumB) * LINEWIDTH + (WIDTH-2) * LINEWIDTH * playernumB, START[1] + (1-playernumB) * LINEWIDTH + (HEIGHT-2) * LINEWIDTH * playernumB, 1, LINEWIDTH, LINEWIDTH, playerNumber=playernumB, transport=tpSpots)
+        #aBot = Agent(START[0] + (1-playernum) * LINEWIDTH + (WIDTH-2) * LINEWIDTH * playernum, START[1] + (1-playernum) * LINEWIDTH + (HEIGHT-2) * LINEWIDTH * playernum, 1, LINEWIDTH, LINEWIDTH, playerNumber=playernum, transport = tpSpots)
+        aBot = self.setPlayer(self.gameInfo.playerAlgorithm[0], START, LINEWIDTH, WIDTH, HEIGHT, 0, tpSpots)
         
+        #playernumB = 1
+
+        #bBot = AgentEvo(START[0] + (1-playernumB) * LINEWIDTH + (WIDTH-2) * LINEWIDTH * playernumB, START[1] + (1-playernumB) * LINEWIDTH + (HEIGHT-2) * LINEWIDTH * playernumB, 1, LINEWIDTH, LINEWIDTH, playerNumber=playernumB, transport=tpSpots)
+        bBot = self.setPlayer(self.gameInfo.playerAlgorithm[1], START, LINEWIDTH, WIDTH, HEIGHT, 1, tpSpots)
 
         self.coins = []
         #------Testing Tsp Solver
@@ -186,4 +197,11 @@ def setup(screen, func = None, param = None):
     botPackage = {"bot" : bot, "bot2" : bBot, "pos" : botPos, "pos2" : bBotPos, "scene" : gameScene, "blue" : portalBlue, "orange" : portalOrange}
 
     gameScene = Scene(screen, object.entities, [], background)
+
+def load():
+
+    global gameScene
+    global botPackage
+
+    return gameScene, botPackage
 
