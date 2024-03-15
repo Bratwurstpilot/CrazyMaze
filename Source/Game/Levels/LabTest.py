@@ -178,7 +178,6 @@ def customFunc(package : dict, gameInfo):
 #------------------------------------------------
 
 object = LabTest()
-#object.setupLab()
 gameScene = None
 botPackage = {}
 background = pygame.image.load("Source/Game/Files/CreateBackground.png")
@@ -193,8 +192,8 @@ def setup(info, screen):
     object.gameInfo = info
     object.screen = screen
     object.setupLab()
+    print(object)
     gameScene = Scene(object.screen, object.entities, [], background)
-    print(object.gameInfo.playerAlgorithm)
     
 
 def load():

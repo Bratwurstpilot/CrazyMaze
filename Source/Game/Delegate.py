@@ -13,6 +13,7 @@ class GameDelegate:
         self.scenes : list = []
 
         self.game : bool = False
+        self.win : bool = False
         self.tournament : bool = False
         self.maxRounds = 0
         self.rounds = 1        
@@ -62,7 +63,6 @@ class GameDelegate:
         
         self.scene = self.scenes[0]
         instance.entities.clear()
-        instance.setupLab()
         self.scenes.pop(index)
-        level.setup(info, screen)
+        #level.setup(info, screen)
         self.scenes.insert(index, level.gameScene)

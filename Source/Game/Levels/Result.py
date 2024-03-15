@@ -7,15 +7,15 @@ from Source.Engine.Button import Button
 from Source.Engine.Scene import Scene
 
 
-class Menu:
+class Result:
     
     entities : list = []
     animations : list = []
     uiEntities : list = []
     delegate = 0
 
-    menuBackground = pygame.image.load("Source/Game/Files/menuBackground.png")
-
+    resultBackground = pygame.image.load("Source/Game/Files/menuBackground.png")
+"""
     gameTitle = Label(1920//2, 440, 0, 1, 1, "Crazy Maze", (0, 110, 18), 70)
     gameTitle.setTextRect()
     uiEntities.append(gameTitle)
@@ -31,27 +31,24 @@ class Menu:
     pygame.init()
     mainMenu = Music("Source/Game/Files/DriftveilCity.wav", 0.1)
     #mainMenu.play()
-
+"""
 
 
 #------Setup Part----------
 
-object = Menu()
 ##menuScene = Scene(screen, menu.entities, menu.uiEntities, menu.menuBackground)
-
+object = Result()
 gameScene = None
 gameDelegate = None
+gameInfo = None
 
-def setup(screen, delegate):
+def setup(screen, delegate, info):
 
     global gameDelegate
     global gameScene
+    global gameInfo
     
-    gameScene = Scene(screen, object.entities, object.uiEntities, object.menuBackground)
+    gameScene = Scene(screen, object.entities, object.uiEntities, object.resultBackground)
     gameDelegate = delegate
-
-    object.startGame.setFunc([gameDelegate.setScene])
-    object.startGame.setParam([[1]])
-
-    object.quitGame.setFunc([gameDelegate.setRunning])
-    object.quitGame.setParam([[False]])
+    gameInfo = info
+    
