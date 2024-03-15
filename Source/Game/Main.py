@@ -26,7 +26,7 @@ def main():
     stateDelegate = GameDelegate(True)
     gameInfo = GameInfo()
     
-    LabTest.setup(screen)
+    LabTest.setup(gameInfo, screen)
     Tournament.setup(screen)
     Menu.setup(screen, stateDelegate)
     Create.setup(screen, stateDelegate, gameInfo)
@@ -73,14 +73,20 @@ def main():
         #-------------------------------------------------
 
         else:
-            func = LabTest.customFunc(botPackage, gameInfo)
-        
-            #Function call + param update || NOT OPTIMAL TODO
-            botPackage = {"bot" : instance.bot[0], "bot2" : instance.bot[1], "pos" : func[0], "pos2" : func[1], "scene" : LabTest.gameScene, "blue" : instance.portalBlue , "orange" : instance.portalOrange }    
+            if stateDelegate.game:
+                stateDelegate.scenes.append(LabTest.load())
+                stateDelegate.setGame(False)
+                print(stateDelegate.scenes)
+            if botPackage:
+                func = LabTest.customFunc(botPackage, gameInfo)
             
+                #Function call + param update || NOT OPTIMAL TODO
+                botPackage = {"bot" : instance.bot[0], "bot2" : instance.bot[1], "pos" : func[0], "pos2" : func[1], "scene" : LabTest.gameScene, "blue" : instance.portalBlue , "orange" : instance.portalOrange }    
             
+              
             #Algorithm Testing
             instance.bot[1].updateGameState(enemyPos = instance.bot[0].positionRelative, enemyPoints = coinsBot0, thisPoints = coinsBot1)
+            instance.bot[0].updateGameState(enemyPos = instance.bot[1].positionRelative, enemyPoints = coinsBot1, thisPoints = coinsBot0)
 
             for coin in coins:
                 if coin.checkCollide(instance.bot[0]):
@@ -106,7 +112,7 @@ def main():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     if not stateDelegate.tournament:
-                        stateDelegate.reset(screen, instance, LabTest, 2)
+                        stateDelegate.reset(screen, instance, LabTest, 2, gameInfo)
                         botPackage = LabTest.botPackage
                         coins = instance.coins
                         coinsBot0 = 0

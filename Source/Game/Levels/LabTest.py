@@ -17,6 +17,7 @@ class LabTest:
         self.end : list = None
         self.bot : list = []
         self.gameInfo = None
+        self.screen = None
     
     def setPlayer(self, gameInfo, start : list, linewidth : int, width : int, height : int, playernum : int, tpSpots : list):
 
@@ -25,6 +26,7 @@ class LabTest:
         
         elif gameInfo == "TSP Solver":
             player = AgentEvo(start[0] + (1-playernum) * linewidth + (width-2) * linewidth * playernum, start[1] + (1-playernum) * linewidth + (height-2) * linewidth * playernum, 1, linewidth, linewidth, playerNumber=playernum, transport = tpSpots)
+        
         return player
 
     def setupLab(self):
@@ -176,18 +178,30 @@ def customFunc(package : dict, gameInfo):
 #------------------------------------------------
 
 object = LabTest()
-object.setupLab()
+#object.setupLab()
 gameScene = None
 botPackage = {}
 background = pygame.image.load("Source/Game/Files/CreateBackground.png")
 controllers = []
 
 
-def setup(screen, func = None, param = None):
+def setup(info, screen):
 
     global gameScene
     global botPackage
     
+    object.gameInfo = info
+    object.screen = screen
+    object.setupLab()
+    gameScene = Scene(object.screen, object.entities, [], background)
+    print(object.gameInfo.playerAlgorithm)
+    
+
+def load():
+
+    global gameScene
+    global botPackage
+
     bot = object.bot[0]
     bBot = object.bot[1]
     botPos = bot.getPosition().copy()
@@ -196,12 +210,7 @@ def setup(screen, func = None, param = None):
     portalOrange = object.portalOrange
     botPackage = {"bot" : bot, "bot2" : bBot, "pos" : botPos, "pos2" : bBotPos, "scene" : gameScene, "blue" : portalBlue, "orange" : portalOrange}
 
-    gameScene = Scene(screen, object.entities, [], background)
+    gameScene = Scene(object.screen, object.entities, [], background)
 
-def load():
-
-    global gameScene
-    global botPackage
-
-    return gameScene, botPackage
+    return gameScene
 
