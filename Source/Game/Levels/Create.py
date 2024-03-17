@@ -167,5 +167,5 @@ def setup(screen, delegate, info):
     object.startGame.setFunc([gameDelegate.setGame, gameDelegate.setScene])
     object.startGame.setParam([[True], [3]])
 
-    object.tournament.setFunc([gameDelegate.setScene, gameDelegate.setTournament])
-    object.tournament.setParam([[2], [True, 10]])
+    object.tournament.setFunc([gameDelegate.setGame, gameDelegate.setScene, gameDelegate.setTournament])
+    object.tournament.setParam([[True], [2], [True, 10]])

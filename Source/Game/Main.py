@@ -39,7 +39,7 @@ def main():
     tournament = Tournament.object
     botPackage2 = Tournament.botPackage
 
-    stateDelegate.setup([Menu.gameScene, Create.gameScene, Result.gameScene, LabTest.gameScene])
+    stateDelegate.setup([Menu.gameScene, Create.gameScene, Result.gameScene, LabTest.gameScene, Tournament.gameScene])
     
     coins = instance.coins
     coinsBot0 = 0
@@ -51,27 +51,32 @@ def main():
             
 
             if stateDelegate.game:
-                stateDelegate.scene = stateDelegate.scenes[2]
-                stateDelegate.scenes.append(Tournament.load())
+                Tournament.setup(gameInfo, screen)
+                stateDelegate.scenes.insert(4,Tournament.load())
+                stateDelegate.setScene(4)
                 stateDelegate.setGame(False)
-                botPackage2 = Tournament.botPackage
+                stateDelegate.win = False
+                coins = instance.coins
             
-            #print(stateDelegate.scenes)
+            
             if botPackage2:
-                print(botPackage2)
+                
                 func = Tournament.customFunc(botPackage2, gameInfo)
                 #Function call + param update || NOT OPTIMAL TODO
                 botPackage2 = {"bot" : tournament.bot[0], "bot2" : tournament.bot[1], "pos" : func[0], "pos2" : func[1], "scene" : Tournament.gameScene, "blue" : tournament.portalBlue , "orange" : tournament.portalOrange }
                 
-            if stateDelegate.checkWin(tournament):
-
+            if stateDelegate.checkWin(tournament) and not stateDelegate.win:
+                
+                stateDelegate.win = True
+                stateDelegate.setGame(True)
                 gameInfo.addWin(tournament)
                 stateDelegate.reset(screen, tournament, Tournament, 2, gameInfo)
                 botPackage2 = Tournament.botPackage
                 
                 if stateDelegate.rounds == stateDelegate.maxRounds:
-                    stateDelegate.scene = stateDelegate.scenes[0]
                     stateDelegate.tournament = False
+                    stateDelegate.setGame(False)
+                    stateDelegate.setScene(2)
                     stateDelegate.rounds = 1
 
                 else:

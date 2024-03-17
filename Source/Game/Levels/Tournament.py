@@ -137,7 +137,7 @@ def customFunc(package : dict, gameInfo):
     portalBlue = package["blue"]
     portalOrange = package["orange"]
     
-    print(botPos[0])
+    
     if botPos[0] != bot.getPosition()[0] or botPos[1] != bot.getPosition()[1]:
         elem = MyEntity(botPos.copy()[0], botPos.copy()[1], 0 ,bodyWidth=bot.bodyWidth, bodyHeight=bot.bodyHeight)
         
@@ -173,7 +173,7 @@ def setup(info, screen):
     gameScene = Scene(object.screen, object.entities, [], background)
     
 
-def load(screen, func = None, param = None):
+def load():
 
     global gameScene
     global botPackage
@@ -188,4 +188,6 @@ def load(screen, func = None, param = None):
     portalOrange = object.portalOrange
     botPackage = {"bot" : bot, "bot2" : bBot, "pos" : botPos, "pos2" : bBotPos, "scene" : gameScene, "blue" : portalBlue, "orange" : portalOrange}
 
-    gameScene = Scene(screen, object.entities, [], background)
+    gameScene = Scene(object.screen, object.entities, [], background)
+
+    return gameScene
