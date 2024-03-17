@@ -70,7 +70,7 @@ def main():
                 stateDelegate.win = True
                 stateDelegate.setGame(True)
                 gameInfo.addWin(tournament)
-                stateDelegate.reset(screen, tournament, Tournament, 2, gameInfo)
+                stateDelegate.reset(screen, tournament, Tournament, 4, gameInfo)
                 botPackage2 = Tournament.botPackage
                 
                 if stateDelegate.rounds == stateDelegate.maxRounds:
@@ -80,7 +80,7 @@ def main():
                     stateDelegate.rounds = 1
 
                 else:
-                    stateDelegate.scene = stateDelegate.scenes[2]
+                    stateDelegate.setScene(4)
                     botPackage2 = Tournament.botPackage
                     stateDelegate.rounds += 1
 
