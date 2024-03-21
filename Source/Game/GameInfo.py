@@ -14,6 +14,8 @@ class GameInfo:
 
         self.winCount : list = [0, 0, 0]
         
+        self.coins : list = [0, 0]
+        
         
     def setPlayerAlgorithm(self, state : int, player : int) -> None:
 

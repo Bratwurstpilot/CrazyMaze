@@ -35,7 +35,7 @@ class Menu:
 
 
 #------Setup Part----------
-
+ 
 object = Menu()
 ##menuScene = Scene(screen, menu.entities, menu.uiEntities, menu.menuBackground)
 

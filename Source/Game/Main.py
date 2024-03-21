@@ -42,8 +42,7 @@ def main():
     stateDelegate.setup([Menu.gameScene, Create.gameScene, Result.gameScene, LabTest.gameScene, Tournament.gameScene])
     
     coins = instance.coins
-    coinsBot0 = 0
-    coinsBot1 = 0
+    
 
     while stateDelegate.running:
 
@@ -106,28 +105,32 @@ def main():
                 
                 stateDelegate.win = True
                 gameInfo.addWin(instance)
+                Result.showResult()
                 stateDelegate.reset(screen, instance, LabTest, 3, gameInfo)
                 stateDelegate.setScene(2)
 
        
         #Algorithm Testing
-        instance.bot[1].updateGameState(enemyPos = instance.bot[0].positionRelative, enemyPoints = coinsBot0, thisPoints = coinsBot1)
-        instance.bot[0].updateGameState(enemyPos = instance.bot[1].positionRelative, enemyPoints = coinsBot1, thisPoints = coinsBot0)
-
+        instance.bot[1].updateGameState(enemyPos = instance.bot[0].positionRelative, enemyPoints = gameInfo.coins[0], thisPoints = gameInfo.coins[1])
+        instance.bot[0].updateGameState(enemyPos = instance.bot[1].positionRelative, enemyPoints = gameInfo.coins[1], thisPoints = gameInfo.coins[0])
+        
+        #print(instance.bot)
         for coin in coins:
             if coin.checkCollide(instance.bot[0]):
                 print("Bot 0 collected coin")
-                coinsBot0 += 1
+                gameInfo.coins[0] += 1
                 instance.bot[1].signal("Coin", [coin.positionX, coin.positionY])
                 coins.remove(coin)
                 instance.entities.remove(coin)
 
             elif coin.checkCollide(instance.bot[1]):
                 print("Bot 1 collected coin")
-                coinsBot1 += 1
+                gameInfo.coins[1] += 1
                 instance.bot[0].signal("Coin", [coin.positionX, coin.positionY])
                 coins.remove(coin)
                 instance.entities.remove(coin)
+
+        print(gameInfo.coins)
 
                     
             #------------------
@@ -141,8 +144,7 @@ def main():
                         stateDelegate.reset(screen, instance, LabTest, 3, gameInfo)
                         botPackage = LabTest.botPackage
                         coins = instance.coins
-                        coinsBot0 = 0
-                        coinsBot1 = 0
+                        gameInfo.coins = [0, 0]
 
         stateDelegate.update()
         stateDelegate.scene.render()

@@ -56,7 +56,7 @@ class GameDelegate:
 
     def checkWin(self, instance):
 
-        return (instance.bot[0].getPosition() == instance.end[1]) or (instance.bot[1].getPosition() == instance.end[0])
+        return (instance.bot[0].getPosition() == instance.end[1]) and (instance.bot[1].getPosition() == instance.end[0])
         
     
     def reset(self, screen, instance, level, index, info):

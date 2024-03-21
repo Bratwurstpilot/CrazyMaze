@@ -12,27 +12,33 @@ class Result:
     entities : list = []
     animations : list = []
     uiEntities : list = []
-    delegate = 0
+    gameInfo = None
 
     resultBackground = pygame.image.load("Source/Game/Files/menuBackground.png")
-"""
-    gameTitle = Label(1920//2, 440, 0, 1, 1, "Crazy Maze", (0, 110, 18), 70)
-    gameTitle.setTextRect()
-    uiEntities.append(gameTitle)
 
-    startGame = Button(1920//2 - 150, 490, 0, 300, 50, "Spiel erstellen", (0, 110, 18), 40)
-    startGame.setTextRect()
-    uiEntities.append(startGame)
+    gameResult = Label(1920//2, 440, 0, 1, 1, "Spielergebnis", (0, 110, 18), 70)
+    gameResult.setTextRect()
+    uiEntities.append(gameResult)
     
-    quitGame = Button(1920//2 - 150, 610, 0, 300, 50, "Beenden", (0, 110, 18), 40)
-    quitGame.setTextRect()
-    uiEntities.append(quitGame)
+    mainMenu = Button(1920//2 - 150, 610, 0, 300, 50, "Hauptmenü", (0, 110, 18), 40)
+    mainMenu.setTextRect()
+    uiEntities.append(mainMenu)
 
-    pygame.init()
-    mainMenu = Music("Source/Game/Files/DriftveilCity.wav", 0.1)
-    #mainMenu.play()
-"""
+    playerOne = Label(1920//4, 490, 0, 1, 1, "T", (0, 110, 18), 70)
+    playerOne.setTextRect()
+    uiEntities.append(playerOne)
 
+    playerOCoins = Label(1920//4, 580, 0, 1, 1, "T", (0, 110, 18), 70)
+    playerOCoins.setTextRect()
+    uiEntities.append(playerOCoins) 
+
+    playerTwo = Label((1920//4) * 3, 490, 0, 1, 1, "T", (0, 110, 18), 70)
+    playerTwo.setTextRect()
+    uiEntities.append(playerTwo)
+
+    playerTCoins = Label((1920//4) * 3, 580, 0, 1, 1, "T", (0, 110, 18), 70)
+    playerTCoins.setTextRect()
+    uiEntities.append(playerTCoins) 
 
 #------Setup Part----------
 
@@ -50,5 +56,13 @@ def setup(screen, delegate, info):
     
     gameScene = Scene(screen, object.entities, object.uiEntities, object.resultBackground)
     gameDelegate = delegate
-    gameInfo = info
-    
+    object.gameInfo = info
+
+    showResult()
+
+def showResult():
+
+    object.playerOne.setText(object.gameInfo.playerAlgorithm[0])
+    object.playerTwo.setText(object.gameInfo.playerAlgorithm[1])
+    object.playerOCoins.setText(object.gameInfo.coins[0])
+    object.playerTCoins.setText(object.gameInfo.coins[1])
