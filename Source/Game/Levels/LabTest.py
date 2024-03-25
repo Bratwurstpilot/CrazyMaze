@@ -18,13 +18,14 @@ class LabTest:
         self.bot : list = []
         self.gameInfo = None
         self.screen = None
+        self.coins : list = []
     
     def setPlayer(self, gameInfo, start : list, linewidth : int, width : int, height : int, playernum : int, tpSpots : list):
 
-        if gameInfo == "A Star":
+        if gameInfo == 0:
             player = Agent(start[0] + (1-playernum) * linewidth + (width-2) * linewidth * playernum, start[1] + (1-playernum) * linewidth + (height-2) * linewidth * playernum, 1, linewidth, linewidth, playerNumber=playernum, transport = tpSpots)
         
-        elif gameInfo == "TSP Solver":
+        elif gameInfo == 1:
             player = AgentEvo(start[0] + (1-playernum) * linewidth + (width-2) * linewidth * playernum, start[1] + (1-playernum) * linewidth + (height-2) * linewidth * playernum, 1, linewidth, linewidth, playerNumber=playernum, transport = tpSpots)
         
         return player
@@ -80,12 +81,12 @@ class LabTest:
         #playernum = 0
 
         #aBot = Agent(START[0] + (1-playernum) * LINEWIDTH + (WIDTH-2) * LINEWIDTH * playernum, START[1] + (1-playernum) * LINEWIDTH + (HEIGHT-2) * LINEWIDTH * playernum, 1, LINEWIDTH, LINEWIDTH, playerNumber=playernum, transport = tpSpots)
-        aBot = self.setPlayer(self.gameInfo.playerAlgorithm[0], START, LINEWIDTH, WIDTH, HEIGHT, 0, tpSpots)
+        aBot = self.setPlayer(self.gameInfo.player[0], START, LINEWIDTH, WIDTH, HEIGHT, 0, tpSpots)
         
         #playernumB = 1
 
         #bBot = AgentEvo(START[0] + (1-playernumB) * LINEWIDTH + (WIDTH-2) * LINEWIDTH * playernumB, START[1] + (1-playernumB) * LINEWIDTH + (HEIGHT-2) * LINEWIDTH * playernumB, 1, LINEWIDTH, LINEWIDTH, playerNumber=playernumB, transport=tpSpots)
-        bBot = self.setPlayer(self.gameInfo.playerAlgorithm[1], START, LINEWIDTH, WIDTH, HEIGHT, 1, tpSpots)
+        bBot = self.setPlayer(self.gameInfo.player[1], START, LINEWIDTH, WIDTH, HEIGHT, 1, tpSpots)
 
         self.coins = []
         #------Testing Tsp Solver
@@ -93,7 +94,7 @@ class LabTest:
         coins = 0
         for y in range(len(labyrinth)):
             for x in range(len(labyrinth[0])):
-                if randint(0,100) >= 95 and labyrinth[y][x] == 0 and coins < 10:
+                if randint(0,1000) >= 980 and labyrinth[y][x] == 0 and coins < 10:
                     coins += 1
                     bBot.anchorPoints.append((x,y))
                     aBot.anchorPoints.append((x,y))
@@ -191,7 +192,7 @@ def setup(info, screen):
     
     object.gameInfo = info
     object.screen = screen
-    object.setupLab()
+    #object.setupLab()
     print(object)
     gameScene = Scene(object.screen, object.entities, [], background)
     
@@ -201,6 +202,7 @@ def load():
     global gameScene
     global botPackage
 
+    object.setupLab()
     bot = object.bot[0]
     bBot = object.bot[1]
     botPos = bot.getPosition().copy()

@@ -13,6 +13,7 @@ class GameDelegate:
         self.scenes : list = []
 
         self.game : bool = False
+        self.play : bool = False
         self.win : bool = False
         self.tournament : bool = False
         self.maxRounds = 0
@@ -44,6 +45,16 @@ class GameDelegate:
     def setGame(self, state : bool):
 
         self.game = state
+
+    
+    def setPlay(self, state : bool):
+        
+        self.play = state
+
+    
+    def setWin(self, state : bool): 
+        
+        self.win = state
 
 
     def update(self):
