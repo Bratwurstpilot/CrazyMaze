@@ -22,12 +22,12 @@ class LabTest:
     
     def setPlayer(self, gameInfo, start : list, linewidth : int, width : int, height : int, playernum : int, tpSpots : list):
 
-        if gameInfo == 0:
+        if gameInfo == 0: #A Star Bot
             player = Agent(start[0] + (1-playernum) * linewidth + (width-2) * linewidth * playernum, start[1] + (1-playernum) * linewidth + (height-2) * linewidth * playernum, 1, linewidth, linewidth, playerNumber=playernum, transport = tpSpots)
         
-        elif gameInfo == 1:
+        elif gameInfo == 1:# TSP Solver Bot
             player = AgentEvo(start[0] + (1-playernum) * linewidth + (width-2) * linewidth * playernum, start[1] + (1-playernum) * linewidth + (height-2) * linewidth * playernum, 1, linewidth, linewidth, playerNumber=playernum, transport = tpSpots)
-        
+            
         return player
 
     def setupLab(self):
@@ -192,8 +192,6 @@ def setup(info, screen):
     
     object.gameInfo = info
     object.screen = screen
-    #object.setupLab()
-    print(object)
     gameScene = Scene(object.screen, object.entities, [], background)
     
 

@@ -36,7 +36,7 @@ class GameDelegate:
         self.running = run
     
 
-    def setTournament(self, state, rounds):
+    def setTournament(self, state, rounds = 10):
 
         self.tournament = state
         self.maxRounds = rounds

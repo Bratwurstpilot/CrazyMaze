@@ -169,7 +169,6 @@ def setup(info, screen):
     
     object.gameInfo = info
     object.screen = screen
-    object.setupLab()
     gameScene = Scene(object.screen, object.entities, [], background)
     
 
@@ -177,9 +176,9 @@ def load():
 
     global gameScene
     global botPackage
-    global controllers
     
     
+    object.setupLab()
     bot = object.bot[0]
     bBot = object.bot[1]
     botPos = bot.getPosition().copy()

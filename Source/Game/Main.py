@@ -34,46 +34,94 @@ def main():
     Tournament.setup(gameInfo, screen)
 
     instance = LabTest.object
+
     botPackage = LabTest.botPackage
+    botPackage2 = Tournament.botPackage
     coins = instance.coins
 
     stateDelegate.setup([Menu.gameScene, Create.gameScene, Result.gameScene, LabTest.gameScene, Tournament.gameScene])
 
     while stateDelegate.running:
         
+        
         if stateDelegate.play:
-            
-            if stateDelegate.game:
 
-                stateDelegate.setGame(False)
-                stateDelegate.setWin(False)
-                
-                stateDelegate.scenes.pop(3)
-                stateDelegate.scenes.insert(3, LabTest.load())
-                botPackage = LabTest.botPackage
-                coins = instance.coins
-                stateDelegate.setScene(3)
+            if stateDelegate.tournament:
 
-            func = LabTest.customFunc(botPackage, gameInfo)
+                if stateDelegate.game:
+
+                    stateDelegate.setGame(False)
+                    stateDelegate.setWin(False)
+
+                    stateDelegate.scenes.pop(4)
+                    stateDelegate.scenes.insert(4, Tournament.load())
+
+                    instance = Tournament.object
+                    botPackage2 = Tournament.botPackage
+                    coins = instance.coins
+                    stateDelegate.setScene(4)
+                    
+                func = Tournament.customFunc(botPackage2, gameInfo)
+
+                #Function call + param update || NOT OPTIMAL TODO
+                botPackage2 = {"bot" : instance.bot[0], "bot2" : instance.bot[1], "pos" : func[0], "pos2" : func[1], "scene" : Tournament.gameScene, "blue" : instance.portalBlue , "orange" : instance.portalOrange }
                 
-            #Function call + param update || NOT OPTIMAL TODO
-            botPackage = {"bot" : instance.bot[0], "bot2" : instance.bot[1], "pos" : func[0], "pos2" : func[1], "scene" : LabTest.gameScene, "blue" : instance.portalBlue , "orange" : instance.portalOrange }  
-            
-            if stateDelegate.checkWin(instance) and not stateDelegate.win:
+                if stateDelegate.checkWin(instance) and not stateDelegate.win:
                     
                     stateDelegate.setWin(True)
-                    stateDelegate.setPlay(False)
-
+                    stateDelegate.setGame(True)
                     gameInfo.addWin(instance)
-                    Result.showResult()
-                    stateDelegate.reset(screen, instance, LabTest, 3, gameInfo)
-                    stateDelegate.setScene(2)
+                    stateDelegate.reset(screen, instance, Tournament, 4, gameInfo)
+                    botPackage2 = Tournament.botPackage
+                    
+                    if stateDelegate.rounds == stateDelegate.maxRounds:
+                        stateDelegate.setTournament(False)
+                        stateDelegate.setGame(False)
+                        stateDelegate.setPlay(False)
+                        stateDelegate.setScene(2)
+                        stateDelegate.rounds = 1
+
+                    else:
+                        stateDelegate.setScene(4)
+                        botPackage2 = Tournament.botPackage
+                        stateDelegate.rounds += 1
+
+                #Algorithm Testing
+                
+
+            else:
+                if stateDelegate.game:
+
+                    stateDelegate.setGame(False)
+                    stateDelegate.setWin(False)
+                    
+                    stateDelegate.scenes.pop(3)
+                    stateDelegate.scenes.insert(3, LabTest.load())
+
+                    instance = LabTest.object
+                    botPackage = LabTest.botPackage
+                    coins = instance.coins
+                    stateDelegate.setScene(3)
+
+                func = LabTest.customFunc(botPackage, gameInfo)
+                    
+                #Function call + param update || NOT OPTIMAL TODO
+                botPackage = {"bot" : instance.bot[0], "bot2" : instance.bot[1], "pos" : func[0], "pos2" : func[1], "scene" : LabTest.gameScene, "blue" : instance.portalBlue , "orange" : instance.portalOrange }  
+                
+                if stateDelegate.checkWin(instance) and not stateDelegate.win:
+                        print("test")
+                        stateDelegate.setWin(True)
+                        stateDelegate.setPlay(False)
+
+                        gameInfo.addWin(instance)
+                        Result.showResult()
+                        stateDelegate.reset(screen, instance, LabTest, 3, gameInfo)
+                        stateDelegate.setScene(2)
 
             #Algorithm Testing
             instance.bot[1].updateGameState(enemyPos = instance.bot[0].positionRelative, enemyPoints = gameInfo.coins[0], thisPoints = gameInfo.coins[1])
             instance.bot[0].updateGameState(enemyPos = instance.bot[1].positionRelative, enemyPoints = gameInfo.coins[1], thisPoints = gameInfo.coins[0])
         
-            print(instance.bot[0].getPosition())
             #print(instance.bot[1].getPosition())
             for coin in coins:
                 if coin.checkCollide(instance.bot[0]):
