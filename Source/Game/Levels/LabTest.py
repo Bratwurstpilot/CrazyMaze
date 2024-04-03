@@ -19,6 +19,8 @@ class LabTest:
         self.gameInfo = None
         self.screen = None
         self.coins : list = []
+        self.player : list = []
+        
     
     def setPlayer(self, gameInfo, start : list, linewidth : int, width : int, height : int, playernum : int, tpSpots : list):
 
@@ -29,6 +31,13 @@ class LabTest:
             player = AgentEvo(start[0] + (1-playernum) * linewidth + (width-2) * linewidth * playernum, start[1] + (1-playernum) * linewidth + (height-2) * linewidth * playernum, 1, linewidth, linewidth, playerNumber=playernum, transport = tpSpots)
             
         return player
+    
+    def setPlayerTexture(self, gameInfo):
+
+        if gameInfo == 0: #A Star Bot
+            return ["Source/Game/Files/KnightSprite1.png", "Source/Game/Files/KnightSprite2.png"]
+        elif gameInfo == 1: #TSP Solver Bot
+            return ["Source/Game/Files/Echse_1.png", "Source/Game/Files/Echse_2.png"]
 
     def setupLab(self):
 
@@ -37,6 +46,7 @@ class LabTest:
         self.bot = []
         self.portalBlue = None
         self.portalOrange = None
+        self.player = []
         
         labyrinth = Labyrinth(45,31).getLabyrinth()
 
@@ -117,13 +127,13 @@ class LabTest:
         self.end.append(bBot.getPosition())
 
         #UI Elements (sprites, infotables, etc)
-
+        
         towerLeft = MyEntity(-50, 500)
         towerLeft.getTextureComponent().setTextureSet(["Source/Game/Files/Tower.png"], (600,600))
         self.entities.append(towerLeft)
 
         playerLeft = MyEntity(50, 460)
-        playerLeft.getTextureComponent().setTextureSet(["Source/Game/Files/KnightSprite1.png", "Source/Game/Files/KnightSprite2.png"], (400,400))
+        playerLeft.getTextureComponent().setTextureSet(self.setPlayerTexture(self.gameInfo.player[0]), (400,400))
         playerLeft.getTextureComponent().setFrameInterval(0.5)
         self.entities.append(playerLeft)
 
@@ -131,8 +141,8 @@ class LabTest:
         towerRight.getTextureComponent().setTextureSet(["Source/Game/Files/Tower.png"], (600,600))
         self.entities.append(towerRight)
 
-        playerRight = MyEntity(1470, 420)
-        playerRight.getTextureComponent().setTextureSet(["Source/Game/Files/Echse_1.png", "Source/Game/Files/Echse_2.png"], (400,400))
+        playerRight = MyEntity(1470, 460)
+        playerRight.getTextureComponent().setTextureSet(self.setPlayerTexture(self.gameInfo.player[0]), (400,400))
         playerRight.getTextureComponent().setFrameInterval(0.5)
         self.entities.append(playerRight)
 

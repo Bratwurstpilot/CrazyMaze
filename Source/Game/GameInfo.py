@@ -15,6 +15,7 @@ class GameInfo:
         self.winCount : list = [0, 0, 0]
         
         self.coins : list = [0, 0]
+        self.gameCoins : list = []
         
         
     def setPlayerAlgorithm(self, state : int, player : int) -> None:
@@ -48,3 +49,6 @@ class GameInfo:
 
         elif instance.bot[1].getPosition() == instance.end[0] and not instance.bot[0].getPosition() == instance.end[1]:
             self.winCount[1] += 1
+
+        self.gameCoins.append(self.coins)
+        self.coins = [0, 0]

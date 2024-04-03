@@ -1,19 +1,14 @@
 import pygame
 
-from Source.Engine.Scene import Scene
-from Source.Engine.Animation import Animation
-from Source.Engine.Sound import Music
 from Source.Engine.Screen import Screen
-from Source.Engine.Label import Label
+from Source.Engine.UtilFile import File
 from Source.Game.Delegate import GameDelegate
 from Source.Game.GameInfo import GameInfo
 from Source.Game.Levels import Menu
 from Source.Game.Levels import Create
 from Source.Game.Levels import LabTest
-from Source.Game.Levels import KnightTest
 from Source.Game.Levels import Tournament
 from Source.Game.Levels import Result
-from Source.Game.Util import MyEntity
 
 def main():
 
@@ -43,7 +38,6 @@ def main():
 
     while stateDelegate.running:
         
-        
         if stateDelegate.play:
 
             if stateDelegate.tournament:
@@ -63,7 +57,6 @@ def main():
                     
                 func = Tournament.customFunc(botPackage2, gameInfo)
 
-                #Function call + param update || NOT OPTIMAL TODO
                 botPackage2 = {"bot" : instance.bot[0], "bot2" : instance.bot[1], "pos" : func[0], "pos2" : func[1], "scene" : Tournament.gameScene, "blue" : instance.portalBlue , "orange" : instance.portalOrange }
                 
                 if stateDelegate.checkWin(instance) and not stateDelegate.win:
@@ -81,13 +74,14 @@ def main():
                         stateDelegate.setScene(2)
                         stateDelegate.rounds = 1
 
+                        File.writeContent("./Source/Game/Result/games.txt", gameInfo)
+
+
+
                     else:
                         stateDelegate.setScene(4)
                         botPackage2 = Tournament.botPackage
                         stateDelegate.rounds += 1
-
-                #Algorithm Testing
-                
 
             else:
                 if stateDelegate.game:
@@ -104,12 +98,11 @@ def main():
                     stateDelegate.setScene(3)
 
                 func = LabTest.customFunc(botPackage, gameInfo)
-                    
-                #Function call + param update || NOT OPTIMAL TODO
+
                 botPackage = {"bot" : instance.bot[0], "bot2" : instance.bot[1], "pos" : func[0], "pos2" : func[1], "scene" : LabTest.gameScene, "blue" : instance.portalBlue , "orange" : instance.portalOrange }  
                 
                 if stateDelegate.checkWin(instance) and not stateDelegate.win:
-                        print("test")
+                        
                         stateDelegate.setWin(True)
                         stateDelegate.setPlay(False)
 
@@ -122,7 +115,6 @@ def main():
             instance.bot[1].updateGameState(enemyPos = instance.bot[0].positionRelative, enemyPoints = gameInfo.coins[0], thisPoints = gameInfo.coins[1])
             instance.bot[0].updateGameState(enemyPos = instance.bot[1].positionRelative, enemyPoints = gameInfo.coins[1], thisPoints = gameInfo.coins[0])
         
-            #print(instance.bot[1].getPosition())
             for coin in coins:
                 if coin.checkCollide(instance.bot[0]):
                     print("Bot 0 collected coin")
@@ -148,7 +140,6 @@ def main():
                         botPackage = LabTest.botPackage
                         coins = instance.coins
                         gameInfo.coins = [0, 0]
-
 
         stateDelegate.update()
         stateDelegate.scene.render()
