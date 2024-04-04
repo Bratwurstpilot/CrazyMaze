@@ -15,6 +15,7 @@ class GameInfo:
         self.winCount : list = [0, 0, 0]
         
         self.coins : list = [0, 0]
+        self.points : list = [0, 0]
         self.gameCoins : list = []
         
         
@@ -52,3 +53,4 @@ class GameInfo:
 
         self.gameCoins.append(self.coins)
         self.coins = [0, 0]
+        self.points = [0, 0]

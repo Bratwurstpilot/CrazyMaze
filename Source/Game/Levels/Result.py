@@ -58,11 +58,11 @@ def setup(screen, delegate, info):
     gameDelegate = delegate
     object.gameInfo = info
 
-    showResult()
+    
 
-def showResult():
-
-    object.playerOne.setText(object.gameInfo.playerAlgorithm[0])
-    object.playerTwo.setText(object.gameInfo.playerAlgorithm[1])
-    object.playerOCoins.setText(object.gameInfo.coins[0])
-    object.playerTCoins.setText(object.gameInfo.coins[1])
+def showResult(gameInfo):
+    print(gameInfo)
+    object.playerOne.setText(gameInfo.playerAlgorithm[0])
+    object.playerTwo.setText(gameInfo.playerAlgorithm[1])
+    object.playerOCoins.setText(gameInfo.points[0])
+    object.playerTCoins.setText(gameInfo.points[1])

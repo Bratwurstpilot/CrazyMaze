@@ -100,14 +100,17 @@ def main():
                 func = LabTest.customFunc(botPackage, gameInfo)
 
                 botPackage = {"bot" : instance.bot[0], "bot2" : instance.bot[1], "pos" : func[0], "pos2" : func[1], "scene" : LabTest.gameScene, "blue" : instance.portalBlue , "orange" : instance.portalOrange }  
-                
+                if not stateDelegate.halfPoints:
+                    stateDelegate.checkHalfPoints(instance)
+
                 if stateDelegate.checkWin(instance) and not stateDelegate.win:
                         
+                        print(gameInfo)
                         stateDelegate.setWin(True)
                         stateDelegate.setPlay(False)
 
                         gameInfo.addWin(instance)
-                        Result.showResult()
+                        Result.showResult(gameInfo)
                         stateDelegate.reset(screen, instance, LabTest, 3, gameInfo)
                         stateDelegate.setScene(2)
 
@@ -119,6 +122,10 @@ def main():
                 if coin.checkCollide(instance.bot[0]):
                     print("Bot 0 collected coin")
                     gameInfo.coins[0] += 1
+                    if stateDelegate.halfPoints:
+                        gameInfo.points[0] += 5
+                    else:
+                        gameInfo.points[0] += 10
                     instance.bot[1].signal("Coin", [coin.positionX, coin.positionY])
                     coins.remove(coin)
                     instance.entities.remove(coin)
@@ -126,6 +133,10 @@ def main():
                 elif coin.checkCollide(instance.bot[1]):
                     print("Bot 1 collected coin")
                     gameInfo.coins[1] += 1
+                    if stateDelegate.halfPoints:
+                        gameInfo.points[1] += 5
+                    else:
+                        gameInfo.points[1] += 10
                     instance.bot[0].signal("Coin", [coin.positionX, coin.positionY])
                     coins.remove(coin)
                     instance.entities.remove(coin)

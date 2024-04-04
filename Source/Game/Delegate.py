@@ -14,6 +14,7 @@ class GameDelegate:
 
         self.game : bool = False
         self.play : bool = False
+        self.halfPoints : bool = False
         self.win : bool = False
         self.tournament : bool = False
         self.maxRounds = 0
@@ -64,6 +65,11 @@ class GameDelegate:
         for entitie in self.scene.uiElements:
             entitie.update() 
 
+    def checkHalfPoints(self, instance):
+
+        if (instance.bot[0].getPosition() == instance.end[1]) or (instance.bot[1].getPosition() == instance.end[0]):
+
+            self.halfPoints = True
 
     def checkWin(self, instance):
 
