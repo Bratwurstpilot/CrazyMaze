@@ -75,9 +75,7 @@ def main():
                         stateDelegate.rounds = 1
 
                         File.writeContent("./Source/Game/Result/games.txt", gameInfo)
-
-
-
+                        
                     else:
                         stateDelegate.setScene(4)
                         botPackage2 = Tournament.botPackage

@@ -15,8 +15,9 @@ class GameInfo:
         self.winCount : list = [0, 0, 0]
         
         self.coins : list = [0, 0]
-        self.points : list = [0, 0]
         self.gameCoins : list = []
+        self.points : list = [0, 0]
+        self.gamePoints : list = []
         
         
     def setPlayerAlgorithm(self, state : int, player : int) -> None:
@@ -52,5 +53,6 @@ class GameInfo:
             self.winCount[1] += 1
 
         self.gameCoins.append(self.coins)
+        self.gamePoints.append(self.points)
         self.coins = [0, 0]
         self.points = [0, 0]

@@ -10,7 +10,8 @@ class File():
         content : str = "["
         content += str(gameInfo.playerAlgorithm) + ", "
         content += str(gameInfo.winCount) + ", "
-        content += str(gameInfo.gameCoins) + "]\n"
+        content += str(gameInfo.gameCoins) + ", "
+        content += str(gameInfo.gamePoints) + "]\n"
         
         file.write(str(content))
 
