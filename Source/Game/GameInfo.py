@@ -5,8 +5,10 @@ class GameInfo:
     def __init__(self):
 
         self.playerAlgorithm : list = ["A Star", "A Star"]
-        self.algorithms : list = ["Manuell", "A Star", "TSP Solver"]
-        self.player : list = [1, 1]
+
+        self.algorithms : list = ["A Star", "TSP Solver"]
+        self.player : list = [0, 0]
+
         
         self.difficulty : list = ["Einfach", "Einfach"]
         self.difficulties : list = ["Einfach", "Mittel", "Schwer"]
@@ -14,10 +16,16 @@ class GameInfo:
 
         self.winCount : list = [0, 0, 0]
         
+        self.coins : list = [0, 0]
+        self.gameCoins : list = []
+        self.points : list = [0, 0]
+        self.gamePoints : list = []
+        
         
     def setPlayerAlgorithm(self, state : int, player : int) -> None:
 
         self.player[player] += state
+        
         if self.player[player] < 0:
             self.player[player] = 0
         elif self.player[player] == len(self.algorithms):
@@ -45,3 +53,8 @@ class GameInfo:
 
         elif instance.bot[1].getPosition() == instance.end[0] and not instance.bot[0].getPosition() == instance.end[1]:
             self.winCount[1] += 1
+
+        self.gameCoins.append(self.coins)
+        self.gamePoints.append(self.points)
+        self.coins = [0, 0]
+        self.points = [0, 0]

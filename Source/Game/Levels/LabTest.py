@@ -18,14 +18,28 @@ class LabTest:
         self.bot : list = []
         self.gameInfo = None
 
-    def setPlayer(self, gameInfo, start : list, linewidth : int, width : int, height : int, playernum : int):
-
-        if gameInfo == "A Star":
-            player = Agent(start[0] + (1-playernum) * linewidth + (width-2) * linewidth * playernum, start[1] + (1-playernum) * linewidth + (height-2) * linewidth * playernum, 1, linewidth, linewidth, playerNumber=playernum)
+        self.screen = None
+        self.coins : list = []
+        self.player : list = []
         
-        elif gameInfo == "TSP Solver":
-            player = AgentEvo(start[0] + (1-playernum) * linewidth + (width-2) * linewidth * playernum, start[1] + (1-playernum) * linewidth + (height-2) * linewidth * playernum, 1, linewidth, linewidth, playerNumber=playernum)
+    
+    def setPlayer(self, gameInfo, start : list, linewidth : int, width : int, height : int, playernum : int, tpSpots : list):
+
+        if gameInfo == 0: #A Star Bot
+            player = Agent(start[0] + (1-playernum) * linewidth + (width-2) * linewidth * playernum, start[1] + (1-playernum) * linewidth + (height-2) * linewidth * playernum, 1, linewidth, linewidth, playerNumber=playernum, transport = tpSpots)
+        
+        elif gameInfo == 1:# TSP Solver Bot
+            player = AgentEvo(start[0] + (1-playernum) * linewidth + (width-2) * linewidth * playernum, start[1] + (1-playernum) * linewidth + (height-2) * linewidth * playernum, 1, linewidth, linewidth, playerNumber=playernum, transport = tpSpots)
+            
         return player
+    
+    def setPlayerTexture(self, gameInfo):
+
+        if gameInfo == 0: #A Star Bot
+            return ["Source/Game/Files/KnightSprite1.png", "Source/Game/Files/KnightSprite2.png"]
+        elif gameInfo == 1: #TSP Solver Bot
+            return ["Source/Game/Files/Echse_1.png", "Source/Game/Files/Echse_2.png"]
+
 
     def setupLab(self):
 
@@ -34,6 +48,7 @@ class LabTest:
         self.bot = []
         self.portalBlue = None
         self.portalOrange = None
+        self.player = []
         
         labyrinth = Labyrinth(45,31).getLabyrinth()
         print(labyrinth)
@@ -41,8 +56,8 @@ class LabTest:
         WIDTH = len(labyrinth[0])
         HEIGHT = len(labyrinth)
         LINEWIDTH = 20
-        START = [500 ,200] #x = 1920//4 + 20
 
+        START = [500 ,200] #x = 1920//4 + 20
 
         labBG = MyEntity(START[0], START[1], -1, 47*LINEWIDTH, 33*LINEWIDTH)
         labBG.getTextureComponent().color = (100,100,100)
@@ -65,14 +80,14 @@ class LabTest:
                 if choice >= 95 and labyrinth[y][x] == 0 and self.portalBlue == None:
                     
                     labyrinth[y][x] = "T1" #change value, dont interrupt with coins
-                    self.portalBlue = MyEntity(START[0] + x * LINEWIDTH, START[1] + y * LINEWIDTH, 0, LINEWIDTH, LINEWIDTH)
+                    self.portalBlue = MyEntity(START[0] + x * LINEWIDTH, START[1] + y * LINEWIDTH, 1, LINEWIDTH, LINEWIDTH)
                     self.portalBlue.getTextureComponent().color = (0, 0, 255) #blue
                     self.entities.append(self.portalBlue)
 
                 if choice >= 95 and y > (len(labyrinth) * 0.80) and labyrinth[y][x] == 0 and self.portalOrange == None:
 
                     labyrinth[y][x] = "T1"
-                    self.portalOrange = MyEntity(START[0] + x * LINEWIDTH, START[1] + y * LINEWIDTH, 0, LINEWIDTH, LINEWIDTH)
+                    self.portalOrange = MyEntity(START[0] + x * LINEWIDTH, START[1] + y * LINEWIDTH, 1, LINEWIDTH, LINEWIDTH)
                     self.portalOrange.getTextureComponent().color = (255, 165, 0) #orange
                     self.entities.append(self.portalOrange)
       
@@ -80,6 +95,16 @@ class LabTest:
         aBot = self.setPlayer(self.gameInfo.playerAlgorithm[0], START, LINEWIDTH, WIDTH, HEIGHT, 0)
         bBot = self.setPlayer(self.gameInfo.playerAlgorithm[1], START, LINEWIDTH, WIDTH, HEIGHT, 1)
 
+        #playernum = 0
+
+
+        #aBot = Agent(START[0] + (1-playernum) * LINEWIDTH + (WIDTH-2) * LINEWIDTH * playernum, START[1] + (1-playernum) * LINEWIDTH + (HEIGHT-2) * LINEWIDTH * playernum, 1, LINEWIDTH, LINEWIDTH, playerNumber=playernum, transport = tpSpots)
+        aBot = self.setPlayer(self.gameInfo.player[0], START, LINEWIDTH, WIDTH, HEIGHT, 0, tpSpots)
+        
+        #playernumB = 1
+
+        #bBot = AgentEvo(START[0] + (1-playernumB) * LINEWIDTH + (WIDTH-2) * LINEWIDTH * playernumB, START[1] + (1-playernumB) * LINEWIDTH + (HEIGHT-2) * LINEWIDTH * playernumB, 1, LINEWIDTH, LINEWIDTH, playerNumber=playernumB, transport=tpSpots)
+        bBot = self.setPlayer(self.gameInfo.player[1], START, LINEWIDTH, WIDTH, HEIGHT, 1, tpSpots)
 
 
         self.coins = []
@@ -90,7 +115,7 @@ class LabTest:
         coins = 0
         for y in range(len(labyrinth)):
             for x in range(len(labyrinth[0])):
-                if randint(0,100) >= 95 and labyrinth[y][x] == 0 and coins < 10:
+                if randint(0,1000) >= 980 and labyrinth[y][x] == 0 and coins < 10:
                     coins += 1
                     bBot.anchorPoints.append((x,y))
                     aBot.anchorPoints.append((x,y))
@@ -120,13 +145,13 @@ class LabTest:
         self.end.append(bBot.getPosition())
 
         #UI Elements (sprites, infotables, etc)
-
+        
         towerLeft = MyEntity(-50, 500)
         towerLeft.getTextureComponent().setTextureSet(["Source/Game/Files/Tower.png"], (600,600))
         self.entities.append(towerLeft)
 
         playerLeft = MyEntity(50, 460)
-        playerLeft.getTextureComponent().setTextureSet(["Source/Game/Files/KnightSprite1.png", "Source/Game/Files/KnightSprite2.png"], (400,400))
+        playerLeft.getTextureComponent().setTextureSet(self.setPlayerTexture(self.gameInfo.player[0]), (400,400))
         playerLeft.getTextureComponent().setFrameInterval(0.5)
         self.entities.append(playerLeft)
 
@@ -134,8 +159,8 @@ class LabTest:
         towerRight.getTextureComponent().setTextureSet(["Source/Game/Files/Tower.png"], (600,600))
         self.entities.append(towerRight)
 
-        playerRight = MyEntity(1470, 420)
-        playerRight.getTextureComponent().setTextureSet(["Source/Game/Files/Echse_1.png", "Source/Game/Files/Echse_2.png"], (400,400))
+        playerRight = MyEntity(1470, 460)
+        playerRight.getTextureComponent().setTextureSet(self.setPlayerTexture(self.gameInfo.player[0]), (400,400))
         playerRight.getTextureComponent().setFrameInterval(0.5)
         self.entities.append(playerRight)
 
@@ -183,23 +208,27 @@ def customFunc(package : dict, gameInfo):
 
 
 object = LabTest()
-#object.setupLab()
 gameScene = None
-
 botPackage = {}
 background = pygame.image.load("Source/Game/Files/CreateBackground.png")
 controllers = []
 
-
-def setup(screen, Info):
+def setup(info, screen):
 
     global gameScene
     global botPackage
     
-    object.bot.clear()
-    object.gameInfo = Info
-    object.setupLab()
+    object.gameInfo = info
+    object.screen = screen
+    gameScene = Scene(object.screen, object.entities, [], background)
     
+
+def load():
+
+    global gameScene
+    global botPackage
+
+    object.setupLab()
     bot = object.bot[0]
     bBot = object.bot[1]
     botPos = bot.getPosition().copy()
@@ -208,7 +237,9 @@ def setup(screen, Info):
     portalOrange = object.portalOrange
     botPackage = {"bot" : bot, "bot2" : bBot, "pos" : botPos, "pos2" : bBotPos, "scene" : gameScene, "blue" : portalBlue, "orange" : portalOrange}
 
-    gameScene = Scene(screen, object.entities, [], background)
 
-    
+    gameScene = Scene(object.screen, object.entities, [], background)
+
+    return gameScene
+
 

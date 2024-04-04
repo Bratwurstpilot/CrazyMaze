@@ -1,166 +1,162 @@
 import pygame
 
-from Source.Engine.Scene import Scene
-from Source.Engine.Animation import Animation
-from Source.Engine.Sound import Music
 from Source.Engine.Screen import Screen
-from Source.Engine.Label import Label
+from Source.Engine.UtilFile import File
 from Source.Game.Delegate import GameDelegate
 from Source.Game.GameInfo import GameInfo
 from Source.Game.Levels import Menu
 from Source.Game.Levels import Create
 from Source.Game.Levels import LabTest
-from Source.Game.Levels import KnightTest
 from Source.Game.Levels import Tournament
-from Source.Game.Util import MyEntity
-
+from Source.Game.Levels import Result
 
 def main():
-        
+
     pygame.init()
 
     clock = pygame.time.Clock()
     animations : list = []
     screen : pygame.display = Screen.setScreen(1920, 1080, "")
 
-    #----------Knight Testing-------------
-
-    KnightTest.setup(screen)
-    knightScene = KnightTest.gameScene
-    entitiyControllers = KnightTest.controllers
-
-    #-------------------------------------
-
     stateDelegate = GameDelegate(True)
     gameInfo = GameInfo()
-    
+
+
+
     Menu.setup(screen, stateDelegate)
     Create.setup(screen, stateDelegate, gameInfo)
-    LabTest.setup(screen, gameInfo)
+    Result.setup(screen, stateDelegate, gameInfo)
 
-    entitiyControllers = LabTest.controllers
+    LabTest.setup(gameInfo, screen)
+    Tournament.setup(gameInfo, screen)
+
 
     instance = LabTest.object
-    tournament = Tournament.object
-    
+
     botPackage = LabTest.botPackage
     botPackage2 = Tournament.botPackage
 
-
-    stateDelegate.setup([Menu.gameScene, Create.gameScene, LabTest.gameScene])
-
-
     coins = instance.coins
-    coinsBot0 = 0
-    coinsBot1 = 0
-    labelBot0 = Label(positionX=100, positionY=100, bodyWidth=1, bodyHeight=1, text=str(coinsBot0), size=50)
-    labelBot0.setTextRect()
-    labelBot1 = Label(positionX=1750, positionY=100, bodyWidth=1, bodyHeight=1, text=str(coinsBot1), size=50)
-    labelBot1.setTextRect()
-    LabTest.gameScene.uiElements.append(labelBot0)
-    LabTest.gameScene.uiElements.append(labelBot1)
 
-    
+    stateDelegate.setup([Menu.gameScene, Create.gameScene, Result.gameScene, LabTest.gameScene, Tournament.gameScene])
+
     while stateDelegate.running:
         
-        
-        #print(gameInfo.playerAlgorithm)
-        #print(botPackage["bot"])
-        if stateDelegate.tournament:
+        if stateDelegate.play:
 
-            stateDelegate.scene = stateDelegate.scenes[2]
+            if stateDelegate.tournament:
 
-            #print(stateDelegate.scenes)
-            func = Tournament.customFunc(botPackage2, gameInfo)
-            #Function call + param update || NOT OPTIMAL TODO
-            botPackage2 = {"bot" : tournament.bot[0], "bot2" : tournament.bot[1], "pos" : func[0], "pos2" : func[1], "scene" : Tournament.gameScene, "blue" : tournament.portalBlue , "orange" : tournament.portalOrange }
-            
-            if stateDelegate.checkWin(tournament):
+                if stateDelegate.game:
 
-                gameInfo.addWin(tournament)
-                stateDelegate.reset(screen, tournament, Tournament, 2)
-                botPackage2 = Tournament.botPackage
-                
-                if stateDelegate.rounds == stateDelegate.maxRounds:
-                    stateDelegate.scene = stateDelegate.scenes[0]
-                    stateDelegate.tournament = False
-                    stateDelegate.rounds = 1
+                    stateDelegate.setGame(False)
+                    stateDelegate.setWin(False)
 
-                else:
-                    stateDelegate.scene = stateDelegate.scenes[2]
+                    stateDelegate.scenes.pop(4)
+                    stateDelegate.scenes.insert(4, Tournament.load())
+
+                    instance = Tournament.object
                     botPackage2 = Tournament.botPackage
-                    stateDelegate.rounds += 1
+                    coins = instance.coins
+                    stateDelegate.setScene(4)
+                    
+                func = Tournament.customFunc(botPackage2, gameInfo)
 
-        #-------------------------------------------------
-        
-        else:
-            #print(gameInfo.playerAlgorithm)
-            #print(instance.bot)
-            print(stateDelegate.stateGame)
-            if stateDelegate.stateGame == True:
+                botPackage2 = {"bot" : instance.bot[0], "bot2" : instance.bot[1], "pos" : func[0], "pos2" : func[1], "scene" : Tournament.gameScene, "blue" : instance.portalBlue , "orange" : instance.portalOrange }
                 
-                LabTest.setup(screen, gameInfo)
-                instance = LabTest.object
-                stateDelegate.stateGame = False
-                botPackage = LabTest.botPackage
-                stateDelegate.scenes.insert(2, LabTest.gameScene)
-                print("Finished")
+                if stateDelegate.checkWin(instance) and not stateDelegate.win:
+                    
+                    stateDelegate.setWin(True)
+                    stateDelegate.setGame(True)
+                    gameInfo.addWin(instance)
+                    stateDelegate.reset(screen, instance, Tournament, 4, gameInfo)
+                    botPackage2 = Tournament.botPackage
+                    
+                    if stateDelegate.rounds == stateDelegate.maxRounds:
+                        stateDelegate.setTournament(False)
+                        stateDelegate.setGame(False)
+                        stateDelegate.setPlay(False)
+                        stateDelegate.setScene(2)
+                        stateDelegate.rounds = 1
 
-            #print(LabTest.gameScene)
-            func = LabTest.customFunc(botPackage, gameInfo)
-        
-            #Function call + param update || NOT OPTIMAL TODO
-            botPackage = {"bot" : instance.bot[0], "bot2" : instance.bot[1], "pos" : func[0], "pos2" : func[1], "scene" : LabTest.gameScene, "blue" : instance.portalBlue , "orange" : instance.portalOrange }    
-            
-            
+                        File.writeContent("./Source/Game/Result/games.txt", gameInfo)
+                        
+                    else:
+                        stateDelegate.setScene(4)
+                        botPackage2 = Tournament.botPackage
+                        stateDelegate.rounds += 1
+
+            else:
+                if stateDelegate.game:
+
+                    stateDelegate.setGame(False)
+                    stateDelegate.setWin(False)
+                    
+                    stateDelegate.scenes.pop(3)
+                    stateDelegate.scenes.insert(3, LabTest.load())
+
+                    instance = LabTest.object
+                    botPackage = LabTest.botPackage
+                    coins = instance.coins
+                    stateDelegate.setScene(3)
+
+                func = LabTest.customFunc(botPackage, gameInfo)
+
+                botPackage = {"bot" : instance.bot[0], "bot2" : instance.bot[1], "pos" : func[0], "pos2" : func[1], "scene" : LabTest.gameScene, "blue" : instance.portalBlue , "orange" : instance.portalOrange }  
+                if not stateDelegate.halfPoints:
+                    stateDelegate.checkHalfPoints(instance)
+
+                if stateDelegate.checkWin(instance) and not stateDelegate.win:
+                        
+                        print(gameInfo)
+                        stateDelegate.setWin(True)
+                        stateDelegate.setPlay(False)
+
+                        gameInfo.addWin(instance)
+                        Result.showResult(gameInfo)
+                        stateDelegate.reset(screen, instance, LabTest, 3, gameInfo)
+                        stateDelegate.setScene(2)
+
             #Algorithm Testing
-            instance.bot[1].updateGameState(enemyPos = instance.bot[0].positionRelative, enemyPoints = coinsBot0, thisPoints = coinsBot1)
-
+            instance.bot[1].updateGameState(enemyPos = instance.bot[0].positionRelative, enemyPoints = gameInfo.coins[0], thisPoints = gameInfo.coins[1])
+            instance.bot[0].updateGameState(enemyPos = instance.bot[1].positionRelative, enemyPoints = gameInfo.coins[1], thisPoints = gameInfo.coins[0])
+        
             for coin in coins:
                 if coin.checkCollide(instance.bot[0]):
                     print("Bot 0 collected coin")
-                    coinsBot0 += 1
-                    labelBot0.setText(str(coinsBot0))
+                    gameInfo.coins[0] += 1
+                    if stateDelegate.halfPoints:
+                        gameInfo.points[0] += 5
+                    else:
+                        gameInfo.points[0] += 10
                     instance.bot[1].signal("Coin", [coin.positionX, coin.positionY])
                     coins.remove(coin)
+                    instance.entities.remove(coin)
 
                 elif coin.checkCollide(instance.bot[1]):
                     print("Bot 1 collected coin")
-                    coinsBot1 += 1
-                    labelBot1.setText(str(coinsBot1))
+                    gameInfo.coins[1] += 1
+                    if stateDelegate.halfPoints:
+                        gameInfo.points[1] += 5
+                    else:
+                        gameInfo.points[1] += 10
                     instance.bot[0].signal("Coin", [coin.positionX, coin.positionY])
                     coins.remove(coin)
+                    instance.entities.remove(coin)
 
-
-            
-            #------------------
-                
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 stateDelegate.running = False
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     if not stateDelegate.tournament:
-                        stateDelegate.reset(stateDelegate, screen, instance, LabTest, 2, gameInfo)
+
+                        stateDelegate.reset(screen, instance, LabTest, 3, gameInfo)
+
                         botPackage = LabTest.botPackage
 
                         coins = instance.coins
-                        coinsBot0 = 0
-                        coinsBot1 = 0
-                        labelBot0.setText(str(0))
-                        labelBot0.setText(str(0))
-                        LabTest.gameScene.uiElements.append(labelBot0)
-                        LabTest.gameScene.uiElements.append(labelBot1)
+                        gameInfo.coins = [0, 0]
 
-
-                for controller in entitiyControllers:
-                    controller.update(event.key, True)
-
-            if event.type == pygame.KEYUP:
-                for controller in entitiyControllers:
-                    controller.update(event.key, False)
-
-        
         stateDelegate.update()
         stateDelegate.scene.render()
    

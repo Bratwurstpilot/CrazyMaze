@@ -35,15 +35,7 @@ class Menu:
 
 
 #------Setup Part----------
-
-object = Menu()
-gameScene = None
-
-def setup(screen):
-    
-    global gameScene
-    gameScene = Scene(screen, object.entities, object.uiEntities, object.background)
-
+ 
 object = Menu()
 ##menuScene = Scene(screen, menu.entities, menu.uiEntities, menu.menuBackground)
 

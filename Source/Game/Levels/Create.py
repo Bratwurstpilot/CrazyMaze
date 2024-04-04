@@ -161,8 +161,10 @@ def setup(screen, delegate, info):
     object.switchRTwoDifficulty.setParam([[gameInfo, object.pTwoDifficulty, 1, 1]])
 
     #---------------------------------------------------------------------------
-    object.startGame.setFunc([gameDelegate.setStateGame, gameDelegate.setScene])
-    object.startGame.setParam([[True], [2]])
 
-    object.tournament.setFunc([gameDelegate.setScene, gameDelegate.setTournament])
-    object.tournament.setParam([[2], [True, 10]])
+    object.startGame.setFunc([gameDelegate.setGame, gameDelegate.setPlay, gameDelegate.setScene])
+    object.startGame.setParam([[True], [True], [3]])
+
+
+    object.tournament.setFunc([gameDelegate.setGame, gameDelegate.setPlay, gameDelegate.setScene, gameDelegate.setTournament])
+    object.tournament.setParam([[True], [True], [2], [True, 10]])

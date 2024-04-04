@@ -2,6 +2,21 @@
 
 class File():
 
+    
+    def writeContent(filePath : str, gameInfo):
+        
+        file = open(filePath, "a")
+
+        content : str = "["
+        content += str(gameInfo.playerAlgorithm) + ", "
+        content += str(gameInfo.winCount) + ", "
+        content += str(gameInfo.gameCoins) + ", "
+        content += str(gameInfo.gamePoints) + "]\n"
+        
+        file.write(str(content))
+
+        file.close()
+
     def getContentSplit(filePath : str, split : str = ";") -> list: # Gets content from file, need of putting the split on EVERY endline
 
         file = open(filePath, "r")
