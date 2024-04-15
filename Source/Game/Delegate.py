@@ -71,16 +71,42 @@ class GameDelegate:
         for entitie in self.scene.uiElements:
             entitie.update() 
 
+
     def checkHalfPoints(self, instance):
 
         if (instance.bot[0].getPosition() == instance.end[1]) or (instance.bot[1].getPosition() == instance.end[0]):
 
             self.halfPoints = True
 
-    def checkWin(self, instance):
+
+    def checkFinish(self, instance):
 
         return (instance.bot[0].getPosition() == instance.end[1]) and (instance.bot[1].getPosition() == instance.end[0])
+
+
+    def checkWin(self, gameInfo):
+
+        if gameInfo.coins[0] > gameInfo.coins[1]:
+            gameInfo.winCount[0] += 1
+
+        elif gameInfo.coins[1] > gameInfo.coins[0]:
+            gameInfo.winCount[1] += 1
+
+        elif gameInfo.coins[0] == gameInfo.coins[1]:
+            gameInfo.winCount[2] += 1
+
+        gameInfo.gameCoins.append(gameInfo.coins)
+        gameInfo.coins = [0, 0]
         
+    
+    def selectCoin(self, coin, coins, instance, info, botNumber):
+
+        info.coins[botNumber] += 1
+            
+        instance.bot[botNumber].signal("Coin", [coin.positionX, coin.positionY])
+        coins.remove(coin)
+        instance.entities.remove(coin)
+    
     
     def reset(self, screen, instance, level, index, info):
         

@@ -116,20 +116,12 @@ class Tournament:
         self.end.append(bBot.getPosition())
 
 
-    def checkWin(self):
-        if self.bot[0].getPosition() == self.end[1]:
-            print("Player1")
-        if self.bot[1].getPosition() == self.end[0]:
-            print("Player2")
-
 #------------Setup-------------------------------
     
 def customFunc(package : dict, gameInfo):
     
     bot = package["bot"]
-
     bot.tickMax = (0.000001) * 144 * 0.1
-
     bBot = package["bot2"]
     bBot.tickMax = (0.000001) * 144 * 0.1
     botPos = package["pos"]

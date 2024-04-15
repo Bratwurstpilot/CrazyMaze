@@ -63,11 +63,18 @@ def main():
 
                 botPackage2 = {"bot" : instance.bot[0], "bot2" : instance.bot[1], "pos" : func[0], "pos2" : func[1], "scene" : Tournament.gameScene, "blue" : instance.portalBlue , "orange" : instance.portalOrange }
                 
-                if stateDelegate.checkWin(instance) and not stateDelegate.win:
+                if not stateDelegate.halfPoints:
+                    stateDelegate.checkHalfPoints(instance)
+                    
+                if stateDelegate.checkFinish(instance) and not stateDelegate.win:
                     
                     stateDelegate.setWin(True)
                     stateDelegate.setGame(True)
-                    gameInfo.addWin(instance)
+                    print(gameInfo.points)
+                    stateDelegate.checkWin(gameInfo)
+                    print(gameInfo.winCount)
+                    
+                    
                     stateDelegate.reset(screen, instance, Tournament, 4, gameInfo)
                     botPackage2 = Tournament.botPackage
                     
@@ -76,7 +83,11 @@ def main():
                         stateDelegate.setGame(False)
                         stateDelegate.setPlay(False)
                         stateDelegate.setScene(2)
+                        
+                        gameInfo.winCount = [0, 0, 0]
                         stateDelegate.rounds = 1
+                        
+                        #print(gameInfo.winCount)
 
                         File.writeContent("./Source/Game/Result/games.txt", gameInfo)
                         
@@ -84,6 +95,9 @@ def main():
                         stateDelegate.setScene(4)
                         botPackage2 = Tournament.botPackage
                         stateDelegate.rounds += 1
+                        
+                        
+                        
 
             else:
                 if stateDelegate.game:
@@ -102,12 +116,12 @@ def main():
                 func = LabTest.customFunc(botPackage, gameInfo)
 
                 botPackage = {"bot" : instance.bot[0], "bot2" : instance.bot[1], "pos" : func[0], "pos2" : func[1], "scene" : LabTest.gameScene, "blue" : instance.portalBlue , "orange" : instance.portalOrange }  
+                
                 if not stateDelegate.halfPoints:
                     stateDelegate.checkHalfPoints(instance)
 
-                if stateDelegate.checkWin(instance) and not stateDelegate.win:
+                if stateDelegate.checkFinish(instance) and not stateDelegate.win:
                         
-                        print(gameInfo)
                         stateDelegate.setWin(True)
                         stateDelegate.setPlay(False)
 
@@ -116,44 +130,29 @@ def main():
                         stateDelegate.reset(screen, instance, LabTest, 3, gameInfo)
                         stateDelegate.setScene(2)
 
+                       
             #Algorithm Testing
             instance.bot[1].updateGameState(enemyPos = instance.bot[0].positionRelative, enemyPoints = gameInfo.coins[0], thisPoints = gameInfo.coins[1])
             instance.bot[0].updateGameState(enemyPos = instance.bot[1].positionRelative, enemyPoints = gameInfo.coins[1], thisPoints = gameInfo.coins[0])
         
             for coin in coins:
                 if coin.checkCollide(instance.bot[0]):
-                    print("Bot 0 collected coin")
-                    gameInfo.coins[0] += 1
-                    if stateDelegate.halfPoints:
-                        gameInfo.points[0] += 5
-                    else:
-                        gameInfo.points[0] += 10
-                    instance.bot[1].signal("Coin", [coin.positionX, coin.positionY])
-                    coins.remove(coin)
-                    instance.entities.remove(coin)
-
+                    #print("Bot 0 collected coin")
+                    stateDelegate.selectCoin(coin, coins, instance, gameInfo, 0)
+                    
                 elif coin.checkCollide(instance.bot[1]):
-                    print("Bot 1 collected coin")
-                    gameInfo.coins[1] += 1
-                    if stateDelegate.halfPoints:
-                        gameInfo.points[1] += 5
-                    else:
-                        gameInfo.points[1] += 10
-                    instance.bot[0].signal("Coin", [coin.positionX, coin.positionY])
-                    coins.remove(coin)
-                    instance.entities.remove(coin)
-
+                    #print("Bot 1 collected coin")
+                    stateDelegate.selectCoin(coin, coins, instance, gameInfo, 1)
+                    
+              
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 stateDelegate.running = False
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     if not stateDelegate.tournament:
-
                         stateDelegate.reset(screen, instance, LabTest, 3, gameInfo)
-
                         botPackage = LabTest.botPackage
-
                         coins = instance.coins
                         gameInfo.coins = [0, 0]
 

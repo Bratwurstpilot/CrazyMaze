@@ -51,7 +51,7 @@ class LabTest:
         self.player = []
         
         labyrinth = Labyrinth(45,31).getLabyrinth()
-        print(labyrinth)
+        
 
         WIDTH = len(labyrinth[0])
         HEIGHT = len(labyrinth)
@@ -90,19 +90,13 @@ class LabTest:
                     self.portalOrange = MyEntity(START[0] + x * LINEWIDTH, START[1] + y * LINEWIDTH, 1, LINEWIDTH, LINEWIDTH)
                     self.portalOrange.getTextureComponent().color = (255, 165, 0) #orange
                     self.entities.append(self.portalOrange)
-      
-
-        aBot = self.setPlayer(self.gameInfo.playerAlgorithm[0], START, LINEWIDTH, WIDTH, HEIGHT, 0)
-        bBot = self.setPlayer(self.gameInfo.playerAlgorithm[1], START, LINEWIDTH, WIDTH, HEIGHT, 1)
+    
 
         #playernum = 0
-
-
         #aBot = Agent(START[0] + (1-playernum) * LINEWIDTH + (WIDTH-2) * LINEWIDTH * playernum, START[1] + (1-playernum) * LINEWIDTH + (HEIGHT-2) * LINEWIDTH * playernum, 1, LINEWIDTH, LINEWIDTH, playerNumber=playernum, transport = tpSpots)
         aBot = self.setPlayer(self.gameInfo.player[0], START, LINEWIDTH, WIDTH, HEIGHT, 0, tpSpots)
         
         #playernumB = 1
-
         #bBot = AgentEvo(START[0] + (1-playernumB) * LINEWIDTH + (WIDTH-2) * LINEWIDTH * playernumB, START[1] + (1-playernumB) * LINEWIDTH + (HEIGHT-2) * LINEWIDTH * playernumB, 1, LINEWIDTH, LINEWIDTH, playerNumber=playernumB, transport=tpSpots)
         bBot = self.setPlayer(self.gameInfo.player[1], START, LINEWIDTH, WIDTH, HEIGHT, 1, tpSpots)
 

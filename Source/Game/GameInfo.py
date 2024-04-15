@@ -18,8 +18,6 @@ class GameInfo:
         
         self.coins : list = [0, 0]
         self.gameCoins : list = []
-        self.points : list = [0, 0]
-        self.gamePoints : list = []
         
         
     def setPlayerAlgorithm(self, state : int, player : int) -> None:

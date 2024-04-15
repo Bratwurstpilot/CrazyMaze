@@ -15,16 +15,12 @@ class Menu:
     delegate = 0
 
     menuBackground = pygame.image.load("Source/Game/Files/menuBackground.png")
-
-    gameTitle = Label(1920//2, 440, 0, 1, 1, "Crazy Maze", (0, 110, 18), 70)
-    gameTitle.setTextRect()
-    uiEntities.append(gameTitle)
-
-    startGame = Button(1920//2 - 150, 490, 0, 300, 50, "Spiel erstellen", (0, 110, 18), 40)
+  
+    startGame = Button(1920//2 - 150, 790, 0, 300, 50, "Spiel erstellen", (0, 110, 18), 60)
     startGame.setTextRect()
     uiEntities.append(startGame)
     
-    quitGame = Button(1920//2 - 150, 610, 0, 300, 50, "Beenden", (0, 110, 18), 40)
+    quitGame = Button(1920//2 - 150, 910, 0, 300, 50, "Beenden", (0, 110, 18), 60)
     quitGame.setTextRect()
     uiEntities.append(quitGame)
 
@@ -32,13 +28,9 @@ class Menu:
     mainMenu = Music("Source/Game/Files/DriftveilCity.wav", 0.1)
     #mainMenu.play()
 
-
-
 #------Setup Part----------
  
 object = Menu()
-##menuScene = Scene(screen, menu.entities, menu.uiEntities, menu.menuBackground)
-
 gameScene = None
 gameDelegate = None
 
