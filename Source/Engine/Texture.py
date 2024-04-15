@@ -32,7 +32,7 @@ class TextureComponent:
     # Set Methods
 
 
-    def setTexture(self, tex2D : str, size : tuple = None) -> None:
+    def setTexture(self, tex2D : str, size : tuple = None, rotate : float = 0) -> None:
 
         try: 
             if size != None:
