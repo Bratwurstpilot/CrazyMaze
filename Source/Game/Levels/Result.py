@@ -63,5 +63,5 @@ def showResult(gameInfo):
     
     object.playerOne.setText(gameInfo.playerAlgorithm[0])
     object.playerTwo.setText(gameInfo.playerAlgorithm[1])
-    object.playerOCoins.setText(gameInfo.points[0])
-    object.playerTCoins.setText(gameInfo.points[1])
+    object.playerOCoins.setText(gameInfo.coins[0])
+    object.playerTCoins.setText(gameInfo.coins[1])

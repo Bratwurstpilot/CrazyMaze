@@ -119,6 +119,15 @@ class Agent(Entity):
 
         if tuple(manipCoords) in self.anchorPoints:
             self.anchorPoints.remove(tuple(manipCoords))
+            #Set Start to current position
+            self.viewSpaceOriginal[self.algorithm.start.coords[1]][self.algorithm.start.coords[0]] = 0
+            self.viewSpaceOriginal[self.positionRelative[1]][self.positionRelative[0]] = self.symbols["Start"]
+            #Compute path to next nearest coin or end node
+            viewSpaceCopy = []
+            for line in self.viewSpaceOriginal:
+                viewSpaceCopy.append(line.copy())
+
+            self.setup(viewSpaceCopy)
 
 
     def updateGameState(self, enemyPos : tuple, enemyPoints : int, thisPoints : int):
@@ -227,13 +236,17 @@ class AgentEvo(Entity):
         if len(self.currentPath) == 0 and self.currentPoint <= len(self.algorithm.globalBest[0].genes)-1:
             self.currentPoint += 1
 
-            while self.algorithm.globalBest[0].genes[self.currentPoint] in self.visited:
-                self.currentPoint += 1
-                print("Let me rethink that...")
+            try:
+                while self.algorithm.globalBest[0].genes[self.currentPoint] in self.visited:
+                    self.currentPoint += 1
+                    print("Let me rethink that...")
 
-            self.relativeEnd = self.algorithm.globalBest[0].genes[self.currentPoint]
-            self.currentPath = []
-            self.currentPath = self.getPath(self.positionRelative, self.relativeEnd).copy()
+                self.relativeEnd = self.algorithm.globalBest[0].genes[self.currentPoint]
+                self.currentPath = []
+                self.currentPath = self.getPath(self.positionRelative, self.relativeEnd).copy()
+            except IndexError:
+                self.goToGoal()
+                return
         
         choice = self.currentPath[-1]
         self.currentPath.remove(choice)

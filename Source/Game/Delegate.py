@@ -103,7 +103,10 @@ class GameDelegate:
 
         info.coins[botNumber] += 1
             
-        instance.bot[botNumber].signal("Coin", [coin.positionX, coin.positionY])
+        #instance.bot[botNumber].signal("Coin", [coin.positionX, coin.positionY])
+        
+        for bot in instance.bot:
+            bot.signal("Coin", [coin.positionX, coin.positionY])
         coins.remove(coin)
         instance.entities.remove(coin)
     
