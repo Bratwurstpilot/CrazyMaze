@@ -36,9 +36,13 @@ class TextureComponent:
 
         try: 
             if size != None:
-                self.__textures = [pygame.transform.scale(pygame.image.load(tex2D), size)]
+                self.__textures = [ (pygame.transform.scale(pygame.image.load(tex2D), size)) ]
+        
             else:
-                self.__textures = [pygame.image.load(tex2D)]
+                self.__textures = [ (pygame.image.load(tex2D)) ]
+
+            self.__textures = [pygame.transform.rotate(self.__textures[0], rotate)]
+
         except ValueError:
             print("Error while loading Texture " + tex2D + " in component " + self)
 

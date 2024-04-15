@@ -113,10 +113,12 @@ class Agent(Entity):
             self.tick = 0
 
     
-    def signal(self, str = "Coin", coords = (0,0)):
+    def signal(self, str = "Coin", coords = (0,0), labCoords = [500,200], labLineWidth = 20):
         #Remove Coins from Anchor points
-        if tuple(coords) in self.anchorPoints:
-            self.anchorPoints.remove(tuple(coords))
+        manipCoords = [(coords[0]-labCoords[0]) // labLineWidth, (coords[1]-labCoords[1]) // labLineWidth]
+
+        if tuple(manipCoords) in self.anchorPoints:
+            self.anchorPoints.remove(tuple(manipCoords))
 
 
     def updateGameState(self, enemyPos : tuple, enemyPoints : int, thisPoints : int):
@@ -267,11 +269,12 @@ class AgentEvo(Entity):
         return path
     
     
-    def signal(self, str = "Coin", coords = [0,0]):
-        
-        if str == "Coin":
+    def signal(self, str = "Coin", coords = [0,0], labCoords = [500,200], labLineWidth = 20):
 
-            self.visited.append(tuple(coords))
+        if str == "Coin":
+            
+            manipCoords = [(coords[0]-labCoords[0]) // labLineWidth, (coords[1]-labCoords[1]) // labLineWidth]
+            self.visited.append(tuple(manipCoords))
 
             if len(self.currentPath) < 1:
                 return
@@ -289,7 +292,7 @@ class AgentEvo(Entity):
     
 
     def goToGoal(self) -> None:
-
+        
         if self.isGoingToGoal:
             return
 
