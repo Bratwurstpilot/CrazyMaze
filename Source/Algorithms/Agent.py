@@ -296,13 +296,16 @@ class AgentEvo(Entity):
             if tuple(self.currentPath[0]) == tuple(manipCoords):
                 self.currentPoint += 1
 
-                while self.algorithm.globalBest[0].genes[self.currentPoint] in self.visited:
-                    self.currentPoint += 1
-                    print("Let me rethink that...")
+                try:
+                    while self.algorithm.globalBest[0].genes[self.currentPoint] in self.visited:
+                        self.currentPoint += 1
+                        print("Let me rethink that...")
 
-                self.relativeEnd = self.algorithm.globalBest[0].genes[self.currentPoint]
-                self.currentPath = []
-                self.currentPath = self.getPath(self.positionRelative, self.relativeEnd).copy()
+                    self.relativeEnd = self.algorithm.globalBest[0].genes[self.currentPoint]
+                    self.currentPath = []
+                    self.currentPath = self.getPath(self.positionRelative, self.relativeEnd).copy()
+                except IndexError:
+                    self.goToGoal()
     
 
     def goToGoal(self) -> None:
