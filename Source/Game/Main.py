@@ -70,10 +70,9 @@ def main():
                     
                     stateDelegate.setWin(True)
                     stateDelegate.setGame(True)
-                    print(gameInfo.points)
+                    print(gameInfo.coins)
                     stateDelegate.checkWin(gameInfo)
                     print(gameInfo.winCount)
-                    
                     
                     stateDelegate.reset(screen, instance, Tournament, 4, gameInfo)
                     botPackage2 = Tournament.botPackage
@@ -86,8 +85,6 @@ def main():
                         
                         gameInfo.winCount = [0, 0, 0]
                         stateDelegate.rounds = 1
-                        
-                        #print(gameInfo.winCount)
 
                         File.writeContent("./Source/Game/Result/games.txt", gameInfo)
                         
@@ -96,9 +93,6 @@ def main():
                         botPackage2 = Tournament.botPackage
                         stateDelegate.rounds += 1
                         
-                        
-                        
-
             else:
                 if stateDelegate.game:
 
