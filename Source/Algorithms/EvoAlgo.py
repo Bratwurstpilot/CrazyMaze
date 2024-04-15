@@ -21,7 +21,7 @@ class Individual:
 
 class EvoAlgo():
 
-    def __init__(self, populationCount : int = 10, points : list = [(0,0)], fixedStart : tuple = (0,0), bestEstimate : float = 100000, maxIterations : int = 1000, metric : str = "Manhatten") -> None:
+    def __init__(self, populationCount : int = 10, points : list = [(0,0)], fixedStart : tuple = (0,0), bestEstimate : float = 100000, maxIterations : int = 1000, metric : str = "AStar") -> None:
         '''
         metric -> Manhatten | AStar
         '''
@@ -33,6 +33,7 @@ class EvoAlgo():
         self.maxIter : int = maxIterations
 
         self.fixedStart : tuple = fixedStart
+        self.fixedEnd : tuple = (0,0)
 
         self.points : list = points.copy()
 
@@ -148,6 +149,8 @@ class EvoAlgo():
         if len(individual.genes) > 0:
             first = individual.genes[0]
             individual.fitness += sqrt( (self.fixedStart[0] - first[0])**2 + (self.fixedStart[1] - first[1])**2 )
+            last = individual.genes[-1]
+            individual.fitness += sqrt( (self.fixedEnd[0] - last[0])**2 + (self.fixedEnd[1] - last[1])**2 )
 
         for i in range(len(individual.genes)-1):
             current = individual.genes[i]
