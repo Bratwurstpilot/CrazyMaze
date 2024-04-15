@@ -274,13 +274,13 @@ class AgentEvo(Entity):
 
         if str == "Coin":
             
-            manipCoords = [( (coords[0]-labCoords[0]) // labLineWidth) + 1, ( (coords[1]-labCoords[1]) // labLineWidth ) + 1]
+            manipCoords = [( (coords[0]-labCoords[0]) / labLineWidth), ( (coords[1]-labCoords[1]) / labLineWidth )]
             self.visited.append(tuple(manipCoords))
 
             if len(self.currentPath) < 1:
                 return
             
-            if tuple(self.currentPath[0]) == tuple(coords):
+            if tuple(self.currentPath[0]) == tuple(manipCoords):
                 self.currentPoint += 1
 
                 while self.algorithm.globalBest[0].genes[self.currentPoint] in self.visited:
@@ -320,16 +320,16 @@ class AgentEvo(Entity):
             
             #Return true if the agent is closer to his goal than the enemy to his
             return ( abs(self.end[0] - this[0]) + abs(self.end[1] - this[1]) ) >= ( abs(self.start[0] - enemy[0]) + abs(self.start[1] - enemy[1]) )
-
+        '''
         if tuple(enemyPos) == tuple(self.start) and enemyPoints < thisPoints:
             return self.goToGoal()
 
-        if thisPoints >= 4:
+        if thisPoints >= 5:
             if delta(self.positionRelative, enemyPos):
                 return self.goToGoal()
             else:
                 #Enemy is closer to the goal
-                if (10 - enemyPoints) > 5:
+                if (10 - enemyPoints) < 5:
                     #There is still hope
                     return
                 else:
@@ -342,3 +342,13 @@ class AgentEvo(Entity):
                     return
                 else:
                     return self.goToGoal()
+        '''
+        #if enemyPoints >= 6:
+            #self.goToGoal()
+            #return    
+        if thisPoints >= 5:
+            self.goToGoal()
+            return
+        if thisPoints + enemyPoints >= 10:
+            self.goToGoal()
+            return

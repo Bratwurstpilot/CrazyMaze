@@ -119,7 +119,7 @@ def main():
                         stateDelegate.setWin(True)
                         stateDelegate.setPlay(False)
 
-                        gameInfo.addWin(instance)
+                        #gameInfo.addWin(instance)
                         Result.showResult(gameInfo)
                         stateDelegate.reset(screen, instance, LabTest, 3, gameInfo)
                         stateDelegate.setScene(2)

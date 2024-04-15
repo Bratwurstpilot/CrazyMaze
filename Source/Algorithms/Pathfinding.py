@@ -265,7 +265,7 @@ class AStar(Algorithm):
             return
 
         possibleEnds.sort(key=lambda x : self.heuristic(self.start.coords, x.coords))
-        self.end = Node(len(self.viewSpace[0])-1, len(self.viewSpace)-1)
+        self.end = possibleEnds[0]
         self.possibleEnds = possibleEnds
 
         for transportNodeCurrent in self.transportNodes:
