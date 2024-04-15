@@ -188,7 +188,7 @@ class AgentEvo(Entity):
                 if viewSpace_[y][x] == self.symbols["Start"]:
                     start = (x,y)
                 if viewSpace_[y][x] == self.symbols["End"]:
-                    relevantPoints.append((x,y))
+                    #relevantPoints.append((x,y))
                     end = (x,y)
                 if viewSpace_[y][x] == self.symbols["Obstacle"]:
                     self.viewSpace[y][x] = self.symbols["Obstacle"]
@@ -202,6 +202,7 @@ class AgentEvo(Entity):
         
         self.algorithm = EvoAlgo(populationCount=300, points=relevantPoints, bestEstimate=None, maxIterations=300, metric="Manhatten")
         self.algorithm.fixedStart = start
+        self.algorithm.fixedEnd = end
         self.algorithm.setUp(self.viewSpace.copy(), self.symbols)
         self.algorithm.update()
 
@@ -273,7 +274,7 @@ class AgentEvo(Entity):
 
         if str == "Coin":
             
-            manipCoords = [(coords[0]-labCoords[0]) // labLineWidth, (coords[1]-labCoords[1]) // labLineWidth]
+            manipCoords = [( (coords[0]-labCoords[0]) // labLineWidth) + 1, ( (coords[1]-labCoords[1]) // labLineWidth ) + 1]
             self.visited.append(tuple(manipCoords))
 
             if len(self.currentPath) < 1:
@@ -295,13 +296,13 @@ class AgentEvo(Entity):
         
         if self.isGoingToGoal:
             return
-
+        print("Bot now goes to goal")
         self.isGoingToGoal = True
 
-        while tuple(self.algorithm.globalBest[0].genes[self.currentPoint]) != tuple(self.end) and self.currentPoint <= len(self.algorithm.globalBest[0].genes)-1:
-            self.currentPoint += 1
+        #while tuple(self.algorithm.globalBest[0].genes[self.currentPoint]) != tuple(self.end) and self.currentPoint <= len(self.algorithm.globalBest[0].genes)-1:
+        #    self.currentPoint += 1
         
-        self.relativeEnd = self.algorithm.globalBest[0].genes[self.currentPoint]
+        self.relativeEnd = tuple(self.end)
         self.currentPath = []
         self.currentPath = self.getPath(self.positionRelative, self.relativeEnd).copy()
 
@@ -337,7 +338,7 @@ class AgentEvo(Entity):
             if (thisPoints + 2 > 5) and delta(self.positionRelative, enemyPos):
                 return self.goToGoal()
             else:
-                if (enemyPoints + 2) < 5:
+                if (enemyPoints + 2) <= 5:
                     return
                 else:
                     return self.goToGoal()
