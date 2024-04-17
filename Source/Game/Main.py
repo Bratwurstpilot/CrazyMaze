@@ -41,10 +41,10 @@ def main():
     stateDelegate.setup([Menu.gameScene, Create.gameScene, Result.gameScene, LabTest.gameScene, Tournament.gameScene])
 
     while stateDelegate.running:
-        print("Info",gameInfo.intMode)
-        print("Delegate",stateDelegate.mode)
+        #print("Info",gameInfo.intMode)
+        #print("Delegate",stateDelegate.mode)
         if stateDelegate.play:
-
+            stateDelegate.setMode(gameInfo.intMode)
             if stateDelegate.mode == 1:
 
                 if stateDelegate.game:
@@ -76,6 +76,7 @@ def main():
                     botPackage2 = Tournament.botPackage
                     
                     if stateDelegate.rounds == stateDelegate.maxRounds:
+                        print(stateDelegate.maxRounds)
                         stateDelegate.setTournament(False)
                         stateDelegate.setGame(False)
                         stateDelegate.setPlay(False)
@@ -90,6 +91,7 @@ def main():
                         stateDelegate.setScene(4)
                         botPackage2 = Tournament.botPackage
                         stateDelegate.rounds += 1
+                        print(stateDelegate.rounds)
                         
             elif stateDelegate.mode == 0:
                 if stateDelegate.game:

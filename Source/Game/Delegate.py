@@ -71,8 +71,7 @@ class GameDelegate:
 
 
     def setMode(self, mode : int):
-        
-    
+
         self.mode = mode
         
     

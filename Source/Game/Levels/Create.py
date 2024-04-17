@@ -190,6 +190,7 @@ def setup(screen, delegate, info):
     def updateMode(info, cgame, step) -> None:
     
         info.setMode(step)
+        print(info.intMode)
         cgame.setText(info.mode[0])
 
     def updateRound(instance, cgame, step):
@@ -249,8 +250,8 @@ def setup(screen, delegate, info):
     object.switchR100.setParam([[gameDelegate, object.round, 100]])
     #----------------------------------------------------------------------------
 
-    object.startGame.setFunc([gameDelegate.setGame, gameDelegate.setPlay, gameDelegate.setMode, gameDelegate.setScene])
-    object.startGame.setParam([[True], [True], [gameInfo.intMode], [3]])
+    object.startGame.setFunc([gameDelegate.setGame, gameDelegate.setPlay, gameDelegate.setScene])
+    object.startGame.setParam([[True], [True], [3]])
 
 
     #object.tournament.setFunc([gameDelegate.setGame, gameDelegate.setPlay, gameDelegate.setScene, gameDelegate.setTournament])
