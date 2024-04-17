@@ -142,15 +142,17 @@ class EvoAlgo():
             individual.genes[choice[0]], individual.genes[choice[1]] = individual.genes[choice[1]], individual.genes[choice[0]]
 
 
-    def fitness(self, individual : Individual) -> None:
+    def fitness(self, individual : Individual, penalty = 5) -> None:
 
         individual.fitness = 0.0
-
+        
+        '''
         if len(individual.genes) > 0:
             first = individual.genes[0]
             individual.fitness += sqrt( (self.fixedStart[0] - first[0])**2 + (self.fixedStart[1] - first[1])**2 )
             last = individual.genes[-1]
             individual.fitness += sqrt( (self.fixedEnd[0] - last[0])**2 + (self.fixedEnd[1] - last[1])**2 )
+        '''
 
         for i in range(len(individual.genes)-1):
             current = individual.genes[i]
@@ -158,13 +160,20 @@ class EvoAlgo():
 
             #Manhatten distance
             if self.metric == "Manhatten":
-                individual.fitness += sqrt( (succ[0] - current[0])**2 + (succ[1] - current[1])**2 )
+                individual.fitness += abs(succ[0] - current[0]) + abs(succ[1] - current[1])
 
             #AStar Distance
             elif self.metric == "AStar":
                 for i in range(0, len(self.distances), 2):
                     if self.distances[i] == (current, succ) or self.distances[i] == (succ, current):
                         individual.fitness += self.distances[i+1]
+
+            #Reward for taking Coins in itselfs Boardhalf
+            distToEnd = abs(self.fixedEnd[0] - current[0]) + abs(self.fixedEnd[1] - current[1])
+            distToStart = abs(self.fixedStart[0] - current[0]) + abs(self.fixedStart[1] - current[1])
+
+            if distToEnd < distToStart:
+                individual.fitness += penalty
 
 
     def selection(self, count = 2, preselected : int = 1) -> list:
@@ -173,8 +182,8 @@ class EvoAlgo():
 
         while len(selected) < count:
 
-            individual1 = self.population[randint(preselected-1,len(self.population)-1)]
-            individual2 = self.population[randint(preselected-1,len(self.population)-1)]
+            individual1 = self.population[randint(preselected,len(self.population)-1)]
+            individual2 = self.population[randint(preselected,len(self.population)-1)]
 
             if individual1.fitness <= individual2.fitness and individual1 not in selected:
                 selected.append(individual1)
@@ -186,13 +195,17 @@ class EvoAlgo():
 
     def update(self) -> bool:
         
+        #Options for evoAlgo
+        probMutation = 2
+        probCrossover = 3
+        fitnessPenalty = 100
+
         #Interupt if there are only 2 points
         if len(self.population[0].genes) < 2:
             return True
         
         #update iteration count
         self.iter += 1
-        #print(self.iter)
 
         #save population size
         populationSize : int = len(self.population)
@@ -201,7 +214,7 @@ class EvoAlgo():
         parents = [self.selection(2) for _ in range(int(len(self.population)*0.5))]
 
         for pair in parents:
-            for newMember in self.crossover(pair, 4):
+            for newMember in self.crossover(pair, probCrossover):
                 self.population.append(newMember)
         
         #Environmental selection
@@ -218,10 +231,10 @@ class EvoAlgo():
 
         #Mutation
         for individual in self.population:
-            self.mutate(individual, 1)
+            self.mutate(individual, probMutation)
 
             #Update fitness
-            self.fitness(individual)
+            self.fitness(individual, fitnessPenalty)
 
             if individual.fitness <= self.globalBest[0].fitness:
                 self.globalBest[0] = Individual(individual.genes.copy())
@@ -268,7 +281,7 @@ class EvoAlgo():
                 if point1 == point2:
                     continue
 
-                if (point1, point2) not in self.distances or (point2, point1) not in self.distances:
+                if (point1, point2) not in self.distances and (point2, point1) not in self.distances:
                     distance : int = len(self.getPath(point1, point2))
                     self.distances.append((point1, point2))
                     self.distances.append(distance)
@@ -279,7 +292,6 @@ class EvoAlgo():
     def getPath(self, start_, end_) -> list:
 
         aStar = AStar(symbols=self.symbols)
-        aStar.reset()
 
         viewSpace = []
 
@@ -288,7 +300,6 @@ class EvoAlgo():
 
         viewSpace[start_[1]][start_[0]] = self.symbols["Start"]
         viewSpace[end_[1]][end_[0]] = self.symbols["End"]
-
 
         aStar.viewSpace = viewSpace
 

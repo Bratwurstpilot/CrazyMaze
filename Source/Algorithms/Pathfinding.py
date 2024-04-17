@@ -132,7 +132,7 @@ class TransportNode(Node):
 
 class AStar(Algorithm):
 
-    def __init__(self, symbols : dict = {"Start" : 2, "End" : 3, "Obstacle" : 1}):
+    def __init__(self, symbols : dict = {"Start" : 2, "End" : 3, "Obstacle" : 1, "Transport" : "T"}):
 
         super().__init__(symbols)
 

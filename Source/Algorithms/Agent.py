@@ -151,7 +151,6 @@ class AgentEvo(Entity):
             end = 3 - playerNumber
 
         self.symbols = {"Start" : start, "End" : end, "Obstacle" : obstacle, "Transport" : transport}
-
         self.anchorPoints = []
 
         self.currentChoice = 0
@@ -172,6 +171,7 @@ class AgentEvo(Entity):
 
         self.isGoingToGoal : bool = False
 
+        self.flag = False
     
     def __del__(self) -> None:
         
@@ -179,6 +179,8 @@ class AgentEvo(Entity):
 
 
     def setup(self, viewSpace_ : list) -> None:
+
+        self.isGoingToGoal = False
         
         self.viewSpace = [ [0 for _ in range(len(viewSpace_[0]))] for __ in range(len(viewSpace_)) ]
 
@@ -201,15 +203,17 @@ class AgentEvo(Entity):
                     end = (x,y)
                 if viewSpace_[y][x] == self.symbols["Obstacle"]:
                     self.viewSpace[y][x] = self.symbols["Obstacle"]
+                if viewSpace_[y][x] in self.symbols["Transport"]:
+                    self.viewSpace[y][x] = viewSpace_[y][x]
 
         self.start = start
         self.end = end
 
-        #Testing TSP solver-------
+        #TSP solver-------
         for anchor in self.anchorPoints:
             relevantPoints.append(anchor)
         
-        self.algorithm = EvoAlgo(populationCount=300, points=relevantPoints, bestEstimate=None, maxIterations=300, metric="Manhatten")
+        self.algorithm = EvoAlgo(populationCount=300, points=relevantPoints, bestEstimate=None, maxIterations=300, metric="AStar")
         self.algorithm.fixedStart = start
         self.algorithm.fixedEnd = end
         self.algorithm.setUp(self.viewSpace.copy(), self.symbols)
@@ -230,23 +234,14 @@ class AgentEvo(Entity):
 
         if self.tick < self.tickMax : return
 
-        if self.currentPoint >= len(self.algorithm.globalBest[0].genes) or self.positionRelative == self.end:
+        #self.currentPoint >= len(self.algorithm.globalBest[0].genes) or 
+        if self.positionRelative == self.end:
             return
 
         if len(self.currentPath) == 0 and self.currentPoint <= len(self.algorithm.globalBest[0].genes)-1:
+            self.flag = False
             self.currentPoint += 1
-
-            try:
-                while self.algorithm.globalBest[0].genes[self.currentPoint] in self.visited:
-                    self.currentPoint += 1
-                    print("Let me rethink that...")
-
-                self.relativeEnd = self.algorithm.globalBest[0].genes[self.currentPoint]
-                self.currentPath = []
-                self.currentPath = self.getPath(self.positionRelative, self.relativeEnd).copy()
-            except IndexError:
-                self.goToGoal()
-                return
+            self.getNextPath()
         
         choice = self.currentPath[-1]
         self.currentPath.remove(choice)
@@ -283,8 +278,11 @@ class AgentEvo(Entity):
         return path
     
     
-    def signal(self, str = "Coin", coords = [0,0], labCoords = [500,200], labLineWidth = 20):
-
+    def signal(self, str : str = "Coin", coords : list = [0,0], labCoords : list = [500,200], labLineWidth : int = 20):
+        
+        if self.isGoingToGoal:
+            return
+        
         if str == "Coin":
             
             manipCoords = [( (coords[0]-labCoords[0]) / labLineWidth), ( (coords[1]-labCoords[1]) / labLineWidth )]
@@ -293,20 +291,22 @@ class AgentEvo(Entity):
             if len(self.currentPath) < 1:
                 return
             
-            if tuple(self.currentPath[0]) == tuple(manipCoords):
-                self.currentPoint += 1
+            self.getNextPath()
 
-                try:
-                    while self.algorithm.globalBest[0].genes[self.currentPoint] in self.visited:
-                        self.currentPoint += 1
-                        print("Let me rethink that...")
-
-                    self.relativeEnd = self.algorithm.globalBest[0].genes[self.currentPoint]
-                    self.currentPath = []
-                    self.currentPath = self.getPath(self.positionRelative, self.relativeEnd).copy()
-                except IndexError:
-                    self.goToGoal()
     
+    def getNextPath(self):
+
+        try:
+            while self.algorithm.globalBest[0].genes[self.currentPoint] in self.visited:
+                self.currentPoint += 1
+                print("Let me rethink that... ")
+
+            self.relativeEnd = self.algorithm.globalBest[0].genes[self.currentPoint]
+            self.currentPath = []
+            self.currentPath = self.getPath(self.positionRelative, self.relativeEnd).copy()
+        except IndexError:
+            self.goToGoal()
+
 
     def goToGoal(self) -> None:
         
@@ -323,25 +323,40 @@ class AgentEvo(Entity):
         self.currentPath = self.getPath(self.positionRelative, self.relativeEnd).copy()
 
 
-    def updateGameState(self, enemyPos : tuple, enemyPoints : int, thisPoints : int):
+    def updateGameState(self, enemyPos : tuple, enemyPoints : int, thisPoints : int, labCoords : list = [500,200], labLineWidth : int = 20):
         '''
         enemyPos -> (x,y)
         enemyPoints -> Current coin State of Enemy
         thisPoints -> Current coin State of this Agent 
+        labCoords -> Dimensions of Labyrinth [width, height]
+        labLineWidth -> lineWidth of labyrinth
 
         Assumption : there are 10 coins in the map and no penalty for being late to the goal
         '''
 
-        def delta(this : tuple, enemy : tuple) -> bool:
+        manipCoords = [( (enemyPos[0]-labCoords[0]) / labLineWidth), ( (enemyPos[1]-labCoords[1]) / labLineWidth )]
+        enemyPos = manipCoords
+
+        def delta(this : tuple, enemy : tuple, epsilon : int = 0) -> bool:
             
             #Return true if the agent is closer to his goal than the enemy to his
-            return ( abs(self.end[0] - this[0]) + abs(self.end[1] - this[1]) ) >= ( abs(self.start[0] - enemy[0]) + abs(self.start[1] - enemy[1]) )
-        '''
+            return ( abs(self.end[0] - this[0]) + abs(self.end[1] - this[1]) ) - epsilon >= ( abs(self.start[0] - enemy[0]) + abs(self.start[1] - enemy[1]) )
+        
+        #Calculate the distance from enemy to next coin
+        if len(self.currentPath) > 0 and not self.flag:
+            distEnemyToCoin = abs(enemyPos[0]-self.currentPath[0][0]) + abs(enemyPos[1]-self.currentPath[0][1])
+            distThisToCoin =  abs(enemyPos[0]-self.positionRelative[0]) + abs(self.positionRelative[1]-self.currentPath[0][1])
+
+            if distEnemyToCoin < distThisToCoin:
+                self.getNextPath()
+                self.flag = True
+                return
+
         if tuple(enemyPos) == tuple(self.start) and enemyPoints < thisPoints:
             return self.goToGoal()
 
-        if thisPoints >= 5:
-            if delta(self.positionRelative, enemyPos):
+        if thisPoints >= 7:
+            if delta(self.positionRelative, enemyPos, 5):
                 return self.goToGoal()
             else:
                 #Enemy is closer to the goal
@@ -351,20 +366,20 @@ class AgentEvo(Entity):
                 else:
                     return self.goToGoal()
         else:
-            if (thisPoints + 2 > 5) and delta(self.positionRelative, enemyPos):
+            if (thisPoints + 2 > 6) and delta(self.positionRelative, enemyPos, 5):
                 return self.goToGoal()
             else:
-                if (enemyPoints + 2) <= 5:
-                    return
-                else:
-                    return self.goToGoal()
+                return
+        
+
         '''
-        #if enemyPoints >= 6:
-            #self.goToGoal()
-            #return    
-        if thisPoints >= 5:
+        if thisPoints >= 6:
             self.goToGoal()
             return
         if thisPoints + enemyPoints >= 10:
             self.goToGoal()
             return
+        if enemyPoints >= 5:
+            self.goToGoal()
+            return
+        '''
