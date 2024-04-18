@@ -206,23 +206,13 @@ class LabTest:
         self.bot.append(bBot)
         self.end.append(bBot.getPosition())
 
-        #UI Elements (sprites, infotables, etc)
-        
-        #towerLeft = MyEntity(-50, 500)
-        #towerLeft.getTextureComponent().setTextureSet(["Source/Game/Files/Tower.png"], (600,600))
-        #self.entities.append(towerLeft)
-
         playerLeft = MyEntity(50, 560)
         playerLeft.getTextureComponent().setTextureSet(self.setPlayerTexture(self.gameInfo.player[0]), (400,400))
         playerLeft.getTextureComponent().setFrameInterval(0.5)
         self.entities.append(playerLeft)
 
-        #towerRight = MyEntity(1370, 500)
-        #towerRight.getTextureComponent().setTextureSet(["Source/Game/Files/Tower.png"], (600,600))
-        #self.entities.append(towerRight)
-
         playerRight = MyEntity(1470, 560)
-        playerRight.getTextureComponent().setTextureSet(self.setPlayerTexture(self.gameInfo.player[0]), (400,400))
+        playerRight.getTextureComponent().setTextureSet(self.setPlayerTexture(self.gameInfo.player[1]), (400,400))
         playerRight.getTextureComponent().setFrameInterval(0.5)
         self.entities.append(playerRight)
 

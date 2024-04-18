@@ -41,10 +41,11 @@ def main():
     stateDelegate.setup([Menu.gameScene, Create.gameScene, Result.gameScene, LabTest.gameScene, Tournament.gameScene])
 
     while stateDelegate.running:
-        
+        #print("Info",gameInfo.intMode)
+        #print("Delegate",stateDelegate.mode)
         if stateDelegate.play:
-
-            if stateDelegate.tournament:
+            stateDelegate.setMode(gameInfo.intMode)
+            if stateDelegate.mode == 1:
 
                 if stateDelegate.game:
 
@@ -62,38 +63,35 @@ def main():
                 func = Tournament.customFunc(botPackage2, gameInfo)
 
                 botPackage2 = {"bot" : instance.bot[0], "bot2" : instance.bot[1], "pos" : func[0], "pos2" : func[1], "scene" : Tournament.gameScene, "blue" : instance.portalBlue , "orange" : instance.portalOrange }
-                
-                if not stateDelegate.halfPoints:
-                    stateDelegate.checkHalfPoints(instance)
                     
-                if stateDelegate.checkFinish(instance) and not stateDelegate.win:
+                if stateDelegate.checkFinish(instance, gameInfo) and not stateDelegate.win:
                     
                     stateDelegate.setWin(True)
                     stateDelegate.setGame(True)
+                    File.writeContent("./Source/Game/Result/games.txt", gameInfo)
                     print(gameInfo.coins)
                     stateDelegate.checkWin(gameInfo)
                     print(gameInfo.winCount)
-                    
+
                     stateDelegate.reset(screen, instance, Tournament, 4, gameInfo)
                     botPackage2 = Tournament.botPackage
-                    
+
                     if stateDelegate.rounds == stateDelegate.maxRounds:
                         stateDelegate.setTournament(False)
                         stateDelegate.setGame(False)
                         stateDelegate.setPlay(False)
                         stateDelegate.setScene(2)
-                        
+                        stateDelegate.setFirst(False)
                         gameInfo.winCount = [0, 0, 0]
                         stateDelegate.rounds = 1
-
-                        File.writeContent("./Source/Game/Result/games.txt", gameInfo)
                         
                     else:
+                        stateDelegate.setFirst(False)
                         stateDelegate.setScene(4)
-                        botPackage2 = Tournament.botPackage
                         stateDelegate.rounds += 1
                         
-            else:
+                        
+            elif stateDelegate.mode == 0:
                 if stateDelegate.game:
 
                     stateDelegate.setGame(False)
@@ -110,21 +108,17 @@ def main():
                 func = LabTest.customFunc(botPackage, gameInfo)
 
                 botPackage = {"bot" : instance.bot[0], "bot2" : instance.bot[1], "pos" : func[0], "pos2" : func[1], "scene" : LabTest.gameScene, "blue" : instance.portalBlue , "orange" : instance.portalOrange }  
-                
-                if not stateDelegate.halfPoints:
-                    stateDelegate.checkHalfPoints(instance)
 
-                if stateDelegate.checkFinish(instance) and not stateDelegate.win:
+                if stateDelegate.checkFinish(instance, gameInfo) and not stateDelegate.win:
                         
                         stateDelegate.setWin(True)
                         stateDelegate.setPlay(False)
-
+                        stateDelegate.first = False
                         #gameInfo.addWin(instance)
                         Result.showResult(gameInfo)
                         stateDelegate.reset(screen, instance, LabTest, 3, gameInfo)
                         stateDelegate.setScene(2)
-
-                       
+   
             #Algorithm Testing
             instance.bot[1].updateGameState(enemyPos = instance.bot[0].positionRelative, enemyPoints = gameInfo.coins[0], thisPoints = gameInfo.coins[1])
             instance.bot[0].updateGameState(enemyPos = instance.bot[1].positionRelative, enemyPoints = gameInfo.coins[1], thisPoints = gameInfo.coins[0])

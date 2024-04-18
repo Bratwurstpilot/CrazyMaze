@@ -7,12 +7,9 @@ class File():
         
         file = open(filePath, "a")
 
-        content : str = "["
-        content += str(gameInfo.playerAlgorithm) + ", "
-        content += str(gameInfo.winCount) + ", "
-        content += str(gameInfo.gameCoins) + ", "
-        
-        file.write(str(content))
+        file.write(str(gameInfo.playerAlgorithm[0]) + ", " + str(gameInfo.playerAlgorithm[1]) + ", " + str(gameInfo.coins[0]) + ", " + str(gameInfo.coins[1]) + "\n")
+        #file.write(str(gameInfo.coins[0]) + ", " + str(gameInfo.coins[1]) + "\n")
+        #file.write("\n")
 
         file.close()
 
