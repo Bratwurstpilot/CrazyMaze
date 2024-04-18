@@ -213,7 +213,7 @@ class AgentEvo(Entity):
         for anchor in self.anchorPoints:
             relevantPoints.append(anchor)
         
-        self.algorithm = EvoAlgo(populationCount=300, points=relevantPoints, bestEstimate=None, maxIterations=300, metric="AStar")
+        self.algorithm = EvoAlgo(populationCount=100, points=relevantPoints, bestEstimate=None, maxIterations=600, metric="AStar")
         self.algorithm.fixedStart = start
         self.algorithm.fixedEnd = end
         self.algorithm.setUp(self.viewSpace.copy(), self.symbols)
@@ -242,6 +242,8 @@ class AgentEvo(Entity):
             self.flag = False
             self.currentPoint += 1
             self.getNextPath()
+        elif len(self.currentPath) == 0:
+            self.goToGoal()
         
         choice = self.currentPath[-1]
         self.currentPath.remove(choice)
@@ -299,7 +301,7 @@ class AgentEvo(Entity):
         try:
             while self.algorithm.globalBest[0].genes[self.currentPoint] in self.visited:
                 self.currentPoint += 1
-                print("Let me rethink that... ")
+                #print("Let me rethink that... ")
 
             self.relativeEnd = self.algorithm.globalBest[0].genes[self.currentPoint]
             self.currentPath = []
@@ -312,7 +314,7 @@ class AgentEvo(Entity):
         
         if self.isGoingToGoal:
             return
-        print("Bot now goes to goal")
+        #print("Bot now goes to goal")
         self.isGoingToGoal = True
 
         #while tuple(self.algorithm.globalBest[0].genes[self.currentPoint]) != tuple(self.end) and self.currentPoint <= len(self.algorithm.globalBest[0].genes)-1:
@@ -347,15 +349,16 @@ class AgentEvo(Entity):
             distEnemyToCoin = abs(enemyPos[0]-self.currentPath[0][0]) + abs(enemyPos[1]-self.currentPath[0][1])
             distThisToCoin =  abs(enemyPos[0]-self.positionRelative[0]) + abs(self.positionRelative[1]-self.currentPath[0][1])
 
-            if distEnemyToCoin < distThisToCoin:
+            epsilon = 10
+            if distEnemyToCoin - epsilon < distThisToCoin:
                 self.getNextPath()
                 self.flag = True
                 return
 
-        if tuple(enemyPos) == tuple(self.start) and enemyPoints < thisPoints:
+        if tuple(enemyPos) == tuple(self.start) and enemyPoints+2 <= thisPoints:
             return self.goToGoal()
 
-        if thisPoints >= 7:
+        if thisPoints >= 5:
             if delta(self.positionRelative, enemyPos, 5):
                 return self.goToGoal()
             else:
