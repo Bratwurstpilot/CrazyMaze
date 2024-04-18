@@ -9,7 +9,6 @@ class GameInfo:
         self.algorithms : list = ["A Star", "TSP Solver"]
         self.player : list = [0, 0]
 
-        
         self.difficulty : list = ["Einfach", "Einfach"]
         self.difficulties : list = ["Einfach", "Mittel", "Schwer"]
         self.botDifficulty : list = [0, 0]
@@ -20,7 +19,6 @@ class GameInfo:
 
         self.winCount : list = [0, 0, 0]
         self.coins : list = [0, 0]
-        self.gameCoins : list = []
         
         
     def setPlayerAlgorithm(self, state : int, player : int) -> None:
@@ -50,5 +48,4 @@ class GameInfo:
             self.intMode = 0
         elif self.intMode == len(self.modes):
             self.intMode = len(self.modes) - 1
-        #print(self.intMode)
         self.mode[0] = self.modes[self.intMode]

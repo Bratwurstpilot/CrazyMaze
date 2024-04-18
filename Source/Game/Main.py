@@ -68,15 +68,15 @@ def main():
                     
                     stateDelegate.setWin(True)
                     stateDelegate.setGame(True)
+                    File.writeContent("./Source/Game/Result/games.txt", gameInfo)
                     print(gameInfo.coins)
                     stateDelegate.checkWin(gameInfo)
                     print(gameInfo.winCount)
-                    
+
                     stateDelegate.reset(screen, instance, Tournament, 4, gameInfo)
                     botPackage2 = Tournament.botPackage
-                    
+
                     if stateDelegate.rounds == stateDelegate.maxRounds:
-                        print(stateDelegate.maxRounds)
                         stateDelegate.setTournament(False)
                         stateDelegate.setGame(False)
                         stateDelegate.setPlay(False)
@@ -84,14 +84,12 @@ def main():
                         stateDelegate.setFirst(False)
                         gameInfo.winCount = [0, 0, 0]
                         stateDelegate.rounds = 1
-
-                        File.writeContent("./Source/Game/Result/games.txt", gameInfo)
                         
                     else:
+                        stateDelegate.setFirst(False)
                         stateDelegate.setScene(4)
-                        botPackage2 = Tournament.botPackage
                         stateDelegate.rounds += 1
-                        print(stateDelegate.rounds)
+                        
                         
             elif stateDelegate.mode == 0:
                 if stateDelegate.game:

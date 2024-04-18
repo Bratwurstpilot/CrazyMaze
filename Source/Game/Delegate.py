@@ -117,7 +117,6 @@ class GameDelegate:
         elif gameInfo.coins[0] == gameInfo.coins[1]:
             gameInfo.winCount[2] += 1
 
-        gameInfo.gameCoins.append(gameInfo.coins)
         gameInfo.coins = [0, 0]
         
     

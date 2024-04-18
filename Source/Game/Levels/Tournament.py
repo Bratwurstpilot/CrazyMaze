@@ -172,18 +172,13 @@ class Tournament:
                     self.portalOrange.getTextureComponent().color = (255, 165, 0) #orange
                     self.entities.append(self.portalOrange)
 
-        #playernum = 0
-
-        #aBot = Agent(START[0] + (1-playernum) * LINEWIDTH + (WIDTH-2) * LINEWIDTH * playernum, START[1] + (1-playernum) * LINEWIDTH + (HEIGHT-2) * LINEWIDTH * playernum, 1, LINEWIDTH, LINEWIDTH, playerNumber=playernum, transport = tpSpots)
         aBot = self.setPlayer(self.gameInfo.playerAlgorithm[0], START, LINEWIDTH, WIDTH, HEIGHT, 0, tpSpots)
+        aBot.tickMax = 0
         
-        #playernumB = 1
-
-        #bBot = AgentEvo(START[0] + (1-playernumB) * LINEWIDTH + (WIDTH-2) * LINEWIDTH * playernumB, START[1] + (1-playernumB) * LINEWIDTH + (HEIGHT-2) * LINEWIDTH * playernumB, 1, LINEWIDTH, LINEWIDTH, playerNumber=playernumB, transport=tpSpots)
         bBot = self.setPlayer(self.gameInfo.playerAlgorithm[1], START, LINEWIDTH, WIDTH, HEIGHT, 1, tpSpots)
+        bBot.tickMax = 0
 
         self.coins = []
-        #------Testing Tsp Solver
         
         coins = 0
         for y in range(len(labyrinth)):
@@ -226,9 +221,9 @@ class Tournament:
 def customFunc(package : dict, gameInfo):
     
     bot = package["bot"]
-    bot.tickMax = (0.00000001) * 144 * 0.1
+    #bot.tickMax = (0.00000001) * 144 * 0.1
     bBot = package["bot2"]
-    bBot.tickMax = (0.00000001) * 144 * 0.1
+    #bBot.tickMax = (0.00000001) * 144 * 0.1
     botPos = package["pos"]
     bBotPos = package["pos2"]
 
