@@ -221,9 +221,9 @@ class Tournament:
 def customFunc(package : dict, gameInfo):
     
     bot = package["bot"]
-    #bot.tickMax = (0.00000001) * 144 * 0.1
+    bot.tickMax = 0
     bBot = package["bot2"]
-    #bBot.tickMax = (0.00000001) * 144 * 0.1
+    bBot.tickMax = 0
     botPos = package["pos"]
     bBotPos = package["pos2"]
 
