@@ -58,6 +58,12 @@ def setup(screen, delegate, info):
     gameDelegate = delegate
     object.gameInfo = info
 
+    #-------------------------Main Menu-----------------------------------------
+    object.mainMenu.setFunc([delegate.reset])
+    object.mainMenu.setParam([[info]])
+    #---------------------------------------------------------------------------
+
+
     
 def showResult(gameInfo):
     

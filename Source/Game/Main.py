@@ -41,8 +41,7 @@ def main():
     stateDelegate.setup([Menu.gameScene, Create.gameScene, Result.gameScene, LabTest.gameScene, Tournament.gameScene])
 
     while stateDelegate.running:
-        #print("Info",gameInfo.intMode)
-        #print("Delegate",stateDelegate.mode)
+    
         if stateDelegate.play:
             stateDelegate.setMode(gameInfo.intMode)
             if stateDelegate.mode == 1:
@@ -66,14 +65,11 @@ def main():
                     
                 if stateDelegate.checkFinish(instance, gameInfo) and not stateDelegate.win:
                     
+                    File.writeContent("./Source/Game/Result/games.txt", gameInfo)
                     stateDelegate.setWin(True)
                     stateDelegate.setGame(True)
-                    File.writeContent("./Source/Game/Result/games.txt", gameInfo)
-                    print(gameInfo.coins)
-                    stateDelegate.checkWin(gameInfo)
-                    print(gameInfo.winCount)
 
-                    stateDelegate.reset(screen, instance, Tournament, 4, gameInfo)
+                    stateDelegate.reset(gameInfo)
                     botPackage2 = Tournament.botPackage
 
                     if stateDelegate.rounds == stateDelegate.maxRounds:
@@ -82,7 +78,6 @@ def main():
                         stateDelegate.setPlay(False)
                         stateDelegate.setScene(2)
                         stateDelegate.setFirst(False)
-                        gameInfo.winCount = [0, 0, 0]
                         stateDelegate.rounds = 1
                         
                     else:
@@ -113,10 +108,9 @@ def main():
                         
                         stateDelegate.setWin(True)
                         stateDelegate.setPlay(False)
-                        stateDelegate.first = False
-                        #gameInfo.addWin(instance)
+                        stateDelegate.setFirst(False)
                         Result.showResult(gameInfo)
-                        stateDelegate.reset(screen, instance, LabTest, 3, gameInfo)
+                        stateDelegate.reset(gameInfo)
                         stateDelegate.setScene(2)
    
             #Algorithm Testing
@@ -125,11 +119,9 @@ def main():
         
             for coin in coins:
                 if coin.checkCollide(instance.bot[0]):
-                    #print("Bot 0 collected coin")
                     stateDelegate.selectCoin(coin, coins, instance, gameInfo, 0)
                     
                 elif coin.checkCollide(instance.bot[1]):
-                    #print("Bot 1 collected coin")
                     stateDelegate.selectCoin(coin, coins, instance, gameInfo, 1)
                     
               
@@ -139,10 +131,13 @@ def main():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     if not stateDelegate.tournament:
+                        pass
+                        """
                         stateDelegate.reset(screen, instance, LabTest, 3, gameInfo)
                         botPackage = LabTest.botPackage
                         coins = instance.coins
                         gameInfo.coins = [0, 0]
+                        """
 
         stateDelegate.update()
         stateDelegate.scene.render()

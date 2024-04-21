@@ -190,7 +190,6 @@ def setup(screen, delegate, info):
     def updateMode(info, cgame, step) -> None:
     
         info.setMode(step)
-        print(info.intMode)
         cgame.setText(info.mode[0])
 
     def updateRound(instance, cgame, step):

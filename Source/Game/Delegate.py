@@ -79,8 +79,8 @@ class GameDelegate:
 
         self.maxRounds += step
         
-        if self.maxRounds < 0:
-            self.maxRounds = 0
+        if self.maxRounds < 10:
+            self.maxRounds = 10
 
 
     def update(self):
@@ -104,21 +104,7 @@ class GameDelegate:
                 gameInfo.coins[1] += 2
             
         return (instance.bot[0].getPosition() == instance.end[1]) and (instance.bot[1].getPosition() == instance.end[0])
-
-
-    def checkWin(self, gameInfo):
-
-        if gameInfo.coins[0] > gameInfo.coins[1]:
-            gameInfo.winCount[0] += 1
-
-        elif gameInfo.coins[1] > gameInfo.coins[0]:
-            gameInfo.winCount[1] += 1
-
-        elif gameInfo.coins[0] == gameInfo.coins[1]:
-            gameInfo.winCount[2] += 1
-
-        gameInfo.coins = [0, 0]
-        
+    
     
     def selectCoin(self, coin, coins, instance, info, botNumber):
 
@@ -130,9 +116,9 @@ class GameDelegate:
         instance.entities.remove(coin)
     
     
-    def reset(self, screen, instance, level, index, info):
+    def reset(self, info):
         
         self.scene = self.scenes[0]
-        instance.entities.clear()
-        self.scenes.pop(index)
-        self.scenes.insert(index, level.gameScene)
+        info.coins = [0, 0]
+        #self.scenes.pop(index)
+        #self.scenes.insert(index, level.gameScene)
