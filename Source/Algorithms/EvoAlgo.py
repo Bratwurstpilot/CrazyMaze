@@ -45,7 +45,9 @@ class EvoAlgo():
         #for individual in self.population:
             #self.fitness(individual)
         
-        self.globalBest : list = [self.population[-1], 0]
+        gb = Individual([])
+        gb.fitness = 100000
+        self.globalBest : list = [gb, 0]
 
         self.metric = metric
     
@@ -146,13 +148,13 @@ class EvoAlgo():
 
         individual.fitness = 0.0
         
-        '''
+        
         if len(individual.genes) > 0:
             first = individual.genes[0]
-            individual.fitness += sqrt( (self.fixedStart[0] - first[0])**2 + (self.fixedStart[1] - first[1])**2 )
-            last = individual.genes[-1]
-            individual.fitness += sqrt( (self.fixedEnd[0] - last[0])**2 + (self.fixedEnd[1] - last[1])**2 )
-        '''
+            individual.fitness += sqrt( (self.fixedStart[0] - first[0])**2 + (self.fixedStart[1] - first[1])**2 ) * 3
+            #last = individual.genes[-1]
+            #individual.fitness += sqrt( (self.fixedEnd[0] - last[0])**2 + (self.fixedEnd[1] - last[1])**2 ) * 3
+        
 
         for i in range(len(individual.genes)-1):
             current = individual.genes[i]
@@ -173,10 +175,8 @@ class EvoAlgo():
             distToStart = abs(self.fixedStart[0] - current[0]) + abs(self.fixedStart[1] - current[1])
 
             if i < len(individual.genes) // 2:
-                if distToEnd > distToStart:
+                if distToEnd < distToStart:
                     individual.fitness += penalty
-                else:
-                    individual.fitness -= penalty
 
 
     def selection(self, count = 2, turnamentSize = 10, preselected : int = 1) -> list:
@@ -232,7 +232,7 @@ class EvoAlgo():
         newGeneration.append(self.population[2])
 
         #newGeneration = self.population[0::populationSize]
-        self.population = newGeneration.copy()
+        self.population = newGeneration
 
         #Mutation
         for individual in self.population:
@@ -245,6 +245,8 @@ class EvoAlgo():
                 self.globalBest[0] = Individual(individual.genes.copy())
                 self.globalBest[0].fitness = individual.fitness
                 self.globalBest[1] = self.iter
+
+            print(self.globalBest[0].fitness)
 
             if self.bestEstimate != None:
                 if individual.fitness <= self.bestEstimate:
