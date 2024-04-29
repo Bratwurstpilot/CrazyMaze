@@ -245,21 +245,24 @@ class AgentEvo(Entity):
             self.flag = False
             self.currentPoint += 1
             self.getNextPath()
-        
-        self.positionSave = self.positionRelative
 
         try:
             choice = self.currentPath[-1] #Error potential
             self.currentPath.remove(choice)
 
             self.shiftPosition((choice[0] - self.positionRelative[0]) * self.stepWidth, (choice[1] - self.positionRelative[1]) * self.stepWidth)
-            self.positionRelative = choice
+            self.positionRelative = tuple(list(choice).copy())
 
             self.visited.append(choice)
 
         except IndexError:
 
             pass
+
+        if self.positionRelative == self.positionSave:
+            self.goToGoal()
+        else:
+            self.positionSave = tuple(list(self.positionRelative).copy())
     
         self.tick = 0
      
@@ -347,6 +350,7 @@ class AgentEvo(Entity):
         manipCoords = [( (enemyPos[0]-labCoords[0]) / labLineWidth), ( (enemyPos[1]-labCoords[1]) / labLineWidth )]
         enemyPos = manipCoords
 
+        '''
         def delta(this : tuple, enemy : tuple, epsilon : int = 0) -> bool:
             
             #Return true if the agent is closer to his goal than the enemy to his
@@ -382,7 +386,7 @@ class AgentEvo(Entity):
             else:
                 return
         
-
+        '''
         '''
         if thisPoints >= 6:
             self.goToGoal()
