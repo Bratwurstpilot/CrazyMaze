@@ -59,11 +59,11 @@ class LabTest:
         elif gameInfo == 3: #TSP Solver Bot
             return ["Source/Game/Files/Echse_1.png", "Source/Game/Files/Echse_2.png"]
         
-    def setController(self, player):
+    def setController(self, player, controllerID : int):
 
-        if type(player) == type(Player):
+        if isinstance(player, Player):
             print("Control")
-            control = MyController2(player)
+            control = MyController([player], controllerID)
             self.controller.append(control)
 
 
@@ -206,8 +206,8 @@ class LabTest:
         #bBot = AgentEvo(START[0] + (1-playernumB) * LINEWIDTH + (WIDTH-2) * LINEWIDTH * playernumB, START[1] + (1-playernumB) * LINEWIDTH + (HEIGHT-2) * LINEWIDTH * playernumB, 1, LINEWIDTH, LINEWIDTH, playerNumber=playernumB, transport=tpSpots)
         bBot = self.setPlayer(self.gameInfo.player[1], START, LINEWIDTH, WIDTH, HEIGHT, 1, tpSpots)
 
-        self.setController(aBot)
-        self.setController(bBot)
+        self.setController(aBot, 0)
+        self.setController(bBot, 1)
 
         self.coins = []
         #------Testing Tsp Solver

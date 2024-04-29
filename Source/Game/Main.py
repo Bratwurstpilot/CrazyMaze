@@ -140,12 +140,15 @@ def main():
                         coins = instance.coins
                         gameInfo.coins = [0, 0]
                         """
+                for controller in instance.controller:
+                    controller.update(event.key, True)
+
+            if event.type == pygame.KEYUP:
+                for controller in instance.controller:
+                    controller.update(event.key, False)
 
         stateDelegate.update()
         stateDelegate.scene.render()
-
-        for controller in instance.controller:
-            controller.update()
    
         for animation in animations:
             animation.update()
