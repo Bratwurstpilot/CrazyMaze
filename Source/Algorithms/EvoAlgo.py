@@ -100,10 +100,10 @@ class EvoAlgo():
         Uniformly ordered Crossover.
         Probability measure x >= pX? -> change genes with pX in [0;10]
         '''
-        offSpring1 = Individual(individuals[0].genes)
+        offSpring1 = Individual(individuals[0].genes.copy())
         #offSpring1.fitness = individuals[0].fitness
 
-        offSpring2 = Individual(individuals[1].genes)
+        offSpring2 = Individual(individuals[1].genes.copy())
         #offSpring2.fitness = individuals[1].fitness
         
         changedGenesIndex : list = [] #What genes should be exchanged with respect to prob. pX
@@ -129,10 +129,13 @@ class EvoAlgo():
         genesP2InOrder = list(filter(lambda x : x in changedGenesP1, offSpring2.genes))
 
         for i in range(len(changedGenesIndex)):
-            offSpring1.genes[changedGenesIndex[i]] = genesP2InOrder[0]
-            genesP2InOrder.remove(genesP2InOrder[0])
-            offSpring2.genes[changedGenesIndex[i]] = genesP1InOrder[0]
-            genesP1InOrder.remove(genesP1InOrder[0])
+            try:    
+                offSpring1.genes[changedGenesIndex[i]] = genesP2InOrder[0]
+                genesP2InOrder.remove(genesP2InOrder[0])
+                offSpring2.genes[changedGenesIndex[i]] = genesP1InOrder[0]
+                genesP1InOrder.remove(genesP1InOrder[0])
+            except IndexError:
+                pass
         
         return [offSpring1, offSpring2]
     
@@ -152,8 +155,8 @@ class EvoAlgo():
         if len(individual.genes) > 0:
             first = individual.genes[0]
             individual.fitness += sqrt( (self.fixedStart[0] - first[0])**2 + (self.fixedStart[1] - first[1])**2 ) * 3
-            #last = individual.genes[-1]
-            #individual.fitness += sqrt( (self.fixedEnd[0] - last[0])**2 + (self.fixedEnd[1] - last[1])**2 ) * 3
+            last = individual.genes[-1]
+            individual.fitness += sqrt( (self.fixedEnd[0] - last[0])**2 + (self.fixedEnd[1] - last[1])**2 ) * 3
         
 
         for i in range(len(individual.genes)-1):
@@ -245,8 +248,6 @@ class EvoAlgo():
                 self.globalBest[0] = Individual(individual.genes.copy())
                 self.globalBest[0].fitness = individual.fitness
                 self.globalBest[1] = self.iter
-
-            print(self.globalBest[0].fitness)
 
             if self.bestEstimate != None:
                 if individual.fitness <= self.bestEstimate:

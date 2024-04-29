@@ -231,24 +231,25 @@ class AgentEvo(Entity):
         
         self.tick += 1
 
-        if self.tick < self.tickMax : return
+        if self.tick < self.tickMax :
+            return
+
+        if self.end in self.visited:
+            self.visited.remove(self.end)
 
         #self.currentPoint >= len(self.algorithm.globalBest[0].genes) or 
         if self.positionRelative == self.end:
             return
 
-        if len(self.currentPath) == 0 and self.currentPoint <= len(self.algorithm.globalBest[0].genes)-1:
+        if len(self.currentPath) == 0 and self.currentPoint < len(self.algorithm.globalBest[0].genes)-1:
             self.flag = False
             self.currentPoint += 1
             self.getNextPath()
-        elif len(self.currentPath) == 0:
-            self.goToGoal()
         
         self.positionSave = self.positionRelative
 
         try:
             choice = self.currentPath[-1] #Error potential
-
             self.currentPath.remove(choice)
 
             self.shiftPosition((choice[0] - self.positionRelative[0]) * self.stepWidth, (choice[1] - self.positionRelative[1]) * self.stepWidth)
@@ -258,7 +259,7 @@ class AgentEvo(Entity):
 
         except IndexError:
 
-            self.goToGoal()
+            pass
     
         self.tick = 0
      
@@ -295,11 +296,10 @@ class AgentEvo(Entity):
         if str == "Coin":
             
             manipCoords = [int((coords[0]-labCoords[0]) // labLineWidth), int((coords[1]-labCoords[1]) // labLineWidth)]
-            print(manipCoords)
             self.visited.append(tuple(manipCoords))
 
-            if len(self.currentPath) < 1:
-                return
+            #if len(self.currentPath) < 1:
+            #    self.goToGoal()
             
             self.getNextPath()
 
@@ -322,7 +322,7 @@ class AgentEvo(Entity):
         
         if self.isGoingToGoal:
             return
-        #print("Bot now goes to goal")
+        print("Bot now goes to goal")
         self.isGoingToGoal = True
 
         #while tuple(self.algorithm.globalBest[0].genes[self.currentPoint]) != tuple(self.end) and self.currentPoint <= len(self.algorithm.globalBest[0].genes)-1:
