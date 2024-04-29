@@ -12,7 +12,7 @@ class GameDelegate:
         self.running : bool = run
         self.scenes : list = []
         self.allScenes : list = []
-        self.mode : int = -1
+        self.mode : int = 0
 
         self.stateGame : bool = True
         self.game : bool = False
@@ -104,6 +104,15 @@ class GameDelegate:
                 gameInfo.coins[1] += 2
             
         return (instance.bot[0].getPosition() == instance.end[1]) and (instance.bot[1].getPosition() == instance.end[0])
+    
+    
+    def checkMode(self, info): 
+
+        if info.intMode == 0:
+            info.algorithms = ["Spieler", "A Star", "Adv Star", "TSP Solver"]
+
+        elif info.intMode == 1:
+            info.algorithms = ["A Star", "TSP Solver"]
     
     
     def selectCoin(self, coin, coins, instance, info, botNumber):

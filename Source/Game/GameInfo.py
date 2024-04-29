@@ -6,8 +6,11 @@ class GameInfo:
 
         self.playerAlgorithm : list = ["A Star", "A Star"]
 
-        self.algorithms : list = ["A Star", "TSP Solver"]
+        self.algorithms : list =  ["Spieler", "A Star", "Adv Star", "TSP Solver"]
         self.player : list = [0, 0]
+
+        self.single : list = ["Spieler", "A Star", "Adv Star", "TSP Solver"]
+        self.tournament : list = ["A Star", "Adv Star", "TSP Solver"]
 
         self.difficulty : list = ["Einfach", "Einfach"]
         self.difficulties : list = ["Einfach", "Mittel", "Schwer"]

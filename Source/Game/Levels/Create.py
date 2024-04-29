@@ -41,7 +41,7 @@ class Create:
 
     #---------------------------------Mode------------------------------------
 
-    mode = Button(1920//2 - 150, 900, 0, 300, 50, "Einzeln", (0, 110, 18), 40)
+    mode = Label(1920//2 - 150, 900, 0, 300, 50, "Einzeln", (0, 110, 18), 40)
     mode.setTextRect()
     uiEntities.append(mode)
 
@@ -56,7 +56,7 @@ class Create:
     uiEntities.append(switchRModus)
 
     #--------------------------------Round-------------------------------------
-    round = Button(1920//2 - 150, 1000, 0, 300, 50, "10", (0, 110, 18), 40)
+    round = Label(1920//2 - 150, 1000, 0, 300, 50, "10", (0, 110, 18), 40)
     round.setTextRect()
     uiEntities.append(round)
 
