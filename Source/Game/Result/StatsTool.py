@@ -60,4 +60,4 @@ keys : dict = {
 }
 
 result = getResult("F:\Studium\Semester 5\SoftwareProjekt\CrazyMaze\Source\Game\Result\games.txt", keys)
-writeResult("F:\Studium\Semester 5\SoftwareProjekt\CrazyMaze\Source\Game\Result\Statistics.txt", "Spieldoku 1 | [win1, win2, draw]", result)
+writeResult("F:\Studium\Semester 5\SoftwareProjekt\CrazyMaze\Source\Game\Result\Statistics.txt", "Spieldoku 2 | [win1, win2, draw]", result)

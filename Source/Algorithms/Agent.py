@@ -350,22 +350,10 @@ class AgentEvo(Entity):
         manipCoords = [( (enemyPos[0]-labCoords[0]) / labLineWidth), ( (enemyPos[1]-labCoords[1]) / labLineWidth )]
         enemyPos = manipCoords
 
-        '''
         def delta(this : tuple, enemy : tuple, epsilon : int = 0) -> bool:
             
             #Return true if the agent is closer to his goal than the enemy to his
             return ( abs(self.end[0] - this[0]) + abs(self.end[1] - this[1]) ) - epsilon >= ( abs(self.start[0] - enemy[0]) + abs(self.start[1] - enemy[1]) )
-        
-        #Calculate the distance from enemy to next coin
-        if len(self.currentPath) > 0 and not self.flag:
-            distEnemyToCoin = abs(enemyPos[0]-self.currentPath[0][0]) + abs(enemyPos[1]-self.currentPath[0][1])
-            distThisToCoin =  abs(enemyPos[0]-self.positionRelative[0]) + abs(self.positionRelative[1]-self.currentPath[0][1])
-
-            epsilon = 10
-            if distEnemyToCoin - epsilon < distThisToCoin:
-                self.getNextPath()
-                self.flag = True
-                return
 
         if tuple(enemyPos) == tuple(self.start) and enemyPoints+2 <= thisPoints:
             return self.goToGoal()
@@ -385,8 +373,7 @@ class AgentEvo(Entity):
                 return self.goToGoal()
             else:
                 return
-        
-        '''
+
         '''
         if thisPoints >= 6:
             self.goToGoal()
