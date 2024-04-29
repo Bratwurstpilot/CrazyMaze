@@ -41,7 +41,9 @@ def main():
     stateDelegate.setup([Menu.gameScene, Create.gameScene, Result.gameScene, LabTest.gameScene, Tournament.gameScene])
 
     while stateDelegate.running:
-    
+
+        stateDelegate.checkMode(gameInfo)
+        
         if stateDelegate.play:
             stateDelegate.setMode(gameInfo.intMode)
             if stateDelegate.mode == 1:
@@ -141,6 +143,9 @@ def main():
 
         stateDelegate.update()
         stateDelegate.scene.render()
+
+        for controller in instance.controller:
+            controller.update()
    
         for animation in animations:
             animation.update()

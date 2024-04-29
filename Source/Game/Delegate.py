@@ -109,10 +109,10 @@ class GameDelegate:
     def checkMode(self, info): 
 
         if info.intMode == 0:
-            info.algorithms = ["Spieler", "A Star", "Adv Star", "TSP Solver"]
+            info.algorithms = info.single
 
         elif info.intMode == 1:
-            info.algorithms = ["A Star", "TSP Solver"]
+            info.algorithms = info.tournament
     
     
     def selectCoin(self, coin, coins, instance, info, botNumber):

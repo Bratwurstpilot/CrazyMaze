@@ -94,7 +94,7 @@ class Create:
     playerOne.setTextRect()
     uiEntities.append(playerOne)
 
-    pOneAlgorithm = Label(1920//4, 755, 0, 1, 1, "A Star", (0, 110, 18), 40)
+    pOneAlgorithm = Label(1920//4, 755, 0, 1, 1, "Spieler", (0, 110, 18), 40)
     pOneAlgorithm.setTextRect()
     uiEntities.append(pOneAlgorithm)
 
@@ -127,7 +127,7 @@ class Create:
     playerTwo.setTextRect()
     uiEntities.append(playerTwo)
 
-    pTwoAlgorithm = Label((1920//4)*3, 755, 0, 1, 1, "A Star", (0, 110, 18), 40)
+    pTwoAlgorithm = Label((1920//4)*3, 755, 0, 1, 1, "Spieler", (0, 110, 18), 40)
     pTwoAlgorithm.setTextRect()
     uiEntities.append(pTwoAlgorithm)
 

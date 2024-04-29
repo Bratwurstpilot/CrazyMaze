@@ -5,6 +5,8 @@ from Source.Game.Util import *
 from Source.Algorithms.Agent import Agent, AgentEvo
 from Source.Game.Labyrinth import Labyrinth
 from Source.Engine.Scene import Scene
+from Source.Game.Player import Player
+from Source.Game.Util import MyController2
 
 
 from random import randint
@@ -20,6 +22,7 @@ class LabTest:
         self.screen = None
         self.coins : list = []
         self.player : list = []
+        self.controller : list = []
         
     
     def setPlayer(self, gameInfo, start : list, linewidth : int, width : int, height : int, playernum : int, tpSpots : list):
@@ -39,9 +42,9 @@ class LabTest:
         """
 
         if gameInfo == 0: #Spieler 
-            player = MyEntity(start[0] + (1-playernum) * linewidth + (width-2) * linewidth * playernum, start[1] + (1-playernum) * linewidth + (height-2) * linewidth * playernum, 1, linewidth, linewidth)
+            player = Player(start[0] + (1-playernum) * linewidth + (width-2) * linewidth * playernum, start[1] + (1-playernum) * linewidth + (height-2) * linewidth * playernum, 1, linewidth, linewidth)
         
-        elif gameInfo == 2:
+        elif gameInfo == 2: #Adv Star Bot
             player = Agent(start[0] + (1-playernum) * linewidth + (width-2) * linewidth * playernum, start[1] + (1-playernum) * linewidth + (height-2) * linewidth * playernum, 1, linewidth, linewidth, playerNumber=playernum, transport = tpSpots)
         
         elif gameInfo == 3:# TSP Solver Bot
@@ -51,10 +54,18 @@ class LabTest:
     
     def setPlayerTexture(self, gameInfo):
 
-        if gameInfo == 2: #A Star Bot
+        if gameInfo == 2 or gameInfo == 0: #A Star Bot
             return ["Source/Game/Files/KnightSprite1.png", "Source/Game/Files/KnightSprite2.png"]
         elif gameInfo == 3: #TSP Solver Bot
             return ["Source/Game/Files/Echse_1.png", "Source/Game/Files/Echse_2.png"]
+        
+    def setController(self, player):
+
+        if type(player) == type(Player):
+            print("Control")
+            control = MyController2(player)
+            self.controller.append(control)
+
 
     def setupLab(self):
 
@@ -194,6 +205,9 @@ class LabTest:
         #playernumB = 1
         #bBot = AgentEvo(START[0] + (1-playernumB) * LINEWIDTH + (WIDTH-2) * LINEWIDTH * playernumB, START[1] + (1-playernumB) * LINEWIDTH + (HEIGHT-2) * LINEWIDTH * playernumB, 1, LINEWIDTH, LINEWIDTH, playerNumber=playernumB, transport=tpSpots)
         bBot = self.setPlayer(self.gameInfo.player[1], START, LINEWIDTH, WIDTH, HEIGHT, 1, tpSpots)
+
+        self.setController(aBot)
+        self.setController(bBot)
 
         self.coins = []
         #------Testing Tsp Solver
