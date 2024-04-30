@@ -1,4 +1,3 @@
-
 from Source.Game.Util import MyEntity
 
 class Player(MyEntity):
@@ -17,7 +16,8 @@ class Player(MyEntity):
 
     def updateGameState(self, enemyPos : tuple, enemyPoints : int, thisPoints : int):
         
-        pass
+        self.positionRelative = (self.positionX, self.positionY, self.positionZ)
+        print(self.positionRelative)
 
 
     def setup(self, labyrinth):
