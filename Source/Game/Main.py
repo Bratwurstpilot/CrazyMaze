@@ -106,6 +106,7 @@ def main():
                     stateDelegate.setScene(3)
 
                 func = LabTest.customFunc(botPackage, gameInfo)
+                instance.updateCoins(gameInfo)
 
                 botPackage = {"bot" : instance.bot[0], "bot2" : instance.bot[1], "pos" : func[0], "pos2" : func[1], "scene" : LabTest.gameScene, "blue" : instance.portalBlue , "orange" : instance.portalOrange }  
 
@@ -150,6 +151,6 @@ def main():
         for animation in animations:
             animation.update()
 
-        clock.tick(144)
+        clock.tick(500)
 
     pygame.quit()

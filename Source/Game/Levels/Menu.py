@@ -17,11 +17,13 @@ class Menu:
     #menuBackground = pygame.image.load("Source/Game/Files/menuBackground.png")
     menuBackground = pygame.transform.scale(pygame.image.load("Source/Game/Files/menuBackground.png"), (1920,1320))
   
-    startGame = Button(1920//2 - 150, 790, 0, 300, 50, "Spiel erstellen", (0, 110, 18), 60)
+    startGame = Button(1920//2 - 150, 870, 0, 300, 50, "Spiel erstellen", (235, 196,0), 30)
+    startGame.setBgColor((20,20,20))
     startGame.setTextRect()
     uiEntities.append(startGame)
     
-    quitGame = Button(1920//2 - 150, 910, 0, 300, 50, "Beenden", (0, 110, 18), 60)
+    quitGame = Button(1920//2 - 150, 950, 0, 300, 50, "Beenden", (235,196,0), 30)
+    quitGame.setBgColor((20,20,20))
     quitGame.setTextRect()
     uiEntities.append(quitGame)
 

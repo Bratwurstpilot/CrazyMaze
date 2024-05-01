@@ -113,7 +113,7 @@ class Agent(Entity):
             self.tick = 0
 
     
-    def signal(self, str = "Coin", coords = (0,0), labCoords = [500,200], labLineWidth = 20):
+    def signal(self, str = "Coin", coords = (0,0), labCoords : list = [500,200], labLineWidth : int = 20):
         #Remove Coins from Anchor points
         manipCoords = [int((coords[0]-labCoords[0]) // labLineWidth), int((coords[1]-labCoords[1]) // labLineWidth)]
 

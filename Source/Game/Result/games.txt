@@ -3998,3 +3998,15 @@ A Star, A Star, 5, 7
 A Star, A Star, 6, 6
 A Star, A Star, 7, 5
 A Star, A Star, 8, 4
+A Star, A Star, 6, 6
+A Star, A Star, 5, 7
+A Star, A Star, 9, 3
+A Star, A Star, 6, 5
+A Star, A Star, 6, 6
+A Star, A Star, 2, 9
+A Star, A Star, 5, 7
+A Star, A Star, 5, 7
+A Star, A Star, 7, 5
+A Star, A Star, 6, 6
+A Star, A Star, 5, 7
+A Star, A Star, 8, 4

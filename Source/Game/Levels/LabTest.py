@@ -6,6 +6,8 @@ from Source.Algorithms.Agent import Agent, AgentEvo
 from Source.Game.Labyrinth import Labyrinth
 from Source.Engine.Scene import Scene
 
+from Source.Engine.Label import Label
+
 
 from random import randint
 
@@ -14,12 +16,17 @@ class LabTest:
     def __init__(self):
 
         self.entities : list = []
+        self.uiEntities : list = []
         self.end : list = None
         self.bot : list = []
         self.gameInfo = None
         self.screen = None
         self.coins : list = []
         self.player : list = []
+        self.LINEWIDTH : int = 0
+        self.WIDTH : int = 0
+        self.HEIGHT : int = 0
+        self.START : list = [0,0]
         
     
     def setPlayer(self, gameInfo, start : list, linewidth : int, width : int, height : int, playernum : int, tpSpots : list):
@@ -50,23 +57,25 @@ class LabTest:
         
         labyrinth = Labyrinth(45,31).getLabyrinth()
 
+        bgEntt = MyEntity()
+        bgEntt.textureComp.setTexture("Source/Game/Files/GameBackground.png", (1920,1330))
+        self.entities.append(bgEntt)
+
         WIDTH = len(labyrinth[0])
         HEIGHT = len(labyrinth)
-        LINEWIDTH = 20
-        START = [500 ,200] #x = 1920//4 + 20
+        LINEWIDTH = 15
+        START = [610 ,420] #x = 1920//4 + 20
+
+        self.WIDTH = WIDTH
+        self.HEIGHT = HEIGHT
+        self.LINEWIDTH = LINEWIDTH
+        self.START = START
 
         BGCOLOR = (10,10,10)
-        labBG = MyEntity(START[0], START[1], -1, 47*LINEWIDTH, 33*LINEWIDTH)
+        labBG = MyEntity(START[0], START[1], 0, 47*LINEWIDTH, 33*LINEWIDTH)
         labBG.getTextureComponent().color = BGCOLOR
         self.entities.append(labBG)
 
-        bg1 = MyEntity(0, 0, bodyWidth=1920, bodyHeight=1080)
-        bg1.textureComp.color = BGCOLOR
-        self.entities.append(bg1)
-
-        bg2 = MyEntity(0,0)
-        #bg2.textureComp.setTexture("Source/Game/Files/Gamefield.png", (1920,1080))
-        self.entities.append(bg2)
 
         #TP Test--------------------------
 
@@ -152,7 +161,7 @@ class LabTest:
                     if len(TEXDATA) == 2:
                         wallEntt.textureComp.setTexture(TEXDATA[0], size=(LINEWIDTH,LINEWIDTH), rotate=-TEXDATA[1])
                     elif len(TEXDATA) == 1:
-                        wallEntt.textureComp.color = (200,200,0)
+                        wallEntt.textureComp.color = (0,0,0)
                     else:
                         wallEntt.textureComp.color = BGCOLOR
                     self.entities.append(wallEntt)
@@ -206,17 +215,32 @@ class LabTest:
         self.bot.append(bBot)
         self.end.append(bBot.getPosition())
 
-        playerLeft = MyEntity(50, 560)
-        playerLeft.getTextureComponent().setTextureSet(self.setPlayerTexture(self.gameInfo.player[0]), (400,400))
-        playerLeft.getTextureComponent().setFrameInterval(0.5)
+        playerLeft = MyEntity(40, 100)
+        playerLeft.getTextureComponent().setTextureSet(self.setPlayerTexture(self.gameInfo.player[0]), (300,300))
+        playerLeft.getTextureComponent().setFrameInterval(0.2)
         self.entities.append(playerLeft)
 
-        playerRight = MyEntity(1470, 560)
-        playerRight.getTextureComponent().setTextureSet(self.setPlayerTexture(self.gameInfo.player[1]), (400,400))
-        playerRight.getTextureComponent().setFrameInterval(0.5)
+        playerRight = MyEntity(1580, 100)
+        playerRight.getTextureComponent().setTextureSet(self.setPlayerTexture(self.gameInfo.player[1]), (300,300), reflectX=True)
+        playerRight.getTextureComponent().setFrameInterval(0.2)
         self.entities.append(playerRight)
 
+        self.coinCountOne = Label(1920//4 + 370, 130, 0, 1, 1, "0", (0, 255, 255), 70)
+        self.coinCountOne.setTextRect()
+        self.uiEntities.append(self.coinCountOne)
+
+        self.coinCountTwo = Label(1920//4 * 3 - 370, 130, 0, 1, 1, "0", (255, 153, 51), 70)
+        self.coinCountTwo.setTextRect()
+        self.uiEntities.append(self.coinCountTwo)
+
         #------------------------
+    
+
+    def updateCoins(self, gameInfo):
+
+        self.coinCountOne.setText(gameInfo.coins[0])
+        self.coinCountTwo.setText(gameInfo.coins[1])
+
                     
 #------------Setup-------------------------------
     
@@ -261,7 +285,7 @@ def customFunc(package : dict, gameInfo):
 object = LabTest()
 gameScene = None
 botPackage = {}
-background = pygame.image.load("Source/Game/Files/CreateBackground.png")
+#background = pygame.transform.scale(pygame.image.load("Source/Game/Files/GameBackground.png"), (1920,1080))
 controllers = []
 
 
@@ -272,7 +296,7 @@ def setup(info, screen):
     
     object.gameInfo = info
     object.screen = screen
-    gameScene = Scene(object.screen, object.entities, [], background)
+    gameScene = Scene(object.screen, object.entities, [])
     
 
 def load():
@@ -289,7 +313,6 @@ def load():
     portalOrange = object.portalOrange
     botPackage = {"bot" : bot, "bot2" : bBot, "pos" : botPos, "pos2" : bBotPos, "scene" : gameScene, "blue" : portalBlue, "orange" : portalOrange}
 
-    gameScene = Scene(object.screen, object.entities, [], background)
+    gameScene = Scene(object.screen, object.entities, object.uiEntities)
 
     return gameScene
-
