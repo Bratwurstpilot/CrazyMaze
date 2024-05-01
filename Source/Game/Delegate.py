@@ -120,7 +120,10 @@ class GameDelegate:
         info.coins[botNumber] += 1
      
         for bot in instance.bot:
-            bot.signal("Coin", [coin.positionX, coin.positionY])
+            try:
+                bot.signal("Coin", [coin.positionX, coin.positionY], labCoords = instance.START, labLineWidth = instance.LINEWIDTH)
+            except AttributeError:
+                bot.signal("Coin", [coin.positionX, coin.positionY])
         coins.remove(coin)
         instance.entities.remove(coin)
     

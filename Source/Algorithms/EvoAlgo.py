@@ -45,7 +45,9 @@ class EvoAlgo():
         #for individual in self.population:
             #self.fitness(individual)
         
-        self.globalBest : list = [self.population[-1], 0]
+        gb = Individual([])
+        gb.fitness = 100000
+        self.globalBest : list = [gb, 0]
 
         self.metric = metric
     
@@ -98,11 +100,11 @@ class EvoAlgo():
         Uniformly ordered Crossover.
         Probability measure x >= pX? -> change genes with pX in [0;10]
         '''
-        offSpring1 = Individual(individuals[0].genes)
-        offSpring1.fitness = individuals[0].fitness
+        offSpring1 = Individual(individuals[0].genes.copy())
+        #offSpring1.fitness = individuals[0].fitness
 
-        offSpring2 = Individual(individuals[1].genes)
-        offSpring2.fitness = individuals[1].fitness
+        offSpring2 = Individual(individuals[1].genes.copy())
+        #offSpring2.fitness = individuals[1].fitness
         
         changedGenesIndex : list = [] #What genes should be exchanged with respect to prob. pX
         changedGenesP1 : list = []
@@ -127,10 +129,13 @@ class EvoAlgo():
         genesP2InOrder = list(filter(lambda x : x in changedGenesP1, offSpring2.genes))
 
         for i in range(len(changedGenesIndex)):
-            offSpring1.genes[changedGenesIndex[i]] = genesP2InOrder[0]
-            genesP2InOrder.remove(genesP2InOrder[0])
-            offSpring2.genes[changedGenesIndex[i]] = genesP1InOrder[0]
-            genesP1InOrder.remove(genesP1InOrder[0])
+            try:    
+                offSpring1.genes[changedGenesIndex[i]] = genesP2InOrder[0]
+                genesP2InOrder.remove(genesP2InOrder[0])
+                offSpring2.genes[changedGenesIndex[i]] = genesP1InOrder[0]
+                genesP1InOrder.remove(genesP1InOrder[0])
+            except IndexError:
+                pass
         
         return [offSpring1, offSpring2]
     
@@ -146,13 +151,13 @@ class EvoAlgo():
 
         individual.fitness = 0.0
         
-        '''
+        
         if len(individual.genes) > 0:
             first = individual.genes[0]
-            individual.fitness += sqrt( (self.fixedStart[0] - first[0])**2 + (self.fixedStart[1] - first[1])**2 )
+            individual.fitness += sqrt( (self.fixedStart[0] - first[0])**2 + (self.fixedStart[1] - first[1])**2 ) * 3
             last = individual.genes[-1]
-            individual.fitness += sqrt( (self.fixedEnd[0] - last[0])**2 + (self.fixedEnd[1] - last[1])**2 )
-        '''
+            individual.fitness += sqrt( (self.fixedEnd[0] - last[0])**2 + (self.fixedEnd[1] - last[1])**2 ) * 3
+        
 
         for i in range(len(individual.genes)-1):
             current = individual.genes[i]
@@ -172,33 +177,36 @@ class EvoAlgo():
             distToEnd = abs(self.fixedEnd[0] - current[0]) + abs(self.fixedEnd[1] - current[1])
             distToStart = abs(self.fixedStart[0] - current[0]) + abs(self.fixedStart[1] - current[1])
 
-            if distToEnd < distToStart:
-                individual.fitness += penalty
+            if i < len(individual.genes) // 2:
+                if distToEnd < distToStart:
+                    individual.fitness += penalty
 
 
-    def selection(self, count = 2, preselected : int = 1) -> list:
+    def selection(self, count = 2, turnamentSize = 10, preselected : int = 1) -> list:
 
         selected : list = []
 
-        while len(selected) < count:
+        while len(selected) < turnamentSize:
 
-            individual1 = self.population[randint(preselected,len(self.population)-1)]
-            individual2 = self.population[randint(preselected,len(self.population)-1)]
+            individual1 = self.population[randint(0,len(self.population)-1)]
+            individual2 = self.population[randint(0,len(self.population)-1)]
 
             if individual1.fitness <= individual2.fitness and individual1 not in selected:
                 selected.append(individual1)
             elif individual2 not in selected:
                 selected.append(individual2)
         
-        return selected
+        selected.sort(key=lambda x:x.fitness)
+
+        return selected[0:count]
 
 
     def update(self) -> bool:
         
         #Options for evoAlgo
         probMutation = 2
-        probCrossover = 3
-        fitnessPenalty = 100
+        probCrossover = 8
+        fitnessPenalty = 5
 
         #Interupt if there are only 2 points
         if len(self.population[0].genes) < 2:
@@ -211,7 +219,7 @@ class EvoAlgo():
         populationSize : int = len(self.population)
 
         #Recombination
-        parents = [self.selection(2) for _ in range(int(len(self.population)*0.5))]
+        parents = [self.selection(2,10,0) for _ in range(int(len(self.population)*0.5))]
 
         for pair in parents:
             for newMember in self.crossover(pair, probCrossover):
@@ -227,7 +235,7 @@ class EvoAlgo():
         newGeneration.append(self.population[2])
 
         #newGeneration = self.population[0::populationSize]
-        self.population = newGeneration.copy()
+        self.population = newGeneration
 
         #Mutation
         for individual in self.population:
@@ -310,23 +318,3 @@ class EvoAlgo():
         aStar.__del__()
 
         return path
-
-    
-#Testing
-            
-#algo = EvoAlgo(10, [(0,1), (10,15), (20,10), (15,17)], (0,0), None, 500)
-#algo.update()
-
-'''
-ind1 = Individual([1 for _ in range(10)])
-ind2 = Individual([0 for _ in range(10)])
-
-algo = EvoAlgo()
-newInd = algo.crossoverNPoint([ind1, ind2])
-
-ind1 = newInd[0]
-ind2 = newInd[1]
-
-print("1 : ", ind1.genes)
-print("2 : ", ind2.genes)
-'''       

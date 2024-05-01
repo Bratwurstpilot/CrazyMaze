@@ -181,6 +181,19 @@ class Tournament:
         self.coins = []
         
         coins = 0
+        while coins < 10:
+            y = random.randint(5, len(labyrinth)-5)
+            x = random.randint(5, len(labyrinth[0])-5)
+            if labyrinth[y][x] != 0:
+                continue
+            coins += 1
+            bBot.anchorPoints.append((x,y))
+            aBot.anchorPoints.append((x,y))
+            entt = MyEntity(START[0] + x * LINEWIDTH, START[1] + y * LINEWIDTH, 0, LINEWIDTH, LINEWIDTH)
+            entt.textureComp.setTexture("Source/Game/Files/coin.png")
+            self.entities.append(entt)
+            self.coins.append(entt)
+        '''
         for y in range(len(labyrinth)):
             for x in range(len(labyrinth[0])):
                 if random.randint(0,1000) >= 980 and labyrinth[y][x] == 0 and coins < 10:
@@ -191,6 +204,7 @@ class Tournament:
                     entt.textureComp.setTexture("Source/Game/Files/coin.png")
                     self.entities.append(entt)
                     self.coins.append(entt)
+        '''
         #-----------------------
                     
         aBot.setup(labyrinth)

@@ -47,15 +47,15 @@ class TextureComponent:
             print("Error while loading Texture " + tex2D + " in component " + self)
 
 
-    def setTextureSet(self, textureSet : list, size : tuple = None) -> None:
+    def setTextureSet(self, textureSet : list, size : tuple = None, reflectX : bool = False) -> None:
 
         try: 
             self.__textures.clear()
             for tex in textureSet:
                 if size != None:
-                    self.__textures.append(pygame.transform.scale(pygame.image.load(tex), size))
+                    self.__textures.append(pygame.transform.flip(pygame.transform.scale(pygame.image.load(tex), size), reflectX, False))
                 else:
-                    self.__textures.append(pygame.image.load(tex))
+                    self.__textures.append(pygame.transform.flip(pygame.image.load(tex), reflectX, False))
         except ValueError:
             ("Error while loading Texture " + textureSet + " in component " + self)
 
