@@ -14,7 +14,8 @@ class Menu:
     uiEntities : list = []
     delegate = 0
 
-    menuBackground = pygame.image.load("Source/Game/Files/menuBackground.png")
+    #menuBackground = pygame.image.load("Source/Game/Files/menuBackground.png")
+    menuBackground = pygame.transform.scale(pygame.image.load("Source/Game/Files/menuBackground.png"), (1920,1320))
   
     startGame = Button(1920//2 - 150, 790, 0, 300, 50, "Spiel erstellen", (0, 110, 18), 60)
     startGame.setTextRect()

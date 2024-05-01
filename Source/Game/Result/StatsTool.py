@@ -60,4 +60,31 @@ keys : dict = {
 }
 
 result = getResult("F:\Studium\Semester 5\SoftwareProjekt\CrazyMaze\Source\Game\Result\games.txt", keys)
-writeResult("F:\Studium\Semester 5\SoftwareProjekt\CrazyMaze\Source\Game\Result\Statistics.txt", "Spieldoku 2 | [win1, win2, draw]", result)
+writeResult("F:\Studium\Semester 5\SoftwareProjekt\CrazyMaze\Source\Game\Result\Statistics.txt", "Spieldoku Merge Final | [win1, win2, draw]", result)
+
+
+
+
+import numpy as np
+import matplotlib.pyplot as plt 
+ 
+
+tspWins : int = result["AStar-TSP"][1] + result["TSP-AStar"][0]
+aStarWins : int = result["AStar-TSP"][0] + result["TSP-AStar"][1]
+draws : int = result["AStar-TSP"][2] + result["TSP-AStar"][2]
+  
+# creating the dataset
+data = {'TSP':tspWins, 'AStar':aStarWins, 'Draw':draws}
+courses = list(data.keys())
+values = list(data.values())
+  
+fig = plt.figure(figsize = (10, 5))
+ 
+# creating the bar plot
+plt.bar(courses, values, color ='steelblue', 
+        width = 0.4)
+ 
+plt.xlabel("Algorithms")
+plt.ylabel("Wins in game")
+plt.title("Algorithm comparison")
+plt.show()
