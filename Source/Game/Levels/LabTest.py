@@ -34,37 +34,25 @@ class LabTest:
     
     def setPlayer(self, gameInfo, start : list, linewidth : int, width : int, height : int, playernum : int, tpSpots : list):
 
-        """
-        if gameInfo == 0: #Spieler 
-            player = MyEntity(start[0] + (1-playernum) * linewidth + (width-2) * linewidth * playernum, start[1] + (1-playernum) * linewidth + (height-2) * linewidth * playernum, 1, linewidth, linewidth, playerNumber = playernum)
-        
-        elif gameInfo == 1: #A Star Bot
-            player = Agent(start[0] + (1-playernum) * linewidth + (width-2) * linewidth * playernum, start[1] + (1-playernum) * linewidth + (height-2) * linewidth * playernum, 1, linewidth, linewidth, playerNumber=playernum, transport = tpSpots)
-
-        elif gameInfo == 2: #Adv Star Bot
-            player = Agent(start[0] + (1-playernum) * linewidth + (width-2) * linewidth * playernum, start[1] + (1-playernum) * linewidth + (height-2) * linewidth * playernum, 1, linewidth, linewidth, playerNumber=playernum, transport = tpSpots)
-        
-        elif gameInfo == 3: #TSP Solver Bot
-            player = AgentEvo(start[0] + (1-playernum) * linewidth + (width-2) * linewidth * playernum, start[1] + (1-playernum) * linewidth + (height-2) * linewidth * playernum, 1, linewidth, linewidth, playerNumber=playernum, transport = tpSpots)
-        """
 
         if gameInfo == 0: #Spieler 
             player = Player(start[0] + (1-playernum) * linewidth + (width-2) * linewidth * playernum, start[1] + (1-playernum) * linewidth + (height-2) * linewidth * playernum, 1, linewidth, linewidth)
         
-        elif gameInfo == 2: #Adv Star Bot
+        elif gameInfo == 1: #Adv Star Bot
             player = Agent(start[0] + (1-playernum) * linewidth + (width-2) * linewidth * playernum, start[1] + (1-playernum) * linewidth + (height-2) * linewidth * playernum, 1, linewidth, linewidth, playerNumber=playernum, transport = tpSpots)
         
-        elif gameInfo == 3:# TSP Solver Bot
+        elif gameInfo == 2:# TSP Solver Bot
             player = AgentEvo(start[0] + (1-playernum) * linewidth + (width-2) * linewidth * playernum, start[1] + (1-playernum) * linewidth + (height-2) * linewidth * playernum, 1, linewidth, linewidth, playerNumber=playernum, transport = tpSpots)
             
         return player
     
     def setPlayerTexture(self, gameInfo):
-
-        if gameInfo == 2 or gameInfo == 0: #A Star Bot
+        
+        if gameInfo == 0: #Spieler
             return ["Source/Game/Files/KnightSprite1.png", "Source/Game/Files/KnightSprite2.png"]
-        elif gameInfo == 3: #TSP Solver Bot
-
+        if gameInfo == 1: #A Star Bot
+            return ["Source/Game/Files/Robo1.png", "Source/Game/Files/Robo2.png"]
+        elif gameInfo == 2: #TSP Solver Bot
             return ["Source/Game/Files/Echse_1.png", "Source/Game/Files/Echse_2.png"]
         
     def setController(self, player, controllerID : int):

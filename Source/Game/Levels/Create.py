@@ -110,7 +110,7 @@ class Create:
     #playerOne.setTextRect()
     #uiEntities.append(playerOne)
 
-    pOneAlgorithm = Label(1920//4, 755, 0, 1, 1, "Spieler", (0, 110, 18), 40)
+    pOneAlgorithm = Label(1920//4 - 16, 775, 0, 1, 1, "Spieler", (0, 255, 255), 40)
     pOneAlgorithm.setTextRect()
     uiEntities.append(pOneAlgorithm)
 
@@ -143,41 +143,41 @@ class Create:
     #playerTwo.setTextRect()
     #uiEntities.append(playerTwo)
 
-    pTwoAlgorithm = Label((1920//4)*3, 755, 0, 1, 1, "Spieler", (0, 110, 18), 40)
+    pTwoAlgorithm = Label((1920//4)*3 + 16, 775, 0, 1, 1, "Spieler", (0, 255, 255), 40)
     pTwoAlgorithm.setTextRect()
     uiEntities.append(pTwoAlgorithm)
 
-    switchLTwoAlgorithm = Button((1920//16)*11 - 22, 760, 0, 50, 40, "<", (255, 153, 51), 40)
+    switchLTwoAlgorithm = Button((1920//16)*11 - 22, 760, 0, 50, 40, "<", (0, 255, 255), 40)
     switchLTwoAlgorithm.setBgColor((50,50,50))
     switchLTwoAlgorithm.setTextRect()
     uiEntities.append(switchLTwoAlgorithm)
     
-    switchRTwoAlgorithm = Button((1920//16)*13 + 15, 760, 0, 50, 40, ">", (255, 153, 51), 40)
+    switchRTwoAlgorithm = Button((1920//16)*13 + 15, 760, 0, 50, 40, ">", (0, 255, 255), 40)
     switchRTwoAlgorithm.setBgColor((50,50,50))
     switchRTwoAlgorithm.setTextRect()
     uiEntities.append(switchRTwoAlgorithm)
 
-    pTwoDifficulty = Label((1920//4)*3 + 16, 855, 0, 1, 1, "Einfach", (255, 153, 51), 40)
+    pTwoDifficulty = Label((1920//4)*3 + 16, 855, 0, 1, 1, "Einfach", (0, 255, 255), 40)
     pTwoDifficulty.setTextRect()
     uiEntities.append(pTwoDifficulty)
 
-    switchLTwoDifficulty = Button((1920//16)*11 - 22, 840, 0, 50, 40, "<", (255, 153, 51), 40)
+    switchLTwoDifficulty = Button((1920//16)*11 - 22, 840, 0, 50, 40, "<", (0, 255, 255), 40)
     switchLTwoDifficulty.setBgColor((50,50,50))
     switchLTwoDifficulty.setTextRect()
     uiEntities.append(switchLTwoDifficulty)
     
-    switchRTwoDifficulty = Button((1920//16)*13 + 15, 840, 0, 50, 40, ">", (255, 153, 51), 40)
+    switchRTwoDifficulty = Button((1920//16)*13 + 15, 840, 0, 50, 40, ">", (0, 255, 255), 40)
     switchRTwoDifficulty.setBgColor((50,50,50))
     switchRTwoDifficulty.setTextRect()
     uiEntities.append(switchRTwoDifficulty)
 
-    playerLeft = MyEntity(260, 230)
-    playerLeft.getTextureComponent().setTextureSet(["Source/Game/Files/Robo1.png", "Source/Game/Files/Robo2.png"], (500,500))
+    playerLeft = MyEntity(230, 260)
+    playerLeft.getTextureComponent().setTextureSet(["Source/Game/Files/KnightSprite1.png", "Source/Game/Files/KnightSprite2.png"], (500,500))
     playerLeft.getTextureComponent().setFrameInterval(0.2)
     entities.append(playerLeft)
 
-    playerRight = MyEntity(1160, 230)
-    playerRight.getTextureComponent().setTextureSet(["Source/Game/Files/Robo1.png", "Source/Game/Files/Robo2.png"], (500,500), reflectX=True)
+    playerRight = MyEntity(1190, 260)
+    playerRight.getTextureComponent().setTextureSet(["Source/Game/Files/KnightSprite1.png", "Source/Game/Files/KnightSprite2.png"], (500,500), reflectX=True)
     playerRight.getTextureComponent().setFrameInterval(0.2)
     entities.append(playerRight)
 
@@ -205,15 +205,21 @@ def setup(screen, delegate, info):
         info.setPlayerAlgorithm(state,player)
         cgame.setText(info.playerAlgorithm[player])
 
-        if state == 1:
+        if gameInfo.player[player] == 2:
             object.entities[-(player)].getTextureComponent().setTextureSet(["Source/Game/Files/Echse_1.png", "Source/Game/Files/Echse_2.png"], (450,450), reflectX=bool(player))
             object.entities[-(player)].positionX = 230 * (1-player) + 1240 * player
             object.entities[-(player)].positionY = 260
 
-        elif state == -1:
+        elif gameInfo.player[player] == 1:
             object.entities[-(player)].getTextureComponent().setTextureSet(["Source/Game/Files/Robo1.png", "Source/Game/Files/Robo2.png"], (500,500), reflectX=bool(player))
             object.entities[-(player)].positionX = 260 * (1-player) + 1160 * player
             object.entities[-(player)].positionY = 230
+
+        elif gameInfo.player[player] == 0:
+            object.entities[-(player)].getTextureComponent().setTextureSet(["Source/Game/Files/KnightSprite1.png", "Source/Game/Files/KnightSprite2.png"], (450,450), reflectX=bool(player))
+            object.entities[-(player)].positionX = 230 * (1-player) + 1240 * player
+            object.entities[-(player)].positionY = 260
+
 
         '''
         Data for Knight:

@@ -21,8 +21,6 @@ def main():
     stateDelegate = GameDelegate(True)
     gameInfo = GameInfo()
 
-
-
     Menu.setup(screen, stateDelegate)
     Create.setup(screen, stateDelegate, gameInfo)
     Result.setup(screen, stateDelegate, gameInfo)
