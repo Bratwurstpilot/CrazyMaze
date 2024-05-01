@@ -42,7 +42,7 @@ class LabTest:
     def setPlayerTexture(self, gameInfo):
 
         if gameInfo == 0: #A Star Bot
-            return ["Source/Game/Files/KnightSprite1.png", "Source/Game/Files/KnightSprite2.png"]
+            return ["Source/Game/Files/Robo1.png", "Source/Game/Files/Robo2.png"]
         elif gameInfo == 1: #TSP Solver Bot
             return ["Source/Game/Files/Echse_1.png", "Source/Game/Files/Echse_2.png"]
 
