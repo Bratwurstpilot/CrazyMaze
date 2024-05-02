@@ -143,30 +143,30 @@ class Create:
     #playerTwo.setTextRect()
     #uiEntities.append(playerTwo)
 
-    pTwoAlgorithm = Label((1920//4)*3 + 16, 775, 0, 1, 1, "Spieler", (0, 255, 255), 40)
+    pTwoAlgorithm = Label((1920//4)*3 + 16, 775, 0, 1, 1, "Spieler", (255, 153, 51), 40)
     pTwoAlgorithm.setTextRect()
     uiEntities.append(pTwoAlgorithm)
 
-    switchLTwoAlgorithm = Button((1920//16)*11 - 22, 760, 0, 50, 40, "<", (0, 255, 255), 40)
+    switchLTwoAlgorithm = Button((1920//16)*11 - 22, 760, 0, 50, 40, "<", (255, 153, 51), 40)
     switchLTwoAlgorithm.setBgColor((50,50,50))
     switchLTwoAlgorithm.setTextRect()
     uiEntities.append(switchLTwoAlgorithm)
     
-    switchRTwoAlgorithm = Button((1920//16)*13 + 15, 760, 0, 50, 40, ">", (0, 255, 255), 40)
+    switchRTwoAlgorithm = Button((1920//16)*13 + 15, 760, 0, 50, 40, ">", (255, 153, 51), 40)
     switchRTwoAlgorithm.setBgColor((50,50,50))
     switchRTwoAlgorithm.setTextRect()
     uiEntities.append(switchRTwoAlgorithm)
 
-    pTwoDifficulty = Label((1920//4)*3 + 16, 855, 0, 1, 1, "Einfach", (0, 255, 255), 40)
+    pTwoDifficulty = Label((1920//4)*3 + 16, 855, 0, 1, 1, "Einfach", (255, 153, 51), 40)
     pTwoDifficulty.setTextRect()
     uiEntities.append(pTwoDifficulty)
 
-    switchLTwoDifficulty = Button((1920//16)*11 - 22, 840, 0, 50, 40, "<", (0, 255, 255), 40)
+    switchLTwoDifficulty = Button((1920//16)*11 - 22, 840, 0, 50, 40, "<", (255, 153, 51), 40)
     switchLTwoDifficulty.setBgColor((50,50,50))
     switchLTwoDifficulty.setTextRect()
     uiEntities.append(switchLTwoDifficulty)
     
-    switchRTwoDifficulty = Button((1920//16)*13 + 15, 840, 0, 50, 40, ">", (0, 255, 255), 40)
+    switchRTwoDifficulty = Button((1920//16)*13 + 15, 840, 0, 50, 40, ">", (255, 153, 51), 40)
     switchRTwoDifficulty.setBgColor((50,50,50))
     switchRTwoDifficulty.setTextRect()
     uiEntities.append(switchRTwoDifficulty)
