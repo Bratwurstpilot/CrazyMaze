@@ -66,6 +66,7 @@ class LabTest:
     def setupLab(self):
 
         self.entities = []
+        self.uiEntities = []
         self.end = []
         self.bot = []
         self.portalBlue = None
