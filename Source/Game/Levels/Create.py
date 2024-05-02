@@ -173,12 +173,12 @@ class Create:
 
     playerLeft = MyEntity(230, 260)
     playerLeft.getTextureComponent().setTextureSet(["Source/Game/Files/KnightSprite1.png", "Source/Game/Files/KnightSprite2.png"], (500,500))
-    playerLeft.getTextureComponent().setFrameInterval(0.2)
+    playerLeft.getTextureComponent().setFrameInterval(0.1)
     entities.append(playerLeft)
 
     playerRight = MyEntity(1190, 260)
     playerRight.getTextureComponent().setTextureSet(["Source/Game/Files/KnightSprite1.png", "Source/Game/Files/KnightSprite2.png"], (500,500), reflectX=True)
-    playerRight.getTextureComponent().setFrameInterval(0.2)
+    playerRight.getTextureComponent().setFrameInterval(0.1)
     entities.append(playerRight)
 
 object = Create()
