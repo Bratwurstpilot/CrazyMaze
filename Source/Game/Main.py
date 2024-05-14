@@ -139,8 +139,19 @@ def main():
                         coins = instance.coins
                         gameInfo.coins = [0, 0]
                         """
+
+                bot1 = instance.bot[0].getPosition()
+                bot2 = instance.bot[1].getPosition()
+
                 for controller in instance.controller:
                     controller.update(event.key, True)
+
+                for wall in instance.walls:
+                    if wall.checkCollide(instance.bot[0]) :
+                        instance.bot[0].setPosition(bot1[0], bot1[1], 1)
+
+                    if wall.checkCollide(instance.bot[1]) :
+                        instance.bot[1].setPosition(bot2[0], bot2[1], 1)
 
             if event.type == pygame.KEYUP:
                 for controller in instance.controller:

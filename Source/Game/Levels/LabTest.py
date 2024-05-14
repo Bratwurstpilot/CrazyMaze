@@ -23,6 +23,7 @@ class LabTest:
         self.bot : list = []
         self.gameInfo = None
         self.screen = None
+        self.walls : list = []
         self.coins : list = []
         self.player : list = []
         self.controller : list = []
@@ -30,6 +31,7 @@ class LabTest:
         self.WIDTH : int = 0
         self.HEIGHT : int = 0
         self.START : list = [0,0]
+        
 
     
     def setPlayer(self, gameInfo, start : list, linewidth : int, width : int, height : int, playernum : int, tpSpots : list):
@@ -72,6 +74,7 @@ class LabTest:
         self.portalBlue = None
         self.portalOrange = None
         self.player = []
+        self.walls = []
         
         labyrinth = Labyrinth(45,31).getLabyrinth()
 
@@ -174,6 +177,7 @@ class LabTest:
 
                 if labyrinth[y][x] == 1:
                     wallEntt = MyEntity(START[0] + x * LINEWIDTH, START[1] + y * LINEWIDTH, 0, LINEWIDTH, LINEWIDTH)
+                    self.walls.append(wallEntt)
 
                     TEXDATA = getSupposedTex(labyrinth, [x,y])
                     if len(TEXDATA) == 2:

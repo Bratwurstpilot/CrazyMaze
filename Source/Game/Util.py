@@ -29,13 +29,13 @@ class MyController(EntityController):
         self.updateInputs(key, mode)
 
         if "LEFT" in self.keysPressed:
-            self.controlledEntities[0].shiftPositionX(-20)
+            self.controlledEntities[0].shiftPositionX(-15)
         if "RIGHT" in self.keysPressed:
-            self.controlledEntities[0].shiftPositionX(20)
+            self.controlledEntities[0].shiftPositionX(15)
         if "UP" in self.keysPressed:
-            self.controlledEntities[0].shiftPositionY(-20)
+            self.controlledEntities[0].shiftPositionY(-15)
         if "DOWN" in self.keysPressed:
-            self.controlledEntities[0].shiftPositionY(20)
+            self.controlledEntities[0].shiftPositionY(15)
 
 
 class MyController2(EntityController):
