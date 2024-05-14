@@ -269,7 +269,7 @@ def customFunc(package : dict, gameInfo):
 object = Tournament()
 gameScene = None
 botPackage = {}
-background = pygame.image.load("Source/Game/Files/createBackground.png")
+background = pygame.image.load("Source/Game/Files/SelectionScreen.png")
 controllers = []
 
 def setup(info, screen):
