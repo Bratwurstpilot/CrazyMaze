@@ -30,11 +30,11 @@ class MyController(EntityController):
 
         if "LEFT" in self.keysPressed:
             self.controlledEntities[0].shiftPositionX(-15)
-        if "RIGHT" in self.keysPressed:
+        elif "RIGHT" in self.keysPressed:
             self.controlledEntities[0].shiftPositionX(15)
-        if "UP" in self.keysPressed:
+        elif "UP" in self.keysPressed:
             self.controlledEntities[0].shiftPositionY(-15)
-        if "DOWN" in self.keysPressed:
+        elif "DOWN" in self.keysPressed:
             self.controlledEntities[0].shiftPositionY(15)
 
 
