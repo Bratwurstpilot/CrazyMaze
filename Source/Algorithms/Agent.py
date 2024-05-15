@@ -385,3 +385,4 @@ class AgentEvo(Entity):
             self.goToGoal()
             return
         '''
+
