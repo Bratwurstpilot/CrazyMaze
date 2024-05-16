@@ -17,7 +17,7 @@ class Player(MyEntity):
     def updateGameState(self, enemyPos : tuple, enemyPoints : int, thisPoints : int):
         
         self.positionRelative = (self.positionX, self.positionY, self.positionZ)
-        print(self.positionRelative)
+        
 
 
     def setup(self, labyrinth):

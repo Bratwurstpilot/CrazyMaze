@@ -65,6 +65,17 @@ class LabTest:
             self.controller.append(control)
 
 
+    def teleport(self, player):
+
+        if player.checkCollide(self.portalBlue):
+            player.setPosition(self.portalOrange.getPositionX(), self.portalOrange.getPositionY(), self.portalOrange.getPositionZ())
+            print("Teleport Blue")
+            return
+        if player.checkCollide(self.portalOrange):
+            player.setPosition(self.portalBlue.getPositionX(), self.portalBlue.getPositionY(), self.portalBlue.getPositionZ())
+            return
+
+
     def setupLab(self):
 
         self.entities = []

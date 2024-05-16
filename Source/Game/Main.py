@@ -140,6 +140,12 @@ def main():
                         gameInfo.coins = [0, 0]
                         """
 
+                if event.key == pygame.K_SPACE:
+                    instance.teleport(instance.bot[0])
+
+                if event.key == pygame.K_t:
+                    instance.teleport(instance.bot[1])
+
                 bot1 = instance.bot[0].getPosition()
                 bot2 = instance.bot[1].getPosition()
 
